@@ -1,8 +1,10 @@
-#= require history
-
+#= require _history
 
 class Wiselinks
   constructor: () ->
+    # check that JQuery or Zepto.js are available
+    throw "Load JQuery or Zepto.js to use Wiselinks" unless window.JQuery? || window.Zepto?
+
     self = this
 
     History.Adapter.bind(
@@ -17,14 +19,14 @@ class Wiselinks
         return false
     )
     
-    # $(document).on(
-    #   "submit", "form[data-push], form[data-replace]"
-    #   (event) ->      
-    #     self._process_form($(this))
+    $(document).on(
+      "submit", "form[data-push], form[data-replace]"
+      (event) ->      
+        self._process_form($(this))
         
-    #     event.preventDefault()
-    #     return false
-    # )
+        event.preventDefault()
+        return false
+    )
   
     $(document).on(
       "click", "a[data-push], a[data-replace]"
@@ -32,85 +34,80 @@ class Wiselinks
         if (event.ctrlKey || event.metaKey)
           return true;
         
-        self._process_link(this)
+        self._process_link($(this))
 
         event.preventDefault()
         return false
     )
   
-  trigger_event: (name) ->
-    event = document.createEvent('Event')
-    event.initEvent(name, true, true)
-    document.dispatchEvent(event)
-
   load: (url, target, slide = 'template') ->
-    this.trigger_event('wiselinks:before_load')
-
     History.ready = true
     History.pushState({ timestamp: (new Date().getTime()), slide: slide, target: target }, document.title, decodeURI(url) )    
-    
-    this.trigger_event('wiselinks:after_load')
 
-  reload: () ->
-    this.trigger_event('wiselinks:before_reload')
-    
+  reload: () ->    
     History.ready = true
     History.replaceState({ timestamp: (new Date().getTime()), slide: 'template' }, document.title, decodeURI(History.getState().url) )    
 
-    this.trigger_event('wiselinks:after_reload')
+  _call: (url, target, slide = 'template') ->    
+    $(document).trigger('wiselinks:loading')
 
-  _call: (url, target, slide = 'template') ->
-    this.trigger_event('wiselinks:loading')
+    $.ajax(
+      url: url      
+      headers:
+        'X-Slide': slide  
+      success: (data) ->                
+        $(document).trigger('wiselinks:success', data)
+        # window.app.managers.data.set(data, target)
+        # window.app.managers.analytics.hit()
 
-    xhr = new XMLHttpRequest
-    xhr.open('GET', url, true)  
-    xhr.setRequestHeader 'X-Slide', slide
-
-    xhr.onload: ->
-      console.log xhr.responseText
-      this.trigger_event('wiselinks:loaded')
-
-    xhr.send()
+      error: ->        
+        $(document).trigger('wiselinks:error')
+        # window.app.managers.data.loaded()
+      # statusCode:
+      #   401: ->
+      #     window.location = ROOT_PATH + "auth/login"
+      dataType: "html"
+    )
   
-  # _process_form: ($form) ->    
-  #   self = this
+  _process_form: ($form) ->    
+    self = this
     
-  #   $disable = $form.find(':input[value=""]')
-  #   $disable.attr('disabled', true);      
+    $disable = $form.find(':input[value=""]')
+    $disable.attr('disabled', true);      
     
-  #   params = {}
-  #   for item in $form.serializeArray()
-  #     if item.name != 'utf8'
-  #       name = if item.name.ends_with('[]')
-  #         item.name.substr(0, item.name.length - 2)
-  #       else
-  #         item.name
+    params = {}
+    for item in $form.serializeArray()
+      if item.name != 'utf8'
+        name = if item.name.ends_with('[]')
+          item.name.substr(0, item.name.length - 2)
+        else
+          item.name
 
-  #       if params[name]?
-  #         params[name] = params[name] + ",#{item.value}"
-  #       else
-  #         params[name] = item.value  
+        if params[name]?
+          params[name] = params[name] + ",#{item.value}"
+        else
+          params[name] = item.value  
 
-  #   params = _.map(params
-  #     (k,v) ->
-  #       "#{v}=#{k}"
-  #   ).join('&').replace(/%|!/g, '')
+    serialized = []
+    for key in params
+      serialized.push("#{params[key]}=key")
 
-  #   # params = params.map(
-  #   #   (item) ->
-  #   #     "#{item.name}=#{item.value}" unless item.name == 'utf8'
-  #   # ).compact().value().join('&').replace(/%|!/g, '')
+    serialized = serialized.join('&').replace(/%|!/g, '')
     
-  #   url = $form.attr("action")
-  #   url += "?#{params}" if params.length > 0
+    url = $form.attr("action")
+    url += "?#{serialized}" if serialized.length > 0
         
-  #   $disable.attr('disabled', false);    
+    $disable.attr('disabled', false);    
 
-  #   type = if ($form.attr("data-push") == 'partial') then 'partial' else 'template'  
+    type = if ($form.attr("data-push") == 'partial') then 'partial' else 'template'  
 
-  #   self.load(url, $form.attr("data-target"), type)
+    self.load(url, $form.attr("data-target"), type)
   
-  _process_link: (link) ->    
-    type = if (link.getAttribute("data-push") == 'partial') then 'partial' else 'template'
+  _process_link: ($link) ->    
+    self = this  
+    
+    type = if ($link.attr("data-push") == 'partial') then 'partial' else 'template'
 
-    this.load(link.getAttribute("href"), link.getAttribute("data-target"), type)    
+    self.load($link.attr("href"), $link.attr("data-target"), type)
+
+window.Wiselinks = Wiselinks

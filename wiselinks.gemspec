@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Igor Alexandrov", "Alexey Solilin", "Julia Egorova"]
-  s.date = "2012-11-22"
+  s.date = "2012-11-26"
   s.email = "igor.alexandrov@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -27,7 +27,8 @@ Gem::Specification.new do |s|
     "lib/assets/javascripts/wiselinks.js.coffee",
     "lib/wiselinks.rb",
     "test/helper.rb",
-    "test/test_wiselinks.rb"
+    "test/test_wiselinks.rb",
+    "wiselinks.gemspec"
   ]
   s.homepage = "http://github.com/igor-alexandrov/wiselinks"
   s.licenses = ["MIT"]

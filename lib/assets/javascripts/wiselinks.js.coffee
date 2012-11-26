@@ -1,7 +1,7 @@
 #= require _history
 
 class Wiselinks
-  constructor: () ->
+  constructor: (@$target = $('body'), options = {}) ->
     # check that JQuery or Zepto.js are available
     throw "Load JQuery or Zepto.js to use Wiselinks" unless window.JQuery? || window.Zepto?
 
@@ -42,30 +42,29 @@ class Wiselinks
   
   load: (url, target, slide = 'template') ->
     History.ready = true
-    History.pushState({ timestamp: (new Date().getTime()), slide: slide, target: target }, document.title, decodeURI(url) )    
+    History.pushState({ timestamp: (new Date().getTime()), slide: slide, target: target }, document.title, decodeURI(url) )
 
-  reload: () ->    
+  reload: () ->
     History.ready = true
-    History.replaceState({ timestamp: (new Date().getTime()), slide: 'template' }, document.title, decodeURI(History.getState().url) )    
+    History.replaceState({ timestamp: (new Date().getTime()), slide: 'template' }, document.title, decodeURI(History.getState().url) )
 
-  _call: (url, target, slide = 'template') ->    
+  _call: (url, target, slide = 'template') ->
+    self = this
     $(document).trigger('wiselinks:loading')
 
-    $.ajax(
-      url: url      
-      headers:
-        'X-Slide': slide  
-      success: (data) ->                
-        $(document).trigger('wiselinks:success', data)
-        # window.app.managers.data.set(data, target)
-        # window.app.managers.analytics.hit()
+    console.log @$target
 
-      error: ->        
-        $(document).trigger('wiselinks:error')
-        # window.app.managers.data.loaded()
-      # statusCode:
-      #   401: ->
-      #     window.location = ROOT_PATH + "auth/login"
+    $.ajax(
+      url: url
+      headers:
+        'X-Slide': slide
+      success: (data) ->
+        $target = if target? then $(target) else self.$target
+        $target.html(data)
+
+        $(document).trigger('wiselinks:success', data)
+      error: (xhr)->        
+        $(document).trigger('wiselinks:error', xhr)
       dataType: "html"
     )
   

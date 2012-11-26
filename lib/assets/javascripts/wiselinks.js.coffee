@@ -52,18 +52,18 @@ class Wiselinks
     self = this
     $(document).trigger('wiselinks:loading')
 
-    console.log @$target
-
     $.ajax(
       url: url
       headers:
         'X-Slide': slide
-      success: (data) ->
+      success: (data, status, xhr) ->
+        document.title = xhr.getResponseHeader('X-Title')        
+
         $target = if target? then $(target) else self.$target
         $target.html(data)
 
         $(document).trigger('wiselinks:success', data)
-      error: (xhr)->        
+      error: (xhr, status, error)->        
         $(document).trigger('wiselinks:error', xhr)
       dataType: "html"
     )

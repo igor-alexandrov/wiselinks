@@ -1,9 +1,12 @@
 #= require _history
 
+String.prototype.ends_with = (suffix) ->
+  this.indexOf(suffix, this.length - suffix.length) != -1
+
 class Wiselinks
   constructor: (@$target = $('body'), options = {}) ->
     # check that JQuery or Zepto.js are available
-    throw "Load JQuery or Zepto.js to use Wiselinks" unless window.JQuery? || window.Zepto?
+    throw "Load JQuery to use Wiselinks" unless window.jQuery?
 
     self = this
 
@@ -21,7 +24,7 @@ class Wiselinks
     
     $(document).on(
       "submit", "form[data-push], form[data-replace]"
-      (event) ->      
+      (event) ->        
         self._process_form($(this))
         
         event.preventDefault()
@@ -68,13 +71,14 @@ class Wiselinks
       dataType: "html"
     )
   
-  _process_form: ($form) ->    
+  _process_form: ($form) ->
     self = this
     
     $disable = $form.find(':input[value=""]')
     $disable.attr('disabled', true);      
     
     params = {}
+
     for item in $form.serializeArray()
       if item.name != 'utf8'
         name = if item.name.ends_with('[]')
@@ -88,7 +92,7 @@ class Wiselinks
           params[name] = item.value  
 
     serialized = []
-    for key in params
+    for key of params
       serialized.push("#{params[key]}=key")
 
     serialized = serialized.join('&').replace(/%|!/g, '')

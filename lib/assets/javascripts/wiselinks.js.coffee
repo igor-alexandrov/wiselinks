@@ -93,7 +93,7 @@ class Wiselinks
 
     serialized = []
     for key of params
-      serialized.push("#{params[key]}=key")
+      serialized.push("#{key}=#{params[key]}")
 
     serialized = serialized.join('&').replace(/%|!/g, '')
     

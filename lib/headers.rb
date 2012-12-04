@@ -9,8 +9,8 @@ module Wiselinks
 
     def render(options = {}, *args, &block)
       if self.wiselinks_request?
-        if options[:partial].blank? && self.wiselinks_partial_request?
-          options[:partial] = action_name
+        if self.wiselinks_partial_request?
+          options[:partial] ||= action_name
         else
           options[:layout] = self.wiselinks_layout        
         end

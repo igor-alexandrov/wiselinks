@@ -17,7 +17,7 @@ class Wiselinks
         return if (!History.ready)
   
         state = History.getState()         
-        self._call(state.url, state.data.target, state.data.slide)  
+        self._call(state.url, state.data.target, state.data.render)  
 
         return false
     )
@@ -43,31 +43,31 @@ class Wiselinks
         return false
     )
   
-  load: (url, target, slide = 'template') ->
+  load: (url, target, render = 'template') ->
     History.ready = true
-    History.pushState({ timestamp: (new Date().getTime()), slide: slide, target: target }, document.title, decodeURI(url) )
+    History.pushState({ timestamp: (new Date().getTime()), render: render, target: target }, document.title, decodeURI(url) )
 
   reload: () ->
     History.ready = true
-    History.replaceState({ timestamp: (new Date().getTime()), slide: 'template' }, document.title, decodeURI(History.getState().url) )
+    History.replaceState({ timestamp: (new Date().getTime()), render: 'template' }, document.title, decodeURI(History.getState().url) )
 
-  _call: (url, target, slide = 'template') ->
+  _call: (url, target, render = 'template') ->
     self = this
-    $(document).trigger('wiselinks:loading')
+    $(document).trigger('page:loading', url, target, render)
 
     $.ajax(
       url: url
       headers:
-        'X-Slide': slide
+        'X-Render': render
       success: (data, status, xhr) ->
         document.title = xhr.getResponseHeader('X-Title')        
 
         $target = if target? then $(target) else self.$target
         $target.html(data)
 
-        $(document).trigger('wiselinks:success', data)
+        $(document).trigger('page:success', data, status)
       error: (xhr, status, error)->        
-        $(document).trigger('wiselinks:error', xhr)
+        $(document).trigger('page:error', status, error)
       dataType: "html"
     )
   

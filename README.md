@@ -26,6 +26,29 @@ Then modify your `application.js` or `application.js.coffee` file to use Wiselin
 
 ##Events
 
+While using Wiselinks you **can rely** on `DOMContentLoaded` or `jQuery.ready()` to trigger your JavaScript code, but Wiselinks gives you some additional useful event to deal with the lifecycle of the page:
+
+#### `page:loading (url, target, render = 'template')`
+Event is triggered before the `XMLHttpRequest` is initialized and performed.
+* *url* - URL of the request that will be performed;
+
+* *target* – element of the page where result of the request will be loaded into;
+
+* *render = 'template'* – what should be rendered; can be 'template' or 'partial';
+
+#### `page:success (data, status)`
+Event is triggered if the request succeeds.
+* *data* – the data returned from the server;
+
+* *status* – a string describing the status;
+
+#### `page:error (status, error)`
+
+Event is triggered if the request fails.
+
+* *status* – a string describing the type of error that occurred;
+* *error* – optional exception object, if one occurred;
+
 ##Example
 
 We crafted small example application that uses Wiselinks so you can see it in action.

@@ -20,15 +20,15 @@ module Wiselinks
     end
 
     def wiselinks_request?
-      request.headers['X-Slide'].present?
+      request.headers['X-Render'].present?
     end
 
     def wiselinks_template_request?
-      self.wiselinks_request? && request.headers['X-Slide'] != 'partial'
+      self.wiselinks_request? && request.headers['X-Render'] != 'partial'
     end
 
     def wiselinks_partial_request?
-      self.wiselinks_request? && request.headers['X-Slide'] == 'partial'
+      self.wiselinks_request? && request.headers['X-Render'] == 'partial'
     end
   end
 end

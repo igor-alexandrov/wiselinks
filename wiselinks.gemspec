@@ -5,28 +5,28 @@
 
 Gem::Specification.new do |s|
   s.name = "wiselinks"
-  s.version = "0.0.2"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Igor Alexandrov", "Alexey Solilin", "Julia Egorova"]
-  s.date = "2012-11-28"
+  s.date = "2012-12-19"
   s.email = "igor.alexandrov@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "README.rdoc"
+    "README.md"
   ]
   s.files = [
     ".document",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE.txt",
-    "README.rdoc",
+    "README.md",
     "Rakefile",
     "VERSION",
     "app/views/layouts/wiselinks.html.erb",
     "lib/assets/javascripts/_history.js",
     "lib/assets/javascripts/wiselinks.js.coffee",
-    "lib/layout.rb",
+    "lib/headers.rb",
     "lib/wiselinks.rb",
     "test/helper.rb",
     "test/test_wiselinks.rb",

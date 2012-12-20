@@ -24,6 +24,36 @@ Then modify your `application.js` or `application.js.coffee` file to use Wiselin
     $(document).ready ->
     	window.wiselinks = new Wiselinks()
 
+Or more complex:
+
+	#= require jquery
+	#= require jquery.role
+	#= require wiselinks
+    
+    $(document).ready ->
+    	window.wiselinks = new Wiselinks($('@content'))
+    
+		$(document).off('page:loading').on(
+        	'page:loading'
+            (event, url, target, render) ->        
+                console.log("Wiselinks loading: #{url} to #{target} within '#{render}'")
+                # start loading animation
+        )
+    
+        $(document).off('page:success').on(
+        	'page:success'
+        	(event, data, status) ->        
+            	console.log("Wiselinks status: '#{status}'")
+            	# stop loading animation
+        )
+    
+        $(document).off('page:error').on(
+        	'page:error'
+        	(event, data, status) ->        
+            	console.log("Wiselinks status: '#{status}'")
+            	# stop loading animation and show error message
+        )	
+
 ##Events
 
 While using Wiselinks you **can rely** on `DOMContentLoaded` or `jQuery.ready()` to trigger your JavaScript code, but Wiselinks gives you some additional useful event to deal with the lifecycle of the page:

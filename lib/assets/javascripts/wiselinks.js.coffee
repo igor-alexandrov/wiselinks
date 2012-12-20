@@ -53,7 +53,10 @@ class Wiselinks
 
   _call: (url, target, render = 'template') ->
     self = this
-    $(document).trigger('page:loading', url, target, render)
+
+    $target = if target? then $(target) else self.$target
+
+    $(document).trigger('page:loading', [url, $target.selector, render])
 
     $.ajax(
       url: url
@@ -61,13 +64,12 @@ class Wiselinks
         'X-Render': render
       success: (data, status, xhr) ->
         document.title = xhr.getResponseHeader('X-Title')        
-
-        $target = if target? then $(target) else self.$target
+        
         $target.html(data)
 
-        $(document).trigger('page:success', data, status)
+        $(document).trigger('page:success', [data, status])
       error: (xhr, status, error)->        
-        $(document).trigger('page:error', status, error)
+        $(document).trigger('page:error', [status, error])
       dataType: "html"
     )
   

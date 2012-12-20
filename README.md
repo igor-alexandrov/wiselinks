@@ -34,16 +34,15 @@ And finally you should tell Wiselinks to process your links or forms:
 ```html	
 <div>
 <!--
-link will fire History.pushState() event.
-Data from the request will replace content of the container that was passed to Wiselinks (default to 'body')
+Link will fire History.pushState() event.
+Data from the request will replace content of the container that was passed to Wiselinks (default is 'body')
 -->
 <a href='/path' data-push='true'>wiselinks are awesome</a>
 
 <!--
-link will fire History.replaceState() event.
-Data from the request will replace content of the container that was passed to Wiselinks (default to 'body')
+Link will fire History.replaceState() event.
+Data from the request will replace content of the container that was passed to Wiselinks (default is 'body')
 -->
-
 <a href='/path' data-replace='true'>wiselinks are awesome</a>
 
 </div>

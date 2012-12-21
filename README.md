@@ -6,24 +6,64 @@ You may find Wiselinks similar to [Turbolinks](https://github.com/rails/turbolin
 
 ##Compatibility
 
-Wiselinks uses awesome [History.js](https://github.com/balupton/History.js/) library to perform requests.
+Wiselinks uses [History.js](https://github.com/balupton/History.js/) library to perform requests.
 
-Wiselinks should work in all major browsers including browsers that do not support HTML History API out of the box.
+Wiselinks works in all major browsers including browsers that do not support HTML History API out of the box.
 
+## In Comparison to Turbolinks
+
+<table>
+	<thead>
+		<tr>
+			<th></th>
+			<th>Turbolinks</th>
+			<th>Wiselinks</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Browsers with History API</td>
+			<td>Yes</td>
+			<td><strong>Yes</strong></td>
+		</tr>
+		<tr>
+			<td>Browsers without History API</td>
+			<td>No, degrades to normal request processing.</td>
+			<td><strong>Yes</strong></td>
+		</tr>
+		<tr>
+			<td>No JavaScript</td>
+			<td>No, degrades to normal request processing.</td>
+			<td>No, degrades to normal request processing.</td>
+		</tr>
+		<tr>
+			<td>Form processing</td>
+			<td>No</td>
+			<td><strong>Yes</strong></td>
+		</tr>
+		<tr>
+			<td>Form parameters optimization</td>
+			<td>No</td>
+			<td><strong>Yes</strong></td>
+		</tr>
+	</tbody>
+</table>
 
 ##Installation
 
 Add this to your Gemfile:
-	
-	gem 'wiselinks'
+
+```ruby
+gem 'wiselinks'
+```
 
 Then do:
 	
-	bundle
+	bundle install
 
 ## How does it work?
 
-Modify your `application.js` or `application.js.coffee` file to use Wiselinks object:
+Modify your `application.js.coffee` file to use Wiselinks object:
 	
 ```coffeescript	
 #= require jquery
@@ -36,7 +76,7 @@ $(document).ready ->
 And finally you should tell Wiselinks to process your links or forms.
 
 Links will fire History.pushState() event.
-Data from the request will replace content of the container that was passed to Wiselinks (default is 'body')
+Data from the request will replace content of the container that was passed to Wiselinks (default is "body")
 
 
 ```html	
@@ -51,7 +91,7 @@ Data from the request will replace content of the container that was passed to W
 ```
 
 Link will fire History.replaceState() event.
-Data from the request will replace content of the container that was passed to Wiselinks (default is 'body')
+Data from the request will replace content of the container that was passed to Wiselinks (default is "body")
 
 ```html
 <div class="dialog">
@@ -60,7 +100,7 @@ Data from the request will replace content of the container that was passed to W
 ```
 
 Links will fire History.pushState() event.
-Data from the request will be pasted into `<div role='catalog'>`. This configuration is widely when you have list of items that are paginated, sorted or maybe grouped by some attributes and you want to update only these items and nothing more on page.
+Data from the request will be pasted into `<div role="catalog">`. This configuration is widely when you have list of items that are paginated, sorted or maybe grouped by some attributes and you want to update only these items and nothing more on page.
 
 ```html	
 <ul class="pagination">
@@ -89,13 +129,13 @@ Data from the request will be pasted into `<div role='catalog'>`. This configura
 <div role="catalog">
 	<!-- the list of your items -->
 	...
-</div
+</div>
 ```
 
-**You can use Wiselinks with forms**! As easy and clear as with links. After submit button is clicked, Wiselinks will perform a request to "/" with serialized form attributes. The result of this request will be pasted into `<div role='catalog'>`.
+**You can use Wiselinks with forms**! As easy and clear as with links. After submit button is clicked, Wiselinks will perform a request to "/" with serialized form attributes. The result of this request will be pasted into `<div role="catalog">`.
 
 ```html	
-<div class='filter'>
+<div class="filter">
     <form action="/" method="get" data-push="true" data-target="@catalog">
 		<input type="text" size="30" name="title" id="title">
 		
@@ -111,10 +151,10 @@ Data from the request will be pasted into `<div role='catalog'>`. This configura
     </form>
 </div>    
 
-<div role='catalog'>
+<div role="catalog">
 	<!-- the list of your items -->
 	...
-</div
+</div>
 ```
 
 You can add some options, if you want:
@@ -125,7 +165,7 @@ You can add some options, if you want:
 #= require wiselinks
 
 $(document).ready ->
-    # DOM element with role = 'content' will be replaced after data load.    	
+    # DOM element with role = "content" will be replaced after data load.    	
     window.wiselinks = new Wiselinks($('@content'))
     
 	# Of course you can use more traditional jQuery selectors.
@@ -160,7 +200,7 @@ While using Wiselinks you **can rely** on `DOMContentLoaded` or `jQuery.ready()`
 
 ### page:loading (url, target, render = 'template')
 
-Event is triggered before the `XMLHttpRequest` is initialized and performed.
+Event is triggered before the `XMLHttpRequest` is initialised and performed.
 * *url* - URL of the request that will be performed;
 
 * *target* – element of the page where result of the request will be loaded into;
@@ -181,17 +221,17 @@ Event is triggered if the request fails.
 * *status* – a string describing the type of error that occurred;
 * *error* – optional exception object, if one occurred;
 
-## ActionController::Base Methods
+## Request methods
 
-Wiselinks adds a couple of methods to your controller. These methods are mostly syntax sugar and don't have any complex logic, so you can use them or not.
+Wiselinks adds a couple of methods to `ActionDispatch::Request`. These methods are mostly syntax sugar and don't have any complex logic, so you can use them or not.
 
-### #wiselinks_request? ###
+### #wiselinks? ###
 Method returns `true` if current request is initiated by Wiselinks, `false` otherwise. 
 
-### #wiselinks\_template\_request? ###
+### #wiselinks_template? ###
 Method returns `true` if current request is initiated by Wiselinks and client want to render template, `false` otherwise. 
 
-### #wiselinks\_partial\_request? ###
+### #wiselinks_partial? ###
 Method returns `true` if current request is initiated by Wiselinks and client want to render partial, `false` otherwise. 
 
 

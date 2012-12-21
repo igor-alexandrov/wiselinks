@@ -1,12 +1,14 @@
 #Wiselinks
+
 Wiselinks makes following links and submitting some forms in your web application faster. 
 
 You may find Wiselinks similar to [Turbolinks](https://github.com/rails/turbolinks) or [Pjax](https://github.com/defunkt/jquery-pjax), but Wiselinks have several rather important differences from both projects. We tried to make Wiselinks as easy to use as Turbolinks are but also as configurable as Pjax.
 
 ##Compatibility
-Wiselinks should work in all major browsers including browsers that do not support HTML History API out of the box.
 
-## How does it work?
+Wiselinks uses awesome [History.js](https://github.com/balupton/History.js/) library to perform requests.
+
+Wiselinks should work in all major browsers including browsers that do not support HTML History API out of the box.
 
 
 ##Installation
@@ -19,7 +21,9 @@ Then do:
 	
 	bundle
 
-Then modify your `application.js` or `application.js.coffee` file to use Wiselinks object:
+## How does it work?
+
+Modify your `application.js` or `application.js.coffee` file to use Wiselinks object:
 	
 ```coffeescript	
 #= require jquery
@@ -29,23 +33,88 @@ $(document).ready ->
     window.wiselinks = new Wiselinks()
 ```	
 
-And finally you should tell Wiselinks to process your links or forms:
+And finally you should tell Wiselinks to process your links or forms.
+
+Links will fire History.pushState() event.
+Data from the request will replace content of the container that was passed to Wiselinks (default is 'body')
+
 
 ```html	
-<div>
-<!--
-Link will fire History.pushState() event.
-Data from the request will replace content of the container that was passed to Wiselinks (default is 'body')
--->
-<a href='/path' data-push='true'>wiselinks are awesome</a>
+<ul class="menu">
+    <li>
+	    <a href="/" data-push="true">Home</a>
+    </li>	
+    <li>
+   		<a href="/contacts" data-push="true">Contacts</a>
+    </li>
+</ul>
+```
 
-<!--
 Link will fire History.replaceState() event.
 Data from the request will replace content of the container that was passed to Wiselinks (default is 'body')
--->
-<a href='/path' data-replace='true'>wiselinks are awesome</a>
 
-</div>
+```html
+<div class="dialog">
+	<a href="/step2" data-replace="true">Proceed to the next step</a>
+</div>	
+```
+
+Links will fire History.pushState() event.
+Data from the request will be pasted into `<div role='catalog'>`. This configuration is widely when you have list of items that are paginated, sorted or maybe grouped by some attributes and you want to update only these items and nothing more on page.
+
+```html	
+<ul class="pagination">
+    <li>
+	    <span>1</span>
+    </li>	
+    <li>
+   		<a href="/?page=2" data-push="true" data-target="@catalog">2</a>
+    </li>
+    <li>
+   		<a href="/?page=3" data-push="true" data-target="@catalog">3</a>
+    </li>
+    <li>
+   		<a href="/?page=4" data-push="true" data-target="@catalog">4</a>
+    </li>
+</ul>
+<ul class="sort">
+	<li>
+	    <a href="/?sort=title" data-push="true" data-target="@catalog">Sort by Title</a>
+    </li>	
+    <li>
+   		<a href="/?sort=price" data-push="true" data-target="@catalog">Sort by Price</a>
+    </li>	
+</ul>
+
+<div role="catalog">
+	<!-- the list of your items -->
+	...
+</div
+```
+
+**You can use Wiselinks with forms**! As easy and clear as with links. After submit button is clicked, Wiselinks will perform a request to "/" with serialized form attributes. The result of this request will be pasted into `<div role='catalog'>`.
+
+```html	
+<div class='filter'>
+    <form action="/" method="get" data-push="true" data-target="@catalog">
+		<input type="text" size="30" name="title" id="title">
+		
+		<select name="scope" id="scope">
+			<option value="">All Tax Liens</option>
+			<option value="accruing">Accruing Interest</option>
+          	<option value="awaiting_payment">Awaiting Payment</option>
+          	<option value="closed">Closed</option>
+          	<option value="trashed">Trash</option>
+    	</select>
+    	
+		<input type="submit" value="Find" name="commit">		
+    </form>
+</div>    
+
+<div role='catalog'>
+	<!-- the list of your items -->
+	...
+</div
 ```
 
 You can add some options, if you want:
@@ -145,7 +214,20 @@ We crafted small example application that uses Wiselinks so you can see it in ac
    bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-## Copyright
+## Credits
 
-Copyright (c) 2012 [Igor Alexandrov](http://igor-alexandrov.github.com/), [Alexey Solilin](https://github.com/solilin) and [Julia Egorova](https://github.com/vankiru). See LICENSE for details.
+![JetRockets](http://www.jetrockets.ru/images/logo.png)
+
+Wiselinks is maintained by [JetRockets](http://www.jetrockets.ru).
+
+Contributors:
+
+* [Igor Alexandrov](http://igor-alexandrov.github.com/)
+* [Alexey Solilin](https://github.com/solilin)
+* [Julia Egorova](https://github.com/vankiru)
+
+## License
+
+It is free software, and may be redistributed under the terms specified in the LICENSE file.
+
 	

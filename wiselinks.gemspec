@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "wiselinks"
-  s.version = "0.1.2"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Igor Alexandrov", "Alexey Solilin", "Julia Egorova"]
@@ -26,8 +26,10 @@ Gem::Specification.new do |s|
     "app/views/layouts/wiselinks.html.erb",
     "lib/assets/javascripts/_history.js",
     "lib/assets/javascripts/wiselinks.js.coffee",
-    "lib/headers.rb",
     "lib/wiselinks.rb",
+    "lib/wiselinks/headers.rb",
+    "lib/wiselinks/logger.rb",
+    "lib/wiselinks/request.rb",
     "test/helper.rb",
     "test/test_wiselinks.rb",
     "wiselinks.gemspec"

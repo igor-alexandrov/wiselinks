@@ -1,17 +1,11 @@
 module Wiselinks
-  module Logger
-    extend self
-
-    def self.logger
-      @logger ||= ::Logger.new(STDOUT)
-    end
-
-    def logger=(logger)
-      @logger = logger
+  module Logger    
+    def logger
+      @logger ||= Wiselinks.options[:logger] || ::Logger.new(STDOUT)
     end
 
     def log(message)
-      logger.info("[wiselinks] #{message}")
+      self.logger.info("[wiselinks] #{message}")
     end
   end
 end

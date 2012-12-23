@@ -7,9 +7,11 @@ require 'wiselinks/logger'
 require 'wiselinks/rails' if defined?(::Rails)
 
 module Wiselinks
+  extend Logger
 
   DEFAULTS = {    
-    :assets_digest => nil
+    :assets_digest => nil,
+    :logger => nil
   }
 
   def self.options

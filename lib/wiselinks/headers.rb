@@ -12,15 +12,19 @@ module Wiselinks
     end
 
     def render(options = {}, *args, &block)
-      if self.request.wiselinks?        
-        if Wiselinks.options[:assets_digest].present?
-          self.headers['X-Assets-Digest'] = Wiselinks.options[:assets_digest]          
-        end
-
+      if self.request.wiselinks?                
         if self.request.wiselinks_partial?
+          Wiselinks.log("processing partial request")
           options[:partial] ||= action_name
         else
+          Wiselinks.log("processing template request")
           options[:layout] = self.wiselinks_layout        
+        end
+
+        if Wiselinks.options[:assets_digest].present?
+          Wiselinks.log("assets digest #{Wiselinks.options[:assets_digest]}")
+
+          self.headers['X-Assets-Digest'] = Wiselinks.options[:assets_digest]          
         end
       end
 
@@ -28,6 +32,8 @@ module Wiselinks
     end
 
     def wiselinks_title(value)
+      Wiselinks.log("title: #{value}")
+
       self.headers['X-Title'] = value if self.request.wiselinks?
     end    
 

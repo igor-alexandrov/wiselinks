@@ -51,7 +51,7 @@ Wiselinks works in all major browsers including browsers that do not support HTM
 			<td><strong>Yes</strong></td>
 		</tr>
 		<tr>
-			<td>Asset change detection</td>
+			<td>Assets change detection</td>
 			<td>Yes, by parsing document head on every request.</td>
 			<td><strong>Yes</strong>, by calculating assets MD5 hash on boot.</td>
 		</tr>
@@ -69,6 +69,8 @@ gem 'wiselinks'
 Then do:
 	
 	bundle install
+
+Restart your server and you're now using wiselinks!
 
 ## How does it work?
 
@@ -245,6 +247,22 @@ Method returns `true` if current request is initiated by Wiselinks and client wa
 ### #wiselinks_partial? ###
 Method returns `true` if current request is initiated by Wiselinks and client want to render partial, `false` otherwise. 
 
+## Assets change detection
+
+You can enable assets change detection with Wiselinks. To do this you have to enable assets digests by adding this to you environment file:
+
+```ruby
+config.assets.digest = true
+```
+
+Then you should append your layout by adding this to head section:
+
+```erb
+<%= wiselinks_meta_tag %>
+```
+
+Now Wiselinks will track changes of your assets and if anything will change, your page will be reloaded completely.
+
 ## Title handling
 
 Wiselinks handles page titles by passing `X-Title` header with response. To do this you can use `wiselinks_title` helper.
@@ -262,7 +280,7 @@ Of course you can use `wiselinks_title` helper in your own helpers too.
 
 ##Example
 
-We crafted small example application that uses Wiselinks so you can see it in action.
+We crafted example application that uses nearly all features of Wiselinks so you can see it in action.
 
 * GitHub Repository: [https://github.com/igor-alexandrov/wiselinks_example](https://github.com/igor-alexandrov/wiselinks_example)
 

@@ -5,7 +5,7 @@ String.prototype.ends_with = (suffix) ->
 
 class Wiselinks
   constructor: (@$target = $('body'), options = {}) ->
-    # check that JQuery or Zepto.js are available
+    # Check that JQuery is available
     throw "Load JQuery to use Wiselinks" unless window.jQuery?
 
     self = this

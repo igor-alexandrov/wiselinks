@@ -6,3 +6,10 @@ group :development do
   gem "bundler"
   gem "jeweler"
 end
+
+group :test do
+  gem 'sqlite3'
+  gem "shoulda", ">= 0"
+
+  gem 'rails', '>= 3.2.0'
+end

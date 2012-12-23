@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/igor-alexandrov/wiselinks.png?branch=master)](https://travis-ci.org/igor-alexandrov/wiselinks)
+[![Dependency Status](https://gemnasium.com/igor-alexandrov/wiselinks.png)](https://gemnasium.com/igor-alexandrov/wiselinks)
+[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/igor-alexandrov/wiselinks)
+
 #Wiselinks
 
 Wiselinks makes following links and submitting some forms in your web application faster. 
@@ -22,17 +26,17 @@ Wiselinks works in all major browsers including browsers that do not support HTM
 	</thead>
 	<tbody>
 		<tr>
-			<td>Browsers with History API</td>
+			<td>Work in browsers with History API</td>
 			<td>Yes</td>
 			<td><strong>Yes</strong></td>
 		</tr>
 		<tr>
-			<td>Browsers without History API</td>
+			<td>Work in browsers without History API</td>
 			<td>No, degrades to normal request processing.</td>
 			<td><strong>Yes</strong></td>
 		</tr>
 		<tr>
-			<td>No JavaScript</td>
+			<td>Work without JavaScript</td>
 			<td>No, degrades to normal request processing.</td>
 			<td>No, degrades to normal request processing.</td>
 		</tr>
@@ -45,6 +49,11 @@ Wiselinks works in all major browsers including browsers that do not support HTM
 			<td>Form parameters optimization</td>
 			<td>No</td>
 			<td><strong>Yes</strong></td>
+		</tr>
+		<tr>
+			<td>Asset change detection</td>
+			<td>Yes, by parsing document head on every request.</td>
+			<td><strong>Yes</strong>, by calculating assets MD5 hash on boot.</td>
 		</tr>
 	</tbody>
 </table>
@@ -221,7 +230,9 @@ Event is triggered if the request fails.
 * *status* – a string describing the type of error that occurred;
 * *error* – optional exception object, if one occurred;
 
-## Request methods
+So if you wanted to have a client-side spinner, you could listen for `page:loading` to start it and `page:success` or `page:error` to stop it.
+
+## ActionDispatch::Request extensions
 
 Wiselinks adds a couple of methods to `ActionDispatch::Request`. These methods are mostly syntax sugar and don't have any complex logic, so you can use them or not.
 
@@ -234,6 +245,20 @@ Method returns `true` if current request is initiated by Wiselinks and client wa
 ### #wiselinks_partial? ###
 Method returns `true` if current request is initiated by Wiselinks and client want to render partial, `false` otherwise. 
 
+## Title handling
+
+Wiselinks handles page titles by passing `X-Title` header with response. To do this you can use `wiselinks_title` helper.
+
+```html	
+<% wiselinks_title("Wiselinks is awesome") %>
+
+<div>
+	<!-- your content -->
+	...
+</div>
+```
+
+Of course you can use `wiselinks_title` helper in your own helpers too.
 
 ##Example
 

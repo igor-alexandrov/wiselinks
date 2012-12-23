@@ -1,5 +1,9 @@
 module Wiselinks
   module Headers    
+    
+    def self.included(base)      
+      base.helper_method :wiselinks_title
+    end
 
   protected
 
@@ -8,7 +12,11 @@ module Wiselinks
     end
 
     def render(options = {}, *args, &block)
-      if self.request.wiselinks?
+      if self.request.wiselinks?        
+        if Wiselinks.options[:assets_digest].present?
+          self.headers['X-Assets-Digest'] = Wiselinks.options[:assets_digest]          
+        end
+
         if self.request.wiselinks_partial?
           options[:partial] ||= action_name
         else
@@ -18,6 +26,10 @@ module Wiselinks
 
       super
     end
+
+    def wiselinks_title(value)
+      self.headers['X-Title'] = value if self.request.wiselinks?
+    end    
 
     def wiselinks_request?
       Wiselinks::Logger.log "DEPRECATION WARNING: Method `wiselinks_request?` is deprecated. Please use `request.wiselinks?` instead."

@@ -1,16 +1,22 @@
-require 'wiselinks/headers'
 require 'wiselinks/request'
+require 'wiselinks/headers'
+require 'wiselinks/helpers'
+
 require 'wiselinks/logger'
 
-module Wiselinks
-  class Engine < ::Rails::Engine
-    initializer 'wiselinks.setup_logger' do
-      Wiselinks::Logger.logger = Rails.logger
-    end
+require 'wiselinks/rails' if defined?(::Rails)
 
-    initializer "wiselinks.register"  do
-      ActionController::Base.send :include, Headers
-      ActionDispatch::Request.send :include, Request
-    end    
+module Wiselinks
+
+  DEFAULTS = {    
+    :assets_digest => nil
+  }
+
+  def self.options
+    @options ||= DEFAULTS.dup
+  end
+
+  def self.options=(value)
+    @options = value
   end
 end

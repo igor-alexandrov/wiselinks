@@ -34,14 +34,16 @@ class Wiselinks
     $(document).on(
       "click", "a[data-push], a[data-replace]"
       (event) ->      
-        if (event.ctrlKey || event.metaKey)
+        if self._cross_origin_link(event.target) || self._non_standard_click(event)
           return true;
-        
+
         self._process_link($(this))
 
         event.preventDefault()
         return false
     )
+
+    @assets_digest = $("meta[name='assets-digest']").attr("content")
   
   load: (url, target, render = 'template') ->
     History.ready = true
@@ -62,12 +64,15 @@ class Wiselinks
       url: url
       headers:
         'X-Render': render
-      success: (data, status, xhr) ->
-        document.title = xhr.getResponseHeader('X-Title')        
-        
-        $target.html(data)
+      success: (data, status, xhr) ->                
+        if self._assets_changed(xhr.getResponseHeader('X-Assets-Digest'))
+          window.location.reload(true)
+        else
+          document.title = xhr.getResponseHeader('X-Title')
+          
+          $target.html(data)
 
-        $(document).trigger('page:success', [data, status])
+          $(document).trigger('page:success', [data, status])
       error: (xhr, status, error)->        
         $(document).trigger('page:error', [status, error])
       dataType: "html"
@@ -114,5 +119,14 @@ class Wiselinks
     type = if ($link.attr("data-push") == 'partial') then 'partial' else 'template'
 
     self.load($link.attr("href"), $link.attr("data-target"), type)
+
+  _cross_origin_link: (link) ->
+    (location.protocol != link.protocol) || (location.host != link.host)
+
+  _non_standard_click: (event) ->
+    event.metaKey || event.ctrlKey || event.shiftKey || event.altKey  
+
+  _assets_changed: (digest) ->
+    digest? && @assets_digest != digest
 
 window.Wiselinks = Wiselinks

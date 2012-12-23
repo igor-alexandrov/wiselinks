@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "wiselinks"
-  s.version = "0.2.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Igor Alexandrov", "Alexey Solilin", "Julia Egorova"]
-  s.date = "2012-12-21"
+  s.date = "2012-12-23"
   s.email = "igor.alexandrov@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE",
@@ -28,10 +28,59 @@ Gem::Specification.new do |s|
     "lib/assets/javascripts/wiselinks.js.coffee",
     "lib/wiselinks.rb",
     "lib/wiselinks/headers.rb",
+    "lib/wiselinks/helpers.rb",
     "lib/wiselinks/logger.rb",
+    "lib/wiselinks/rails.rb",
     "lib/wiselinks/request.rb",
+    "test/cases/application_controller_test.rb",
+    "test/dummy/README.rdoc",
+    "test/dummy/Rakefile",
+    "test/dummy/app/assets/javascripts/application.js",
+    "test/dummy/app/assets/javascripts/wisepdf.js",
+    "test/dummy/app/assets/stylesheets/application.css",
+    "test/dummy/app/assets/stylesheets/wisepdf.css",
+    "test/dummy/app/controllers/application_controller.rb",
+    "test/dummy/app/helpers/application_helper.rb",
+    "test/dummy/app/mailers/.gitkeep",
+    "test/dummy/app/models/.gitkeep",
+    "test/dummy/app/views/application/index.pdf.erb",
+    "test/dummy/app/views/layouts/application.html.erb",
+    "test/dummy/app/views/layouts/pdf.html.erb",
+    "test/dummy/config.ru",
+    "test/dummy/config/application.rb",
+    "test/dummy/config/boot.rb",
+    "test/dummy/config/database.yml",
+    "test/dummy/config/environment.rb",
+    "test/dummy/config/environments/development.rb",
+    "test/dummy/config/environments/production.rb",
+    "test/dummy/config/environments/test.rb",
+    "test/dummy/config/initializers/backtrace_silencers.rb",
+    "test/dummy/config/initializers/inflections.rb",
+    "test/dummy/config/initializers/mime_types.rb",
+    "test/dummy/config/initializers/secret_token.rb",
+    "test/dummy/config/initializers/session_store.rb",
+    "test/dummy/config/initializers/wrap_parameters.rb",
+    "test/dummy/config/locales/en.yml",
+    "test/dummy/config/routes.rb",
+    "test/dummy/lib/assets/.gitkeep",
+    "test/dummy/log/.gitkeep",
+    "test/dummy/log/development.log",
+    "test/dummy/log/test.log",
+    "test/dummy/public/404.html",
+    "test/dummy/public/422.html",
+    "test/dummy/public/500.html",
+    "test/dummy/public/favicon.ico",
+    "test/dummy/public/javascripts/wisepdf.js",
+    "test/dummy/public/stylesheets/wisepdf.css",
+    "test/dummy/script/rails",
+    "test/dummy/tmp/cache/assets/CA9/590/sprockets%2F260d19b0714b39b217abfe83309458b7",
+    "test/dummy/tmp/cache/assets/D13/4A0/sprockets%2Fc857f4fea90e731182fa7000ea6833e9",
+    "test/dummy/tmp/cache/assets/D1C/0F0/sprockets%2F13dc05c787589dd73a669e0ad23d54e8",
+    "test/dummy/tmp/cache/assets/D6E/B20/sprockets%2F2669d77f5dd55e82ba092accac21871a",
+    "test/dummy/tmp/cache/assets/D93/BA0/sprockets%2Fe162e2a148480db4edf41c7ca8a527cb",
+    "test/dummy/tmp/cache/assets/E1B/1A0/sprockets%2Fbdc3a3ccd7d2f02dddd41712ed4c8e31",
     "test/helper.rb",
-    "test/test_wiselinks.rb",
+    "travis.yml",
     "wiselinks.gemspec"
   ]
   s.homepage = "http://github.com/igor-alexandrov/wiselinks"

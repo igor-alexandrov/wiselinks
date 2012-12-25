@@ -58,14 +58,14 @@ class Wiselinks
 
     $target = if target? then $(target) else self.$target
 
-    $(document).trigger('page:loading', [url, $target.selector, render])
+    $document = $(document).trigger('page:loading', [url, $target.selector, render])
 
     $.ajax(
       url: url
       headers:
         'X-Render': render
       complete: (event, xhr, settings) ->
-        $(document).trigger('page:complete', [event, xhr, settings])
+        $document.trigger('page:complete', [event, xhr, settings])
 
       success: (data, status, xhr) ->                
         if self._assets_changed(xhr.getResponseHeader('X-Assets-Digest'))
@@ -75,9 +75,9 @@ class Wiselinks
           
           $target.html(data)
 
-          $(document).trigger('page:success', [data, status])
-      error: (xhr, status, error)->        
-        $(document).trigger('page:error', [status, error])
+          $document.trigger('page:success', [data, status])
+      error: (xhr, status, error)->
+        $document.trigger('page:error', [status, error])
       dataType: "html"
     )
   

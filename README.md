@@ -191,24 +191,23 @@ $(document).ready ->
     )
 
 	$(document).off('page:complete').on(
-        'page:loading'
+        'page:complete'
         (event, xhr, settings) ->
             console.log("Wiselinks page loading completed")
-            # start loading animation
+            # stop loading animation
     )
 
     $(document).off('page:success').on(
         'page:success'
         (event, data, status) ->        
             console.log("Wiselinks status: '#{status}'")
-            # stop loading animation
     )
 
     $(document).off('page:error').on(
         'page:error'
         (event, data, status) ->        
             console.log("Wiselinks status: '#{status}'")
-            # stop loading animation and show error message
+            # show error message
     )
 ```     	
 

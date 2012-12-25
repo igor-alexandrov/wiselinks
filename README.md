@@ -190,6 +190,13 @@ $(document).ready ->
             # start loading animation
     )
 
+	$(document).off('page:complete').on(
+        'page:loading'
+        (event, xhr, settings) ->
+            console.log("Wiselinks page loading completed")
+            # start loading animation
+    )
+
     $(document).off('page:success').on(
         'page:success'
         (event, data, status) ->        

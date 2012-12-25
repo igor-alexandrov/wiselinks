@@ -64,6 +64,9 @@ class Wiselinks
       url: url
       headers:
         'X-Render': render
+      complete: (event, xhr, settings) ->
+        $(document).trigger('page:complete', [event, xhr, settings])
+
       success: (data, status, xhr) ->                
         if self._assets_changed(xhr.getResponseHeader('X-Assets-Digest'))
           window.location.reload(true)

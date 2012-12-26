@@ -1,25 +1,34 @@
 #= require _history
+#= require _history.html4
+#= require _history.adapter.jquery.js
 
 String.prototype.ends_with = (suffix) ->
   this.indexOf(suffix, this.length - suffix.length) != -1
 
 class Wiselinks
-  constructor: (@$target = $('body'), options = {}) ->
+  constructor: (@$target = $('body'), @options = {}) ->
     # Check that JQuery is available
     throw "Load JQuery to use Wiselinks" unless window.jQuery?
 
     self = this
 
+    @options = jQuery.extend(self._defaults(), @options);
+
+    if History.emulated.pushState && @options.html4 == true
+      if window.location.href.indexOf('#!') == -1 && window.location.pathname != '/'                 
+        window.location.href = "#{window.location.protocol}//#{window.location.host}/#!#{window.location.pathname}"
+      
+      if window.location.hash.indexOf('#!') != -1                 
+        self._call(window.location.hash.substring(2))    
+
     History.Adapter.bind(
       window,
       "statechange"
       (event, data) ->
-        return if (!History.ready)
+        return false if (!History.ready)
   
         state = History.getState()         
-        self._call(state.url, state.data.target, state.data.render)  
-
-        return false
+        self._call(state.url, state.data.target, state.data.render)        
     )
     
     $(document).on(
@@ -35,23 +44,25 @@ class Wiselinks
       "click", "a[data-push], a[data-replace]"
       (event) ->      
         if self._cross_origin_link(event.target) || self._non_standard_click(event)
-          return true;
-
+          return true;        
         self._process_link($(this))
 
         event.preventDefault()
         return false
-    )
+    )     
 
     @assets_digest = $("meta[name='assets-digest']").attr("content")
   
   load: (url, target, render = 'template') ->
     History.ready = true
-    History.pushState({ timestamp: (new Date().getTime()), render: render, target: target }, document.title, decodeURI(url) )
+    History.pushState({ timestamp: (new Date().getTime()), render: render, target: target }, document.title, url )
 
   reload: () ->
     History.ready = true
-    History.replaceState({ timestamp: (new Date().getTime()), render: 'template' }, document.title, decodeURI(History.getState().url) )
+    History.replaceState({ timestamp: (new Date().getTime()), render: 'template' }, document.title, History.getState().url )
+
+  _defaults: ->
+    html4: true
 
   _call: (url, target, render = 'template') ->
     self = this
@@ -68,7 +79,7 @@ class Wiselinks
         if self._assets_changed(xhr.getResponseHeader('X-Assets-Digest'))
           window.location.reload(true)
         else
-          document.title = xhr.getResponseHeader('X-Title')
+          self._set_title(xhr)
           
           $target.html(data)
 
@@ -127,6 +138,10 @@ class Wiselinks
     event.metaKey || event.ctrlKey || event.shiftKey || event.altKey  
 
   _assets_changed: (digest) ->
-    digest? && @assets_digest != digest
+    @assets_digest? && @assets_digest != digest
+
+  _set_title: (xhr) ->
+    value = xhr.getResponseHeader('X-Title')
+    document.title = value if value?
 
 window.Wiselinks = Wiselinks

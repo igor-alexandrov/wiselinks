@@ -32,9 +32,10 @@ module Wiselinks
     end
 
     def wiselinks_title(value)
-      Wiselinks.log("title: #{value}")
-
-      self.headers['X-Title'] = value if self.request.wiselinks?
+      if self.request.wiselinks?
+        Wiselinks.log("title: #{value}")        
+        response.headers['X-Title'] = value 
+      end
     end    
 
     def wiselinks_request?

@@ -35,7 +35,7 @@ module Wiselinks
     end
 
     def wiselinks_title(value)
-      if self.request.wiselinks?
+      if self.request.wiselinks? && value.present?
         Wiselinks.log("title: #{value}")        
         response.headers['X-Title'] = URI.encode(value)
       end

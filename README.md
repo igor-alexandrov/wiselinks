@@ -74,6 +74,8 @@ Restart your server and you're now using wiselinks!
 
 ## How does it work?
 
+### CoffeeScript
+
 Modify your `application.js.coffee` file to use Wiselinks object:
 	
 ```coffeescript	
@@ -84,9 +86,52 @@ $(document).ready ->
     window.wiselinks = new Wiselinks()
 ```	
 
-And finally you should tell Wiselinks to process your links or forms.
+You can add some options, if you want:
 
-Links will fire History.pushState() event.
+```coffeescript	
+#= require jquery
+#= require jquery.role
+#= require wiselinks
+
+$(document).ready ->
+    # DOM element with role = "content" will be replaced after data load.    	
+    window.wiselinks = new Wiselinks($('@content'))
+    
+	# Of course you can use more traditional jQuery selectors.
+	# window.wiselinks = new Wiselinks($('#content'))
+	# window.wiselinks = new Wiselinks($('.content:first'))
+
+	$(document).off('page:loading').on(
+        'page:loading'
+        (event, url, target, render) ->        
+            console.log("Wiselinks loading: #{url} to #{target} within '#{render}'")
+            # start loading animation
+    )
+
+	$(document).off('page:complete').on(
+        'page:complete'
+        (event, xhr, settings) ->
+            console.log("Wiselinks page loading completed")
+            # stop loading animation
+    )
+
+    $(document).off('page:success').on(
+        'page:success'
+        (event, data, status) ->        
+            console.log("Wiselinks status: '#{status}'")
+    )
+
+    $(document).off('page:error').on(
+        'page:error'
+        (event, data, status) ->        
+            console.log("Wiselinks status: '#{status}'")
+            # show error message
+    )
+```
+
+### HTML templates
+
+Links with `data-push` attribute will fire History.pushState() event.
 Data from the request will replace content of the container that was passed to Wiselinks (default is "body")
 
 
@@ -166,56 +211,17 @@ Data from the request will be pasted into `<div role="catalog">`. This configura
 	<!-- the list of your items -->
 	...
 </div>
-```
-
-You can add some options, if you want:
-
-```coffeescript	
-#= require jquery
-#= require jquery.role
-#= require wiselinks
-
-$(document).ready ->
-    # DOM element with role = "content" will be replaced after data load.    	
-    window.wiselinks = new Wiselinks($('@content'))
-    
-	# Of course you can use more traditional jQuery selectors.
-	# window.wiselinks = new Wiselinks($('#content'))
-	# window.wiselinks = new Wiselinks($('.content:first'))
-
-	$(document).off('page:loading').on(
-        'page:loading'
-        (event, url, target, render) ->        
-            console.log("Wiselinks loading: #{url} to #{target} within '#{render}'")
-            # start loading animation
-    )
-
-	$(document).off('page:complete').on(
-        'page:complete'
-        (event, xhr, settings) ->
-            console.log("Wiselinks page loading completed")
-            # stop loading animation
-    )
-
-    $(document).off('page:success').on(
-        'page:success'
-        (event, data, status) ->        
-            console.log("Wiselinks status: '#{status}'")
-    )
-
-    $(document).off('page:error').on(
-        'page:error'
-        (event, data, status) ->        
-            console.log("Wiselinks status: '#{status}'")
-            # show error message
-    )
 ```     	
 
-## Javascript Events
+### Rendering
+
+The idea of Wiselinks is that you should render only content that you need in current request. Usually you don't need to reload your stylesheets and javascripts on every request.
+
+### Javascript Events
 
 While using Wiselinks you **can rely** on `DOMContentLoaded` or `jQuery.ready()` to trigger your JavaScript code, but Wiselinks gives you some additional useful event to deal with the lifecycle of the page:
 
-### page:loading (url, target, render = 'template')
+#### page:loading (url, target, render = 'template')
 
 Event is triggered before the `XMLHttpRequest` is initialised and performed.
 * *url* - URL of the request that will be performed;
@@ -224,14 +230,14 @@ Event is triggered before the `XMLHttpRequest` is initialised and performed.
 
 * *render = 'template'* – what should be rendered; can be 'template' or 'partial';
 
-### page:success (data, status) ###
+#### page:success (data, status) ###
 
 Event is triggered if the request succeeds.
 * *data* – the data returned from the server;
 
 * *status* – a string describing the status;
 
-### page:error (status, error) ###
+#### page:error (status, error) ###
 
 Event is triggered if the request fails.
 
@@ -240,20 +246,20 @@ Event is triggered if the request fails.
 
 So if you wanted to have a client-side spinner, you could listen for `page:loading` to start it and `page:success` or `page:error` to stop it.
 
-## ActionDispatch::Request extensions
+### ActionDispatch::Request extensions
 
 Wiselinks adds a couple of methods to `ActionDispatch::Request`. These methods are mostly syntax sugar and don't have any complex logic, so you can use them or not.
 
-### #wiselinks? ###
+#### #wiselinks? ###
 Method returns `true` if current request is initiated by Wiselinks, `false` otherwise. 
 
-### #wiselinks_template? ###
+#### #wiselinks_template? ###
 Method returns `true` if current request is initiated by Wiselinks and client want to render template, `false` otherwise. 
 
-### #wiselinks_partial? ###
+#### #wiselinks_partial? ###
 Method returns `true` if current request is initiated by Wiselinks and client want to render partial, `false` otherwise. 
 
-## Assets change detection
+### Assets change detection
 
 You can enable assets change detection with Wiselinks. To do this you have to enable assets digests by adding this to you environment file:
 
@@ -269,7 +275,7 @@ Then you should append your layout by adding this to head section:
 
 Now Wiselinks will track changes of your assets and if anything will change, your page will be reloaded completely.
 
-## Title handling
+### Title handling
 
 Wiselinks handles page titles by passing `X-Title` header with response. To do this you can use `wiselinks_title` helper.
 
@@ -284,7 +290,7 @@ Wiselinks handles page titles by passing `X-Title` header with response. To do t
 
 Of course you can use `wiselinks_title` helper in your own helpers too.
 
-##Example
+## Example
 
 We crafted example application that uses nearly all features of Wiselinks so you can see it in action.
 
@@ -307,7 +313,7 @@ We crafted example application that uses nearly all features of Wiselinks so you
 
 ![JetRockets](http://www.jetrockets.ru/images/logo.png)
 
-Wiselinks is maintained by [JetRockets](http://www.jetrockets.ru).
+Wiselinks is maintained by [JetRockets](http://www.jetrockets.ru/en).
 
 Contributors:
 

@@ -75,10 +75,9 @@ class Wiselinks
       url: url
       headers:
         'X-Render': render
-      complete: (event, xhr, settings) ->
-        $document.trigger('page:complete', [event, xhr, settings])
-
-      success: (data, status, xhr) ->                
+      complete: (xhr, status) ->
+        $document.trigger('page:complete', [xhr, status])        
+      success: (data, status, xhr) ->
         if self._assets_changed(xhr.getResponseHeader('X-Assets-Digest'))
           window.location.reload(true)
         else
@@ -88,7 +87,8 @@ class Wiselinks
 
           $document.trigger('page:success', [data, status])
       error: (xhr, status, error)->
-        $document.trigger('page:error', [status, error])
+        $document.trigger('page:error', [status, error])      
+
       dataType: "html"
     )
   
@@ -145,6 +145,6 @@ class Wiselinks
 
   _set_title: (xhr) ->
     value = xhr.getResponseHeader('X-Title')
-    document.title = value if value?
+    document.title = decodeURI(value) if value?
 
 window.Wiselinks = Wiselinks

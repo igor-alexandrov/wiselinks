@@ -86,7 +86,18 @@ $(document).ready ->
     window.wiselinks = new Wiselinks()
 ```	
 
-You can add some options, if you want:
+You can disable HTML4 browsers support easily:
+
+```coffeescript	
+#= require jquery
+#= require wiselinks
+
+$(document).ready ->
+    window.wiselinks = new Wiselinks($('body'), html4: true )
+```	
+
+
+Or you can add some more options, if you want:
 
 ```coffeescript	
 #= require jquery
@@ -221,7 +232,7 @@ The idea of Wiselinks is that you should render only content that you need in cu
 
 While using Wiselinks you **can rely** on `DOMContentLoaded` or `jQuery.ready()` to trigger your JavaScript code, but Wiselinks gives you some additional useful event to deal with the lifecycle of the page:
 
-#### page:loading (url, target, render = 'template')
+**page:loading (url, target, render = 'template')**
 
 Event is triggered before the `XMLHttpRequest` is initialised and performed.
 * *url* - URL of the request that will be performed;
@@ -230,14 +241,14 @@ Event is triggered before the `XMLHttpRequest` is initialised and performed.
 
 * *render = 'template'* – what should be rendered; can be 'template' or 'partial';
 
-#### page:success (data, status) ###
+**page:success (data, status)**
 
 Event is triggered if the request succeeds.
 * *data* – the data returned from the server;
 
 * *status* – a string describing the status;
 
-#### page:error (status, error) ###
+**page:error (status, error)**
 
 Event is triggered if the request fails.
 

@@ -8,51 +8,55 @@ String.prototype.ends_with = (suffix) ->
 class Wiselinks
   constructor: (@$target = $('body'), @options = {}) ->
     # Check that JQuery is available
-    throw "Load JQuery to use Wiselinks" unless window.jQuery?
+    throw "Load jQuery to use Wiselinks" unless window.jQuery?
 
     self = this
 
     @options = jQuery.extend(self._defaults(), @options);
 
-    if History.emulated.pushState && @options.html4 == true
-      if window.location.href.indexOf('#!') == -1 && window.location.pathname != '/'                 
-        window.location.href = "#{window.location.protocol}//#{window.location.host}/#!#{window.location.pathname}"
-      
-      if window.location.hash.indexOf('#!') != -1                 
-        self._call(window.location.hash.substring(2))    
+    if self.enabled()
+      @assets_digest = $("meta[name='assets-digest']").attr("content")
 
-    History.Adapter.bind(
-      window,
-      "statechange"
-      (event, data) ->
-        return false if (!History.ready)
-  
-        state = History.getState()         
-        self._call(state.url, state.data.target, state.data.render)        
-    )
-    
-    $(document).on(
-      "submit", "form[data-push], form[data-replace]"
-      (event) ->        
-        self._process_form($(this))
+      if History.emulated.pushState && @options.html4 == true
+        if window.location.href.indexOf('#!') == -1 && window.location.pathname != '/'                 
+          window.location.href = "#{window.location.protocol}//#{window.location.host}/#!#{window.location.pathname}"
         
-        event.preventDefault()
-        return false
-    )
-  
-    $(document).on(
-      "click", "a[data-push], a[data-replace]"
-      (event) ->      
-        if self._cross_origin_link(event.target) || self._non_standard_click(event)
-          return true;        
-        self._process_link($(this))
+        if window.location.hash.indexOf('#!') != -1                 
+          self._call(window.location.hash.substring(2))    
 
-        event.preventDefault()
-        return false
-    )     
+      History.Adapter.bind(
+        window,
+        "statechange"
+        (event, data) ->
+          return false if (!History.ready)
+    
+          state = History.getState()         
+          self._call(state.url, state.data.target, state.data.render)        
+      )
+      
+      $(document).on(
+        "submit", "form[data-push], form[data-replace]"
+        (event) ->        
+          self._process_form($(this))
+          
+          event.preventDefault()
+          return false
+      )
+    
+      $(document).on(
+        "click", "a[data-push], a[data-replace]"
+        (event) ->      
+          if self._cross_origin_link(event.target) || self._non_standard_click(event)
+            return true;        
+          self._process_link($(this))
 
-    @assets_digest = $("meta[name='assets-digest']").attr("content")
+          event.preventDefault()
+          return false
+      )           
   
+  enabled: ->
+    !History.emulated.pushState || @options.html4 == true 
+
   load: (url, target, render = 'template') ->
     History.ready = true
     History.pushState({ timestamp: (new Date().getTime()), render: render, target: target }, document.title, url )
@@ -135,7 +139,8 @@ class Wiselinks
     self.load($link.attr("href"), $link.attr("data-target"), type)
 
   _cross_origin_link: (link) ->
-    (location.protocol != link.protocol) || (location.host != link.host)
+    # we split host because IE returns host with port and other browsers not
+    (location.protocol != link.protocol) || (location.host.split(':')[0] != link.host.split(':')[0])    
 
   _non_standard_click: (event) ->
     event.metaKey || event.ctrlKey || event.shiftKey || event.altKey  

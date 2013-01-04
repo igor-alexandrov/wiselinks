@@ -8,52 +8,59 @@ Wiselinks makes following links and submitting some forms in your web applicatio
 
 You may find Wiselinks similar to [Turbolinks](https://github.com/rails/turbolinks) or [Pjax](https://github.com/defunkt/jquery-pjax), but Wiselinks have several rather important differences from both projects. We tried to make Wiselinks as easy to use as Turbolinks are but also as configurable as Pjax.
 
-##Compatibility
+## Compatibility
 
 Wiselinks uses [History.js](https://github.com/balupton/History.js/) library to perform requests.
 
 Wiselinks works in all major browsers including browsers that do not support HTML History API out of the box.
 
-## In Comparison to Turbolinks
+## In Comparison to Turbolinks and PJAX
 
 <table>
 	<thead>
 		<tr>
 			<th></th>
-			<th>Turbolinks</th>
 			<th>Wiselinks</th>
+			<th>Turbolinks</th>
+			<th>PJAX</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
-			<td>Work in browsers with History API</td>
-			<td>Yes</td>
+			<td>Work in HTML5 browsers</td>			
 			<td><strong>Yes</strong></td>
+			<td>Yes</td>
+			<td>Yes</td>
 		</tr>
 		<tr>
 			<td>Work in browsers without History API</td>
-			<td>No, degrades to normal request processing.</td>
-			<td><strong>Yes</strong></td>
+			<td><strong>Yes</strong>, with hashbang (can be switched off)</td>
+			<td>No, degrades to normal request processing</td>
+			<td>No, degrades to normal request processing</td>
 		</tr>
 		<tr>
 			<td>Work without JavaScript</td>
-			<td>No, degrades to normal request processing.</td>
-			<td>No, degrades to normal request processing.</td>
+			<td>No, degrades to normal request processing</td>
+			<td>No, degrades to normal request processing</td>
+			<td>No, degrades to normal request processing</td>
 		</tr>
 		<tr>
-			<td>Form processing</td>
-			<td>No</td>
+			<td>Form processing</td>			
 			<td><strong>Yes</strong></td>
-		</tr>
-		<tr>
-			<td>Form parameters optimization</td>
 			<td>No</td>
-			<td><strong>Yes</strong></td>
+			<td>Yes (experimental feature)</td>
 		</tr>
 		<tr>
-			<td>Assets change detection</td>
-			<td>Yes, by parsing document head on every request.</td>
-			<td><strong>Yes</strong>, by calculating assets MD5 hash on boot.</td>
+			<td>Form parameters optimization</td>			
+			<td><strong>Yes</strong></td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>Assets change detection</td>			
+			<td><strong>Yes</strong>, by calculating assets MD5 hash on boot</td>
+			<td>Yes, by parsing document head on every request</td>
+			<td>No</td>
 		</tr>
 	</tbody>
 </table>

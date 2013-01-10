@@ -100,7 +100,7 @@ You can disable HTML4 browsers support easily:
 #= require wiselinks
 
 $(document).ready ->
-    window.wiselinks = new Wiselinks($('body'), html4: true )
+    window.wiselinks = new Wiselinks($('body'), html4: false )
 ```	
 
 

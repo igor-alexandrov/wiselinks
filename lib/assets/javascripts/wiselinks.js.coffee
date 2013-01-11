@@ -1,3 +1,4 @@
+#= require _json2
 #= require _history
 #= require _history.html4
 #= require _history.adapter.jquery.js

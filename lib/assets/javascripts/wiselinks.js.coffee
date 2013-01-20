@@ -100,7 +100,7 @@ class Wiselinks
   _process_form: ($form) ->
     self = this
     
-    $disable = $form.find(':input[value=""]')
+    $disable = $form.find(':input[value=""]:not(:disabled)')
     $disable.attr('disabled', true);      
     
     params = {}

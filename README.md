@@ -135,7 +135,7 @@ $(document).ready ->
 
     $(document).off('page:success').on(
         'page:success'
-        (event, data, status) ->        
+        (event, $target, status) ->        
             console.log("Wiselinks status: '#{status}'")
     )
 
@@ -248,10 +248,10 @@ Event is triggered before the `XMLHttpRequest` is initialised and performed.
 
 * *render = 'template'* – what should be rendered; can be 'template' or 'partial';
 
-**page:success (data, status)**
+**page:success ($target, status)**
 
 Event is triggered if the request succeeds.
-* *data* – the data returned from the server;
+* *$target* – JQuery object that was updated by request;
 
 * *status* – a string describing the status;
 

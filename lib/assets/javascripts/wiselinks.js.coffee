@@ -90,7 +90,7 @@ class Wiselinks
           
           $target.html(data)
 
-          $document.trigger('page:success', [data, status])
+          $document.trigger('page:success', [$target, status])
       error: (xhr, status, error)->
         $document.trigger('page:error', [status, error])      
 

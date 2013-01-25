@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "wiselinks"
-  s.version = "0.3.9"
+  s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Igor Alexandrov", "Alexey Solilin", "Julia Egorova"]
-  s.date = "2013-01-21"
+  s.date = "2013-01-25"
   s.email = "igor.alexandrov@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE",

@@ -12,7 +12,10 @@ module Wiselinks
     end
 
     def render(options = {}, *args, &block)
-      if self.request.wiselinks?                
+      if self.request.wiselinks?        
+        response.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
+        response.headers['Pragma'] = 'no-cache'
+
         if self.request.wiselinks_partial?
           Wiselinks.log("processing partial request")
           options[:partial] ||= action_name

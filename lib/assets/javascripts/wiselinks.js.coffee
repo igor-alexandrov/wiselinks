@@ -19,8 +19,8 @@ class Wiselinks
       @assets_digest = $("meta[name='assets-digest']").attr("content")
 
       if History.emulated.pushState && @options.html4 == true
-        if window.location.href.indexOf('#!') == -1 && window.location.pathname != '/'                 
-          window.location.href = "#{window.location.protocol}//#{window.location.host}/#!#{window.location.pathname}"
+        if window.location.href.indexOf('#!') == -1 && @options.html4_root_path != null && window.location.pathname != @options.html4_root_path
+          window.location.href = "#{window.location.protocol}//#{window.location.host}#{@options.html4_root_path}#!#{window.location.pathname}"
         
         if window.location.hash.indexOf('#!') != -1                 
           self._call(window.location.hash.substring(2))    
@@ -28,9 +28,7 @@ class Wiselinks
       History.Adapter.bind(
         window,
         "statechange"
-        (event, data) ->
-          return false if (!History.ready)
-    
+        (event, data) ->    
           state = History.getState()         
           self._call(state.url, state.data.target, state.data.render)        
       )
@@ -58,16 +56,15 @@ class Wiselinks
   enabled: ->
     !History.emulated.pushState || @options.html4 == true 
 
-  load: (url, target, render = 'template') ->
-    History.ready = true
+  load: (url, target, render = 'template') ->    
     History.pushState({ timestamp: (new Date().getTime()), render: render, target: target }, document.title, url )
 
-  reload: () ->
-    History.ready = true
+  reload: () ->    
     History.replaceState({ timestamp: (new Date().getTime()), render: 'template' }, document.title, History.getState().url )
 
   _defaults: ->
     html4: true
+    html4_root_path: '/'
 
   _call: (url, target, render = 'template') ->
     self = this

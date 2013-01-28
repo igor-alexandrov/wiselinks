@@ -308,6 +308,24 @@ Wiselinks handles page titles by passing `X-Title` header with response. To do t
 
 Of course you can use `wiselinks_title` helper in your own helpers too.
 
+### Google Analytics and Yandex Metrika
+
+If you want to handle these analytics tools, then you should add handler to `page:success` event.
+
+Let's say, that you have two objects, first is `_gaq` – instance of Google Analytics, second is `_metrika` – instance of Yandex Metrika. Then you have to add the following code somewhere in your `application.js.coffee`.
+
+```coffeescript
+$(document).off('page:success').on(
+  'page:success'
+  (event, data, status) ->
+    _gaq.push(['_trackPageview', location.pathname])
+    _metrika.hit(location.pathname)
+)
+```
+
+After this, you will have correct page view statistics in your analytics tools.
+
+
 ## Example
 
 We crafted example application that uses nearly all features of Wiselinks so you can see it in action.

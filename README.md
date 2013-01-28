@@ -347,7 +347,7 @@ We crafted example application that uses nearly all features of Wiselinks so you
 
 ## Credits
 
-![JetRockets](http://www.jetrockets.ru/images/logo.png)
+![JetRockets](http://www.jetrockets.ru/public/logo.png)
 
 Wiselinks is maintained by [JetRockets](http://www.jetrockets.ru/en).
 

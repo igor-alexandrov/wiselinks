@@ -44,8 +44,8 @@ class Wiselinks
     
       $(document).on(
         "click", "a[data-push], a[data-replace]"
-        (event) ->      
-          if self._cross_origin_link(event.target) || self._non_standard_click(event)
+        (event) ->        
+          if self._cross_origin_link(event.currentTarget) || self._non_standard_click(event)
             return true;        
           self._process_link($(this))
 

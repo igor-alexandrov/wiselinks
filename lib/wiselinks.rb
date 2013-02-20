@@ -1,5 +1,8 @@
 require 'wiselinks/request'
-require 'wiselinks/headers'
+
+require 'wiselinks/controller_methods'
+require 'wiselinks/rendering'
+
 require 'wiselinks/helpers'
 
 require 'wiselinks/logger'

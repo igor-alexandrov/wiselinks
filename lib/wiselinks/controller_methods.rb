@@ -1,8 +1,10 @@
 module Wiselinks
-  module Headers    
+  module ControllerMethods    
     
     def self.included(base)      
-      base.helper_method :wiselinks_title
+      base.helper_method :wiselinks_title      
+
+      base.before_filter :set_wiselinks_url
     end
 
   protected
@@ -11,37 +13,15 @@ module Wiselinks
       'wiselinks'
     end
 
-    def render(options = {}, *args, &block)
-      if self.request.wiselinks?        
-        self.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
-        self.headers['Pragma'] = 'no-cache'
-
-        if self.request.wiselinks_partial?
-          Wiselinks.log("processing partial request")
-          options[:partial] ||= action_name
-        else
-          Wiselinks.log("processing template request")
-          
-          if Wiselinks.options[:layout] != false
-            options[:layout] = self.wiselinks_layout 
-          end
-        end
-
-        if Wiselinks.options[:assets_digest].present?
-          Wiselinks.log("assets digest #{Wiselinks.options[:assets_digest]}")
-
-          self.headers['X-Assets-Digest'] = Wiselinks.options[:assets_digest]          
-        end
-      end
-
-      super
-    end
-
     def wiselinks_title(value)
       if self.request.wiselinks? && value.present?
         Wiselinks.log("title: #{value}")        
-        response.headers['X-Title'] = URI.encode(value)
+        self.response.headers['X-Wiselinks-Title'] = URI.encode(value)
       end
+    end
+
+    def set_wiselinks_url      
+      self.response.headers['X-Wiselinks-Url'] = request.url if self.request.wiselinks?
     end    
 
     def wiselinks_request?

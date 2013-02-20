@@ -71,29 +71,40 @@ class Wiselinks
 
     $target = if target? then $(target) else self.$target
 
-    $document = $(document).trigger('page:loading', [url, $target.selector, render])
-
+    $document = $(document).trigger('page:loading', [$target, render, url])
+    
     $.ajax(
       url: url
       headers:
-        'X-Render': render
-      complete: (xhr, status) ->
-        $document.trigger('page:complete', [xhr, status])        
-      success: (data, status, xhr) ->
-        if self._assets_changed(xhr.getResponseHeader('X-Assets-Digest'))
+        'X-Wiselinks': render
+    
+      dataType: "html"
+    ).done(
+      (data, status, xhr) ->
+        url = xhr.getResponseHeader('X-Wiselinks-Url')
+
+        if self._assets_changed(xhr.getResponseHeader('X-Wiselinks-Assets-Digest'))
           window.location.reload(true)
+        else if url? && url != window.location.href
+          $document.trigger('page:redirect', [$target, render, url])
+          if ( xhr && xhr.readyState < 4)
+            xhr.onreadystatechange = $.noop
+            xhr.abort()          
+          History.replaceState(History.getState().data, document.title, url )                        
         else
           self._set_title(xhr)
           
           $target.html(data)
 
-          $document.trigger('page:success', [$target, status])
-      error: (xhr, status, error)->
-        $document.trigger('page:error', [status, error])      
-
-      dataType: "html"
+          $document.trigger('page:done', [$target, status, url, data])
+    ).fail(
+      (xhr, status, error) ->
+        $document.trigger('page:fail', [$target, status, url, error])
+    ).always(
+      (data_or_xhr, status, xhr_or_error)->
+        $document.trigger('page:always', [$target, status, url])
     )
-  
+
   _process_form: ($form) ->
     self = this
     
@@ -147,7 +158,7 @@ class Wiselinks
     @assets_digest? && @assets_digest != digest
 
   _set_title: (xhr) ->
-    value = xhr.getResponseHeader('X-Title')
+    value = xhr.getResponseHeader('X-Wiselinks-Title')
     document.title = decodeURI(value) if value?
 
 window.Wiselinks = Wiselinks

@@ -13,18 +13,17 @@ module Wiselinks
         self.headers['Pragma'] = 'no-cache'
 
         if self.request.wiselinks_partial?
-          Wiselinks.log("processing partial request")
+          Wiselinks.log("Processing partial request")
           options[:partial] ||= action_name
         else
-          Wiselinks.log("processing template request")
-          
+          Wiselinks.log("Processing template request")
           if Wiselinks.options[:layout] != false
             options[:layout] = self.wiselinks_layout 
           end
         end
 
         if Wiselinks.options[:assets_digest].present?
-          Wiselinks.log("assets digest #{Wiselinks.options[:assets_digest]}")
+          Wiselinks.log("Assets digest #{Wiselinks.options[:assets_digest]}")
 
           self.headers['X-Wiselinks-Assets-Digest'] = Wiselinks.options[:assets_digest]          
         end

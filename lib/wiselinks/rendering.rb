@@ -7,10 +7,10 @@ module Wiselinks
 
   protected
 
-    def render_with_wiselinks(*args)      
-      options = _normalize_render(*args)
+    def render_with_wiselinks(*args, &block)
+      options = _normalize_args(*args)
 
-      if self.request.wiselinks?        
+      if self.request.wiselinks?              
         self.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
         self.headers['Pragma'] = 'no-cache'
 
@@ -28,10 +28,10 @@ module Wiselinks
           Wiselinks.log("Assets digest #{Wiselinks.options[:assets_digest]}")
 
           self.headers['X-Wiselinks-Assets-Digest'] = Wiselinks.options[:assets_digest]          
-        end
+        end        
       end
 
-      self.render_without_wiselinks(options)
+      self.render_without_wiselinks(options, &block)
     end
   end
 end

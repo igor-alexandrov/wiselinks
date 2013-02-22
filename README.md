@@ -1,6 +1,9 @@
+[![Gem Version](https://badge.fury.io/rb/wiselinks.png)](http://badge.fury.io/rb/wiselinks)
 [![Build Status](https://travis-ci.org/igor-alexandrov/wiselinks.png?branch=master)](https://travis-ci.org/igor-alexandrov/wiselinks)
-[![Dependency Status](https://gemnasium.com/igor-alexandrov/wiselinks.png)](https://gemnasium.com/igor-alexandrov/wiselinks)
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/igor-alexandrov/wiselinks)
+
+
+[![Dependency Status](https://gemnasium.com/igor-alexandrov/wiselinks.png)](https://gemnasium.com/igor-alexandrov/wiselinks)
 
 #Wiselinks
 
@@ -9,6 +12,8 @@ Wiselinks makes following links and submitting some forms in your web applicatio
 You may find Wiselinks similar to [Turbolinks](https://github.com/rails/turbolinks) or [Pjax](https://github.com/defunkt/jquery-pjax), but Wiselinks have several rather important differences from both projects. We tried to make Wiselinks as easy to use as Turbolinks are but also as configurable as Pjax.
 
 ## Compatibility
+
+**Please be advised that Javascript events in wiselinks-0.5.0 are not backward compatible.** 
 
 Wiselinks uses [History.js](https://github.com/balupton/History.js/) library to perform requests.
 
@@ -62,6 +67,12 @@ Wiselinks works in all major browsers including browsers that do not support HTM
 			<td>Yes, by parsing document head on every request</td>
 			<td>No</td>
 		</tr>
+		<tr>
+			<td>30x HTTP redirects processing</td>			
+			<td><strong>Yes</strong></td>
+			<td>No</td>
+			<td>Yes</td>
+		</tr>
 	</tbody>
 </table>
 
@@ -83,7 +94,7 @@ Restart your server and you're now using wiselinks!
 
 ### CoffeeScript
 
-Modify your `application.js.coffee` file to use Wiselinks object:
+Create Wiselinks object in your `application.js.coffee`:
 	
 ```coffeescript	
 #= require jquery
@@ -112,45 +123,48 @@ Or you can add some more options, if you want:
 #= require wiselinks
 
 $(document).ready ->
-    # DOM element with role = "content" will be replaced after data load.    	
-    window.wiselinks = new Wiselinks($('@content'))
-    
-	# Of course you can use more traditional jQuery selectors.
-	# window.wiselinks = new Wiselinks($('#content'))
-	# window.wiselinks = new Wiselinks($('.content:first'))
-
+    # DOM element with id = "content" will be replaced after data load.    	
+    window.wiselinks = new Wiselinks($('#content'))
+   
 	$(document).off('page:loading').on(
         'page:loading'
-        (event, url, target, render) ->        
-            console.log("Wiselinks loading: #{url} to #{target} within '#{render}'")
-            # start loading animation
+        (event, $target, render, url) ->
+            console.log("Loading: #{url} to #{$target.selector} within '#{render}'")
+            # code to start loading animation
+    )
+	
+	$(document).off('page:redirected').on(
+        'page:redirected'
+        (event, $target, render, url) ->
+            console.log("Redirected to: #{url}")
+            # code to start loading animation
     )
 
-	$(document).off('page:complete').on(
-        'page:complete'
+	$(document).off('page:always').on(
+        'page:always'
         (event, xhr, settings) ->
             console.log("Wiselinks page loading completed")
-            # stop loading animation
+            # code to stop loading animation
     )
 
-    $(document).off('page:success').on(
-        'page:success'
-        (event, $target, status) ->        
+    $(document).off('page:done').on(
+        'page:done'
+        (event, $target, status, url, data) ->
             console.log("Wiselinks status: '#{status}'")
     )
 
-    $(document).off('page:error').on(
-        'page:error'
-        (event, data, status) ->        
+    $(document).off('page:fail').on(
+        'page:fail'
+        (event, $target, status, url, error) ->
             console.log("Wiselinks status: '#{status}'")
-            # show error message
+            # code to show error message
     )
 ```
 
-### HTML templates
+### HTML
 
-Links with `data-push` attribute will fire History.pushState() event.
-Data from the request will replace content of the container that was passed to Wiselinks (default is "body")
+Click on links with `data-push` attribute will fire History.pushState() event.
+Data from the request will replace content of the container that was passed to Wiselinks (default is `$('body')`)
 
 
 ```html	
@@ -164,7 +178,7 @@ Data from the request will replace content of the container that was passed to W
 </ul>
 ```
 
-Link will fire History.replaceState() event.
+Click on links with `data-replace` will fire History.replaceState() event.
 Data from the request will replace content of the container that was passed to Wiselinks (default is "body")
 
 ```html
@@ -173,8 +187,8 @@ Data from the request will replace content of the container that was passed to W
 </div>	
 ```
 
-Links will fire History.pushState() event.
-Data from the request will be pasted into `<div role="catalog">`. This configuration is widely when you have list of items that are paginated, sorted or maybe grouped by some attributes and you want to update only these items and nothing more on page.
+Click on following links will fire History.pushState() event.
+Data from the request will be pasted into `<div id="catalog">`. This configuration is widely when you have list of items that are paginated, sorted or maybe grouped by some attributes and you want to update only these items and nothing more on page.
 
 ```html	
 <ul class="pagination">
@@ -182,31 +196,34 @@ Data from the request will be pasted into `<div role="catalog">`. This configura
 	    <span>1</span>
     </li>	
     <li>
-   		<a href="/?page=2" data-push="true" data-target="@catalog">2</a>
+   		<a href="/?page=2" data-push="true" data-target="#catalog">2</a>
     </li>
     <li>
-   		<a href="/?page=3" data-push="true" data-target="@catalog">3</a>
+   		<a href="/?page=3" data-push="true" data-target="#catalog">3</a>
     </li>
     <li>
-   		<a href="/?page=4" data-push="true" data-target="@catalog">4</a>
+   		<a href="/?page=4" data-push="true" data-target="#catalog">4</a>
     </li>
 </ul>
+
 <ul class="sort">
 	<li>
-	    <a href="/?sort=title" data-push="true" data-target="@catalog">Sort by Title</a>
+	    <a href="/?sort=title" data-push="true" data-target="#catalog">Sort by Title</a>
     </li>	
     <li>
-   		<a href="/?sort=price" data-push="true" data-target="@catalog">Sort by Price</a>
+   		<a href="/?sort=price" data-push="true" data-target="#catalog">Sort by Price</a>
     </li>	
 </ul>
 
-<div role="catalog">
+<div id="catalog">
 	<!-- the list of your items -->
 	...
 </div>
 ```
 
-**You can use Wiselinks with forms**! As easy and clear as with links. After submit button is clicked, Wiselinks will perform a request to "/" with serialized form attributes. The result of this request will be pasted into `<div role="catalog">`.
+**Form processing**
+
+Wiselinks can process forms. After submit button is clicked, Wiselinks will perform a request to form url with form attributes serialized to a string. Wiselinks always performs a HTTP GET request.
 
 ```html	
 <div class="filter">
@@ -239,30 +256,58 @@ The idea of Wiselinks is that you should render only content that you need in cu
 
 While using Wiselinks you **can rely** on `DOMContentLoaded` or `jQuery.ready()` to trigger your JavaScript code, but Wiselinks gives you some additional useful event to deal with the lifecycle of the page:
 
-**page:loading (url, target, render = 'template')**
+**page:loading ($target, render, url)**
 
 Event is triggered before the `XMLHttpRequest` is initialised and performed.
+* *$target* – JQuery object in which result of the request will be inserted;
+
 * *url* - URL of the request that will be performed;
 
-* *target* – element of the page where result of the request will be loaded into;
+* *render* – what should be rendered; can be 'template' or 'partial';
 
-* *render = 'template'* – what should be rendered; can be 'template' or 'partial';
+**page:redirected ($target, render, url)**
 
-**page:success ($target, status)**
+Event is triggered when you were redirected during `XMLHttpRequest` (with HTTP 30x status). 
+* *$target* – jQuery object in which result of the request will be inserted;
+
+* *url* - URL where you have been redirected to;
+
+* *render* – what should be rendered; can be 'template' or 'partial';
+
+**page:done ($target, status, url, data)**
 
 Event is triggered if the request succeeds.
-* *$target* – JQuery object that was updated by request;
+* *$target* – jQuery object that was updated with the request;
 
 * *status* – a string describing the status;
 
-**page:error (status, error)**
+* *url* – url of the request;
+
+* *data* – content of the request;
+
+**page:fail ($target, status, url, error)**
 
 Event is triggered if the request fails.
 
-* *status* – a string describing the type of error that occurred;
-* *error* – optional exception object, if one occurred;
+* *$target* – jQuery object that had to be updated with the request;
 
-So if you wanted to have a client-side spinner, you could listen for `page:loading` to start it and `page:success` or `page:error` to stop it.
+* *status* – a string describing the status;
+
+* *url* – url of the request;
+
+* *error* – a string describing the type of error that occurred;
+
+**page:always ($target, status, url)**
+
+Event is triggered after each request.
+
+* *$target* – jQuery object that had to be updated with the request;
+
+* *status* – a string describing the status;
+
+* *url* – url of the request;
+
+So if you want to show a client-side loading spinner, you could listen for `page:loading` to start it and `page:always` to stop it.
 
 ### ActionDispatch::Request extensions
 
@@ -295,7 +340,7 @@ Now Wiselinks will track changes of your assets and if anything will change, you
 
 ### Title handling
 
-Wiselinks handles page titles by passing `X-Title` header with response. To do this you can use `wiselinks_title` helper.
+Wiselinks handles page titles by passing `X-Wiselinks-Title` header with response. To set this header you can use `wiselinks_title` helper (in Rails).
 
 ```html	
 <% wiselinks_title("Wiselinks is awesome") %>
@@ -308,18 +353,22 @@ Wiselinks handles page titles by passing `X-Title` header with response. To do t
 
 Of course you can use `wiselinks_title` helper in your own helpers too.
 
+### Redirect handling
+
+Wiselinks follows 30x HTTP redirects. Location is updated in browser with `X-Wiselinks-Url` header that is setting up automatically (in Rails) on every wiselinks request.
+
 ### Google Analytics and Yandex Metrika
 
-If you want to handle these analytics tools, then you should add handler to `page:success` event.
+If you want to handle these analytics tools, then you should add handler to `page:done` event.
 
 Let's say, that you have two objects, first is `_gaq` – instance of Google Analytics, second is `_metrika` – instance of Yandex Metrika. Then you have to add the following code somewhere in your `application.js.coffee`.
 
 ```coffeescript
-$(document).off('page:success').on(
-  'page:success'
-  (event, data, status) ->
-    _gaq.push(['_trackPageview', location.pathname])
-    _metrika.hit(location.pathname)
+$(document).off('page:done').on(
+  'page:done'
+  (event, $target, status, url, data) ->
+    _gaq.push(['_trackPageview', url])
+    _metrika.hit(url)
 )
 ```
 

@@ -86,7 +86,7 @@ class Wiselinks
         if self._assets_changed(xhr.getResponseHeader('X-Wiselinks-Assets-Digest'))
           window.location.reload(true)
         else if url? && url != window.location.href
-          $document.trigger('page:redirect', [$target, render, url])
+          $document.trigger('page:redirected', [$target, render, url])
           if ( xhr && xhr.readyState < 4)
             xhr.onreadystatechange = $.noop
             xhr.abort()          

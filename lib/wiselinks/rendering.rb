@@ -7,7 +7,9 @@ module Wiselinks
 
   protected
 
-    def render_with_wiselinks(options = {}, *args, &block)      
+    def render_with_wiselinks(*args)      
+      options = _normalize_render(*args)
+
       if self.request.wiselinks?        
         self.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
         self.headers['Pragma'] = 'no-cache'
@@ -29,7 +31,7 @@ module Wiselinks
         end
       end
 
-      self.render_without_wiselinks(options, args, &block)
+      self.render_without_wiselinks(options)
     end
   end
 end

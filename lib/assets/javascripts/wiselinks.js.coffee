@@ -14,6 +14,7 @@ class Wiselinks
     self = this
 
     @options = jQuery.extend(self._defaults(), @options);
+    @template_id = new Date().getTime()
 
     if self.enabled()
       @assets_digest = $("meta[name='assets-digest']").attr("content")
@@ -28,9 +29,12 @@ class Wiselinks
       History.Adapter.bind(
         window,
         "statechange"
-        (event, data) ->    
-          state = History.getState()         
-          self._call(state.url, state.data.target, state.data.render)        
+        (event, data) ->          
+          state = History.getState()
+          if self._template_id_changed(state)
+            self._call(state.url, null, 'template')
+          else            
+            self._call(state.url, state.data.target, state.data.render)        
       )
       
       $(document).on(
@@ -57,10 +61,11 @@ class Wiselinks
     !History.emulated.pushState || @options.html4 == true 
 
   load: (url, target, render = 'template') ->    
-    History.pushState({ timestamp: (new Date().getTime()), render: render, target: target }, document.title, url )
+    @template_id = new Date().getTime() if render != 'partial'
+    History.pushState({ template_id: @template_id, render: render, target: target }, document.title, url )
 
-  reload: () ->    
-    History.replaceState({ timestamp: (new Date().getTime()), render: 'template' }, document.title, History.getState().url )
+  reload: () ->
+    History.replaceState({ template_id: @template_id, render: 'template' }, document.title, History.getState().url )
 
   _defaults: ->
     html4: true
@@ -156,6 +161,9 @@ class Wiselinks
 
   _assets_changed: (digest) ->
     @assets_digest? && @assets_digest != digest
+
+  _template_id_changed: (state) ->    
+    !state.data.template_id? || state.data.template_id != @template_id
 
   _set_title: (xhr) ->
     value = xhr.getResponseHeader('X-Wiselinks-Title')

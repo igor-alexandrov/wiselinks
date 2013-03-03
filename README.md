@@ -1,9 +1,10 @@
 [![Gem Version](https://badge.fury.io/rb/wiselinks.png)](http://badge.fury.io/rb/wiselinks)
 [![Build Status](https://travis-ci.org/igor-alexandrov/wiselinks.png?branch=master)](https://travis-ci.org/igor-alexandrov/wiselinks)
+[![Dependency Status](https://gemnasium.com/igor-alexandrov/wiselinks.png)](https://gemnasium.com/igor-alexandrov/wiselinks)
+
+
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/igor-alexandrov/wiselinks)
 
-
-[![Dependency Status](https://gemnasium.com/igor-alexandrov/wiselinks.png)](https://gemnasium.com/igor-alexandrov/wiselinks)
 
 #Wiselinks
 

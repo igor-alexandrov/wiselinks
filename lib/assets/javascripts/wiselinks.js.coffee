@@ -24,17 +24,18 @@ class Wiselinks
           window.location.href = "#{window.location.protocol}//#{window.location.host}#{@options.html4_root_path}#!#{window.location.pathname}"
         
         if window.location.hash.indexOf('#!') != -1                 
-          self._call(window.location.hash.substring(2))    
+          self._call(self._make_state(window.location.hash.substring(2)))    
 
       History.Adapter.bind(
         window,
         "statechange"
         (event, data) ->          
           state = History.getState()
+          
           if self._template_id_changed(state)
-            self._call(state.url, null, 'template')
+            self._call(self._reset_state(state))
           else            
-            self._call(state.url, state.data.target, state.data.render)        
+            self._call(state)
       )
       
       $(document).on(
@@ -62,26 +63,26 @@ class Wiselinks
 
   load: (url, target, render = 'template') ->    
     @template_id = new Date().getTime() if render != 'partial'
-    History.pushState({ template_id: @template_id, render: render, target: target }, document.title, url )
+    History.pushState({ template_id: @template_id, render: render, target: target, referer: window.location.href }, document.title, url )
 
   reload: () ->
-    History.replaceState({ template_id: @template_id, render: 'template' }, document.title, History.getState().url )
+    History.replaceState({ template_id: @template_id, render: 'template', referer: window.location.href }, document.title, History.getState().url )
 
   _defaults: ->
     html4: true
     html4_root_path: '/'
 
-  _call: (url, target, render = 'template') ->
+  _call: (state) ->
     self = this
 
-    $target = if target? then $(target) else self.$target
+    $target = if state.data.target? then $(state.data.target) else self.$target
+    $document = $(document).trigger('page:loading', [$target, state.data.render, state.url])
 
-    $document = $(document).trigger('page:loading', [$target, render, url])
-    
     $.ajax(
-      url: url
+      url: state.url
       headers:
-        'X-Wiselinks': render
+        'X-Wiselinks': state.data.render
+        'X-Wiselinks-Referer': state.data.referer
     
       dataType: "html"
     ).done(
@@ -91,7 +92,7 @@ class Wiselinks
         if self._assets_changed(xhr.getResponseHeader('X-Wiselinks-Assets-Digest'))
           window.location.reload(true)
         else if url? && url != window.location.href
-          $document.trigger('page:redirected', [$target, render, url])
+          $document.trigger('page:redirected', [$target, state.data.render, url])
           if ( xhr && xhr.readyState < 4)
             xhr.onreadystatechange = $.noop
             xhr.abort()          
@@ -101,13 +102,13 @@ class Wiselinks
           
           $target.html(data)
 
-          $document.trigger('page:done', [$target, status, url, data])
+          $document.trigger('page:done', [$target, status, state.ur, data])
     ).fail(
       (xhr, status, error) ->
-        $document.trigger('page:fail', [$target, status, url, error])
+        $document.trigger('page:fail', [$target, status, state.ur, error])
     ).always(
       (data_or_xhr, status, xhr_or_error)->
-        $document.trigger('page:always', [$target, status, url])
+        $document.trigger('page:always', [$target, status, state.ur])
     )
 
   _process_form: ($form) ->
@@ -169,4 +170,19 @@ class Wiselinks
     value = xhr.getResponseHeader('X-Wiselinks-Title')
     document.title = decodeURI(value) if value?
 
+  _make_state: (url, target, render = 'template', referer) ->
+    { 
+      url: url
+      data:
+        target: target
+        render: render
+        referer: referer
+    }
+  
+  _reset_state: (state) ->
+    state.data = {} unless state.data?    
+    state.data.target = null
+    state.data.render = 'template'
+    state
+    
 window.Wiselinks = Wiselinks

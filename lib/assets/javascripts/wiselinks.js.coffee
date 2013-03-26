@@ -29,7 +29,7 @@ class Wiselinks
       History.Adapter.bind(
         window,
         "statechange"
-        (event, data) ->          
+        (event, data) ->
           state = History.getState()
           
           if self._template_id_changed(state)
@@ -76,7 +76,14 @@ class Wiselinks
     self = this
 
     $target = if state.data.target? then $(state.data.target) else self.$target
-    $document = $(document).trigger('page:loading', [$target, state.data.render, state.url])
+    $document = $(document)
+    
+    if @redirected
+      $document.trigger('page:redirected', [$target, state.data.render, state.url])
+      @redirected = null
+      return
+
+    $document.trigger('page:loading', [$target, state.data.render, state.url])
 
     $.ajax(
       url: state.url
@@ -90,18 +97,18 @@ class Wiselinks
         url = xhr.getResponseHeader('X-Wiselinks-Url')
 
         if self._assets_changed(xhr.getResponseHeader('X-Wiselinks-Assets-Digest'))
-          window.location.reload(true)
-        else if url? && url != window.location.href
-          $document.trigger('page:redirected', [$target, state.data.render, url])
-          if ( xhr && xhr.readyState < 4)
-            xhr.onreadystatechange = $.noop
-            xhr.abort()          
-          History.replaceState(History.getState().data, document.title, url )                        
+          window.location.reload(true)        
         else
           self._set_title(xhr)
-          
-          $target.html(data)
 
+          if url? && url != window.location.href            
+            if ( xhr && xhr.readyState < 4)            
+              xhr.onreadystatechange = $.noop
+              xhr.abort()
+            self.redirected = true
+            History.replaceState(History.getState().data, document.title, url )
+                  
+          $target.html(data)
           $document.trigger('page:done', [$target, status, state.ur, data])
     ).fail(
       (xhr, status, error) ->

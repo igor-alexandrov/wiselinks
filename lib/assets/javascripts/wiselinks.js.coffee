@@ -63,10 +63,10 @@ class Wiselinks
 
   load: (url, target, render = 'template') ->    
     @template_id = new Date().getTime() if render != 'partial'
-    History.pushState({ template_id: @template_id, render: render, target: target, referer: window.location.href }, document.title, url )
+    History.pushState({ timestamp: (new Date().getTime()), template_id: @template_id, render: render, target: target, referer: window.location.href }, document.title, url )
 
   reload: () ->
-    History.replaceState({ template_id: @template_id, render: 'template', referer: window.location.href }, document.title, History.getState().url )
+    History.replaceState({ timestamp: (new Date().getTime()), template_id: @template_id, render: 'template', referer: window.location.href }, document.title, History.getState().url )
 
   _defaults: ->
     html4: true

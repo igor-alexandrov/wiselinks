@@ -4,19 +4,19 @@ FactoryGirl.define do
   factory :request, :class => ActionDispatch::Request do |r|    
     trait :wiselinks do
       after(:build) do |obj|
-        obj.env['X-Render'] = Faker::Lorem.characters(10)
+        obj.env['X-Wiselinks'] = Faker::Lorem.characters(10)
       end
     end
 
     trait :wiselinks_template do
       after(:build) do |obj|
-        obj.env['X-Render'] = 'template'
+        obj.env['X-Wiselinks'] = 'template'
       end
     end
 
     trait :wiselinks_partial do
       after(:build) do |obj|
-        obj.env['X-Render'] = 'partial'
+        obj.env['X-Wiselinks'] = 'partial'
       end
     end
 

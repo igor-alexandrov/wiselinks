@@ -109,13 +109,13 @@ class Wiselinks
             History.replaceState(History.getState().data, document.title, url )
                   
           $target.html(data)
-          $document.trigger('page:done', [$target, status, state.ur, data])
+          $document.trigger('page:done', [$target, status, state.url, data])
     ).fail(
       (xhr, status, error) ->
-        $document.trigger('page:fail', [$target, status, state.ur, error])
+        $document.trigger('page:fail', [$target, status, state.url, error])
     ).always(
       (data_or_xhr, status, xhr_or_error)->
-        $document.trigger('page:always', [$target, status, state.ur])
+        $document.trigger('page:always', [$target, status, state.url])
     )
 
   _process_form: ($form) ->

@@ -14,15 +14,7 @@ class Wiselinks
     this._try_jquery()
 
     if this.enabled()
-      options = $.extend(this._defaults(), options)
-      options.assets_digest = $("meta[name='assets-digest']").attr("content")      
-
-      if History.emulated.pushState && @options.html4 == true
-        if window.location.href.indexOf('#!') == -1 && options.html4_root_path != null && window.location.pathname != options.html4_root_path
-          window.location.href = "#{window.location.protocol}//#{window.location.host}#{@options.html4_root_path}#!#{window.location.pathname}"
-        
-        # if window.location.hash.indexOf('#!') != -1                 
-        #   this._call(this._make_state(window.location.hash.substring(2)))    
+      options = $.extend(this._defaults(), options) 
 
       $(document).on(
         'click', 'a[data-push], a[data-replace]'
@@ -59,6 +51,7 @@ class Wiselinks
     html4: true
     html4_root_path: '/'
     target_missing: null
+    assets_digest: $("meta[name='assets-digest']").attr("content")      
 
   _try_jquery: ->
     throw "[Wiselinks] jQuery is not loaded" unless window.jQuery?  

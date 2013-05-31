@@ -20,6 +20,10 @@ class Form
           params[name] = item.value  
 
     serialized = []
+
+    # To find out why encodeURIComponent should be used, follow the link:
+    # http://stackoverflow.com/questions/75980/best-practice-escape-or-encodeuri-encodeuricomponent
+    # 
     for key of params
       serialized.push("#{key}=#{encodeURIComponent(params[key])}")
 

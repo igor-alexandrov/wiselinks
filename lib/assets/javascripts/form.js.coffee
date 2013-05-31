@@ -3,9 +3,15 @@ class Form
 
   process: ->
     $disable = @$form.find('select:not(:disabled),input:not(:disabled)').filter(-> !$(this).val())
-    $disable.attr('disabled', true);      
-    
-    params = {}
+
+    $disable.attr('disabled', true)
+    url = this._url()    
+    $disable.attr('disabled', false)
+
+    @page.load(url, @$form.attr("data-target"), this._type())
+
+  _params: ->
+    hash = {}
 
     for item in @$form.serializeArray()
       if item.name != 'utf8'
@@ -14,28 +20,30 @@ class Form
         else
           item.name
 
-        if params[name]?
-          params[name] = params[name] + ",#{item.value}"
+        if hash[name]?
+          hash[name] = hash[name] + ",#{item.value}"
         else
-          params[name] = item.value  
+          hash[name] = item.value  
 
+    hash     
+
+  _type: ->  
+    if (@$form.attr("data-push") == 'partial') then 'partial' else 'template' 
+
+  _url: ->
     serialized = []
 
     # To find out why encodeURIComponent should be used, follow the link:
     # http://stackoverflow.com/questions/75980/best-practice-escape-or-encodeuri-encodeuricomponent
-    # 
-    for key of params
-      serialized.push("#{key}=#{encodeURIComponent(params[key])}")
+    #
+    for key, value of this._params()
+      serialized.push("#{key}=#{encodeURIComponent(value)}")
 
     serialized = serialized.join('&')
     
     url = @$form.attr("action")
-    url += "?#{serialized}" if serialized.length > 0
-        
-    $disable.attr('disabled', false);    
-
-    type = if (@$form.attr("data-push") == 'partial') then 'partial' else 'template' 
-    @page.load(url, @$form.attr("data-target"), type)
+    url += "?#{serialized}" if serialized.length > 0 
+    url
 
 window._Wiselinks = {} if window._Wiselinks == undefined
 window._Wiselinks.Form = Form        

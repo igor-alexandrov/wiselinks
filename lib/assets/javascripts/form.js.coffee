@@ -2,7 +2,7 @@ class Form
   constructor: (@page, @$form) -> 
 
   process: ->
-    $disable = @$form.find(':input[value=""]:not(:disabled)')
+    $disable = @$form.find('select:not(:disabled),input:not(:disabled)').filter(-> !$(this).val())
     $disable.attr('disabled', true);      
     
     params = {}
@@ -22,7 +22,7 @@ class Form
     serialized = []
     for key of params
       serialized.push("#{key}=#{params[key]}")
-
+      
     serialized = serialized.join('&').replace(/%|!/g, '')
     
     url = @$form.attr("action")

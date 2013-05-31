@@ -21,9 +21,9 @@ class Form
 
     serialized = []
     for key of params
-      serialized.push("#{key}=#{params[key]}")
-      
-    serialized = serialized.join('&').replace(/%|!/g, '')
+      serialized.push("#{key}=#{encodeURIComponent(params[key])}")
+
+    serialized = serialized.join('&')
     
     url = @$form.attr("action")
     url += "?#{serialized}" if serialized.length > 0

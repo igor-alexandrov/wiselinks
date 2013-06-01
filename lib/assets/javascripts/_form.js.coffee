@@ -15,7 +15,8 @@ class Form
 
     for item in @$form.serializeArray()
       if item.name != 'utf8'
-        name = if item.name.ends_with('[]')
+        # if name ends with [], then we try to optimize it
+        name = if item.name.indexOf('[]', item.name.length - '[]'.length) != -1
           item.name.substr(0, item.name.length - 2)
         else
           item.name

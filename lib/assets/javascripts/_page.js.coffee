@@ -1,29 +1,51 @@
-#= require request_manager
+#= require _request_manager
 
 class Page
   constructor: (@$target, @options) ->
+    self = this
+
     @template_id = new Date().getTime()
     @request_manager = new _Wiselinks.RequestManager(@options)
 
-    this._try_target(@$target)
+    self._try_target(@$target)
 
     if History.emulated.pushState && @options.html4 == true
       if window.location.href.indexOf('#!') == -1 && @options.html4_root_path != null && window.location.pathname != @options.html4_root_path
         window.location.href = "#{window.location.protocol}//#{window.location.host}#{@options.html4_root_path}#!#{window.location.pathname}"
       
       if window.location.hash.indexOf('#!') != -1                 
-        this._call(this._make_state(window.location.hash.substring(2)))   
+        self._call(self._make_state(window.location.hash.substring(2)))   
 
     History.Adapter.bind(
       window,
       "statechange"
-      (event, data) =>        
+      (event, data) ->        
         state = History.getState()
         
-        if this._template_id_changed(state)          
-          this._call(this._reset_state(state))
+        if self._template_id_changed(state)          
+          self._call(self._reset_state(state))
         else          
-          this._call(state)
+          self._call(state)
+    )
+
+    $(document).on(
+      'click', 'a[data-push], a[data-replace]'
+      (event) ->
+        if (link = new _Wiselinks.Link(self, $(this))).allows_process(event)
+          event.preventDefault()
+          link.process()
+
+          return false
+    )
+
+    $(document).on(
+      'submit', 'form[data-push], form[data-replace]'
+      (event) ->
+        if (form = new _Wiselinks.Form(self, $(this)))
+          event.preventDefault()
+          form.process()
+
+          return false
     )
 
   load: (url, target, render = 'template') ->

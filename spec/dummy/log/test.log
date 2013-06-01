@@ -52409,3 +52409,8 @@ Connecting to database specified by database.yml
 Processing by ApplicationController#index as HTML
   Rendered application/index.html.erb within layouts/application (4.6ms)
 Completed 200 OK in 25ms (Views: 24.6ms | ActiveRecord: 0.0ms)
+Started GET "/" for 127.0.0.1 at 2013-06-01 11:22:33 +0400
+Connecting to database specified by database.yml
+Processing by ApplicationController#index as HTML
+  Rendered application/index.html.erb within layouts/application (4.4ms)
+Completed 200 OK in 26ms (Views: 25.7ms | ActiveRecord: 0.0ms)

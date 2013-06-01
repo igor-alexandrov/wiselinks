@@ -7,7 +7,7 @@ require 'wiselinks/version'
 Gem::Specification.new do |gem|
   gem.name          = 'wiselinks'
   gem.version       = Wiselinks::Version::STRING
-  gem.authors       = ['Igor Alexandrov', 'Alexey Solilin', 'Julia Egorova']  
+  gem.authors       = ['Igor Alexandrov', 'Alexey Solilin', 'Julia Egorova', 'Alexandr Borisov']  
   gem.email         = 'igor.alexandrov@gmail.com'  
   gem.summary       = 'Wiselinks makes following links and submitting some forms in your web application smarter and faster'
   gem.homepage      = 'http://github.com/igor-alexandrov/wiselinks'

@@ -423,6 +423,7 @@ Contributors:
 * [Igor Alexandrov](http://igor-alexandrov.github.com/)
 * [Alexey Solilin](https://github.com/solilin)
 * [Julia Egorova](https://github.com/vankiru)
+* [Alexandr Borisov](https://github.com/aishek)
 
 ## License
 

@@ -6,6 +6,9 @@ require 'wiselinks'
 require 'rspec'
 require 'webmock/rspec'
 
+require 'coveralls'
+Coveralls.wear!
+
 ENV['RAILS_ENV'] = 'test'
 require "dummy/config/environment"
 

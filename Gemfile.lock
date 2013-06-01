@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    wiselinks (0.6.0)
+    wiselinks (0.6.1)
 
 GEM
   remote: https://rubygems.org/

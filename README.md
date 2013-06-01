@@ -1,9 +1,8 @@
-[![Gem Version](https://badge.fury.io/rb/wiselinks.png)](http://badge.fury.io/rb/wiselinks)
-[![Build Status](https://travis-ci.org/igor-alexandrov/wiselinks.png?branch=master)](https://travis-ci.org/igor-alexandrov/wiselinks)
+[![Build Status](https://travis-ci.org/igor-alexandrov/wiselinks.png)](https://travis-ci.org/igor-alexandrov/wiselinks)
+[![Code Climate](https://codeclimate.com/github/igor-alexandrov/wiselinks.png)](https://codeclimate.com/github/igor-alexandrov/wiselinks)
+[![Coverage Status](https://coveralls.io/repos/igor-alexandrov/wiselinks/badge.png)](https://coveralls.io/r/igor-alexandrov/wiselinks)
 [![Dependency Status](https://gemnasium.com/igor-alexandrov/wiselinks.png)](https://gemnasium.com/igor-alexandrov/wiselinks)
-
-
-[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/igor-alexandrov/wiselinks)
+[![Gem Version](https://badge.fury.io/rb/wiselinks.png)](http://badge.fury.io/rb/wiselinks)
 
 
 #Wiselinks
@@ -357,6 +356,24 @@ Of course you can use `wiselinks_title` helper in your own helpers too.
 ### Redirect handling
 
 Wiselinks follows 30x HTTP redirects. Location is updated in browser with `X-Wiselinks-Url` header that is setting up automatically (in Rails) on every wiselinks request.
+
+### Target missing handling
+
+By default, if Wiselinks cannot find target that you specified during initialization, it will fail silently. But you can override this behaviour:
+
+```coffeescript	
+#= require jquery
+#= require wiselinks
+
+$(document).ready ->
+    window.wiselinks = new Wiselinks(
+      $('something that does not exist'),
+      target_missing: 'exception'
+    )
+```	
+
+`[Wiselinks] Target missing` exception will be thrown. This also works for `data-target` attributes.
+
 
 ### Google Analytics and Yandex Metrika
 

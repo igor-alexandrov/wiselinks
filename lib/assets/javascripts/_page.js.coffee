@@ -82,7 +82,7 @@ class Page
     state
   
   _try_target: ($target) ->
-    throw "[Wiselinks] Missing target #{$target.selector}" if $target.length == 0  && @options.target_missing == 'exception'
+    throw "[Wiselinks] Target missing: `#{$target.selector}`" if $target.length == 0  && @options.target_missing == 'exception'
 
 window._Wiselinks = {} if window._Wiselinks == undefined
 window._Wiselinks.Page = Page

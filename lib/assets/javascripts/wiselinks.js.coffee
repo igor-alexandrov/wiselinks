@@ -5,12 +5,12 @@
 #= require _form
 
 class Wiselinks
-  constructor: ($target = $('body'), options = {}) ->
+  constructor: ($target = $('body'), @options = {}) ->
     this._try_jquery()
 
-    if this.enabled()
-      options = $.extend(this._defaults(), options)
-      @page = new _Wiselinks.Page($target, options)
+    @options = $.extend(this._defaults(), @options)
+    if this.enabled()      
+      @page = new _Wiselinks.Page($target, @options)
 
   enabled: ->
     !History.emulated.pushState || @options.html4 == true 

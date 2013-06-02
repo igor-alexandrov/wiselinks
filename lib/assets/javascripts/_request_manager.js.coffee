@@ -6,9 +6,9 @@ class RequestManager
 
     # If been redirected, just trigger event and exit
     # 
-    if @redirected
-      self._handle_redirect($target, state)
-      return
+    if @redirected?
+      @redirected = null
+      return      
 
     # Trigger loading event
     # 
@@ -24,14 +24,15 @@ class RequestManager
     
       dataType: "html"
     ).done(
-      (data, status, xhr) ->
+      (data, status, xhr) ->        
         url = xhr.getResponseHeader('X-Wiselinks-Url')
 
         if self._assets_changed(xhr.getResponseHeader('X-Wiselinks-Assets-Digest'))
           window.location.reload(true)        
         else
-          if url? && url != window.location.href
-            self._redirect_to(url, xhr)
+          state = History.getState()        
+          if url? && url != state.url
+            self._redirect_to(url, $target, state, xhr)
                   
           $target.html(data)
 
@@ -48,20 +49,14 @@ class RequestManager
   _assets_changed: (digest) ->
     @options.assets_digest? && @options.assets_digest != digest
 
-  _handle_redirect: ($target, state) ->
-    $(document).trigger('page:redirected', [$target, state.data.render, state.url])
-    @redirected = null
-
-  _redirect_to: (url, xhr) ->
+  _redirect_to: (url, $target, state, xhr) ->
     if ( xhr && xhr.readyState < 4)
       xhr.onreadystatechange = $.noop
       xhr.abort()
-
-    @redirected = true
     
-    this._title('Redirecting…')
-    History.replaceState(History.getState().data, document.title, url )
-
+    @redirected = true
+    $(document).trigger('page:redirected', [$target, state.data.render, url])
+    History.replaceState(state.data, document.title, url)
 
   _loading: ($target, state) ->
     $(document).trigger('page:loading', [$target, state.data.render, state.url])
@@ -78,7 +73,7 @@ class RequestManager
   _title: (value) ->
     if value?  
       $(document).trigger('page:title', decodeURI(value))
-      document.title = decodeURI(value) if value?
+      document.title = decodeURI(value)
   
 
 window._Wiselinks = {} if window._Wiselinks == undefined

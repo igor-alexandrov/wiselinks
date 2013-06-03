@@ -11,6 +11,10 @@ Wiselinks makes following links and submitting some forms in your web applicatio
 
 You may find Wiselinks similar to [Turbolinks](https://github.com/rails/turbolinks) or [Pjax](https://github.com/defunkt/jquery-pjax), but Wiselinks have several rather important differences from both projects. We tried to make Wiselinks as easy to use as Turbolinks are but also as configurable as Pjax.
 
+Try Wiselinks online in our **demo application**:
+
+ * [http://wiselinks.herokuapp.com/](http://wiselinks.herokuapp.com/)
+
 ## Compatibility
 
 **Please be advised that Javascript events in wiselinks-0.5.0 are not backward compatible.** 

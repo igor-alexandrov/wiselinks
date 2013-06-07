@@ -24,6 +24,7 @@ class Wiselinks
   _defaults: ->
     html4: true
     html4_root_path: '/'
+    html4_normalize_path: true
     target_missing: null
     assets_digest: $("meta[name='assets-digest']").attr("content")      
 

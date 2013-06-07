@@ -10,7 +10,7 @@ class Page
     self._try_target(@$target)
 
     if History.emulated.pushState && @options.html4 == true
-      if window.location.href.indexOf('#!') == -1 && @options.html4_root_path != null && window.location.pathname != @options.html4_root_path
+      if window.location.href.indexOf('#!') == -1 && @options.html4_normalize_path == true && window.location.pathname != @options.html4_root_path
         window.location.href = "#{window.location.protocol}//#{window.location.host}#{@options.html4_root_path}#!#{window.location.pathname}"
       
       if window.location.hash.indexOf('#!') != -1                 

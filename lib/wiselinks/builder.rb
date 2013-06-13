@@ -19,11 +19,11 @@ module Wiselinks
 
 
     def install
-      desc "Build #{self.name}-#{self.version} CoffeeScript sources."
-      task 'build' do
-        Rake::Task["coffee:lint"].invoke
-        Rake::Task["coffee:build"].invoke
-      end
+      # desc "Build #{self.name}-#{self.version} CoffeeScript sources."
+      # task 'build' do
+      #   Rake::Task["coffee:lint"].invoke
+      #   Rake::Task["coffee:build"].invoke
+      # end
 
       namespace :coffee do
         desc "Run CoffeeLint over #{self.name}-#{self.version} sources."

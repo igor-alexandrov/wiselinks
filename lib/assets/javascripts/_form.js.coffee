@@ -1,11 +1,12 @@
 class Form
-  constructor: (@page, @$form) -> 
+  constructor: (@page, @$form) ->
 
   process: ->
-    $disable = @$form.find('select:not(:disabled),input:not(:disabled)').filter(-> !$(this).val())
+    selector = 'select:not(:disabled),input:not(:disabled)'
+    $disable = @$form.find(selector).filter(-> !$(this).val())
 
     $disable.attr('disabled', true)
-    url = this._url()    
+    url = this._url()
     $disable.attr('disabled', false)
 
     @page.load(url, @$form.attr("data-target"), this._type())
@@ -24,12 +25,12 @@ class Form
         if hash[name]?
           hash[name] = hash[name] + ",#{item.value}"
         else
-          hash[name] = item.value  
+          hash[name] = item.value
 
-    hash     
+    hash
 
-  _type: ->  
-    if (@$form.attr("data-push") == 'partial') then 'partial' else 'template' 
+  _type: ->
+    if (@$form.attr("data-push") == 'partial') then 'partial' else 'template'
 
   _url: ->
     serialized = []
@@ -43,8 +44,8 @@ class Form
     serialized = serialized.join('&')
     
     url = @$form.attr("action")
-    url += "?#{serialized}" if serialized.length > 0 
+    url += "?#{serialized}" if serialized.length > 0
     url
 
 window._Wiselinks = {} if window._Wiselinks == undefined
-window._Wiselinks.Form = Form        
+window._Wiselinks.Form = Form

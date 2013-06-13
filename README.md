@@ -82,6 +82,8 @@ Wiselinks works in all major browsers including browsers that do not support HTM
 
 ##Installation
 
+### Rails
+
 Add this to your Gemfile:
 
 ```ruby
@@ -93,6 +95,10 @@ Then do:
 	bundle install
 
 Restart your server and you're now using wiselinks!
+
+### All others
+
+Copy `wiselinks-x.y.z.js` or `wiselinks-x.y.z.min.js` from `build` folder in this project to your project.
 
 ## How does it work?
 
@@ -252,9 +258,13 @@ Wiselinks can process forms. After submit button is clicked, Wiselinks will perf
 </div>
 ```     	
 
-### Rendering
+### Server processing
 
 The idea of Wiselinks is that you should render only content that you need in current request. Usually you don't need to reload your stylesheets and javascripts on every request.
+
+`X-Wiselinks` header is passed with every Wiselinks request. Server should respond with content that should be inserted into `$target`.
+
+In Rails after installing Wiselinks gem, all requests that have `X-Wiselinks` header will be automatically processed within 'app/views/layouts/wiselinks' layout, that basically has only `yield` operator. Of course you can override layout name by redefining `wiselinks_layout` method in your controller.
 
 ### Javascript Events
 
@@ -318,13 +328,13 @@ So if you want to show a client-side loading spinner, you could listen for `page
 Wiselinks adds a couple of methods to `ActionDispatch::Request`. These methods are mostly syntax sugar and don't have any complex logic, so you can use them or not.
 
 #### #wiselinks? ###
-Method returns `true` if current request is initiated by Wiselinks, `false` otherwise. 
+Method returns `true` if current request is initiated by Wiselinks (has `X-Wiselinks` header), `false` otherwise. 
 
 #### #wiselinks_template? ###
-Method returns `true` if current request is initiated by Wiselinks and client want to render template, `false` otherwise. 
+Method returns `true` if current request is initiated by Wiselinks and client want to render template (`X-Wiselinks != 'partial'`), `false` otherwise. 
 
 #### #wiselinks_partial? ###
-Method returns `true` if current request is initiated by Wiselinks and client want to render partial, `false` otherwise. 
+Method returns `true` if current request is initiated by Wiselinks and client want to render partial (`X-Wiselinks == 'partial'`), `false` otherwise. 
 
 ### Assets change detection
 

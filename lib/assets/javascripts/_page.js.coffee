@@ -10,21 +10,27 @@ class Page
     self._try_target(@$target)
 
     if History.emulated.pushState && @options.html4 == true
-      if window.location.href.indexOf('#!') == -1 && @options.html4_normalize_path == true && window.location.pathname != @options.html4_root_path
-        window.location.href = "#{window.location.protocol}//#{window.location.host}#{@options.html4_root_path}#!#{window.location.pathname}"
+      if window.location.href.indexOf('#!') == -1 &&
+          @options.html4_normalize_path == true &&
+          window.location.pathname != @options.html4_root_path
+
+        window.location.href = "#{window.location.protocol}//
+          #{window.location.host}
+          #{@options.html4_root_path}#!
+          #{window.location.pathname}"
       
-      if window.location.hash.indexOf('#!') != -1                 
-        self._call(self._make_state(window.location.hash.substring(2)))   
+      if window.location.hash.indexOf('#!') != -1
+        self._call(self._make_state(window.location.hash.substring(2)))
 
     History.Adapter.bind(
       window,
       "statechange"
-      (event, data) ->        
+      (event, data) ->
         state = History.getState()
         
-        if self._template_id_changed(state)          
+        if self._template_id_changed(state)
           self._call(self._reset_state(state))
-        else          
+        else
           self._call(state)
     )
 
@@ -54,20 +60,30 @@ class Page
     if target?
       this._try_target($(target))
 
-    History.pushState({ timestamp: (new Date().getTime()), template_id: @template_id, render: render, target: target, referer: window.location.href }, document.title, url )
+    History.pushState({
+      timestamp: (new Date().getTime()),
+      template_id: @template_id,
+      render: render, target: target,
+      referer: window.location.href
+    }, document.title, url )
 
-  reload: () ->    
-    History.replaceState({ timestamp: (new Date().getTime()), template_id: @template_id, render: 'template', referer: window.location.href }, document.title, History.getState().url )
+  reload: () ->
+    History.replaceState({
+      timestamp: (new Date().getTime()),
+      template_id: @template_id,
+      render: 'template',
+      referer: window.location.href
+    }, document.title, History.getState().url )
   
   _call: (state) ->
     $target = if state.data.target? then $(state.data.target) else @$target
     this.request_manager.call($target, state)
 
-  _template_id_changed: (state) ->    
+  _template_id_changed: (state) ->
     !state.data.template_id? || state.data.template_id != @template_id
 
   _make_state: (url, target, render = 'template', referer) ->
-    { 
+    {
       url: url
       data:
         target: target
@@ -82,7 +98,8 @@ class Page
     state
   
   _try_target: ($target) ->
-    throw "[Wiselinks] Target missing: `#{$target.selector}`" if $target.length == 0  && @options.target_missing == 'exception'
+    if $target.length == 0  && @options.target_missing == 'exception'
+      throw new Error("[Wiselinks] Target missing: `#{$target.selector}`")
 
 window._Wiselinks = {} if window._Wiselinks == undefined
 window._Wiselinks.Page = Page

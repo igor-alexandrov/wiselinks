@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    wiselinks (0.6.0)
+    wiselinks (0.6.3)
 
 GEM
   remote: https://rubygems.org/
@@ -47,6 +47,7 @@ GEM
       xpath (~> 1.0.0)
     childprocess (0.3.9)
       ffi (~> 1.0, >= 1.0.11)
+    closure-compiler (1.1.8)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -54,6 +55,8 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.5.0)
+    coffeelint (0.0.6)
+      coffee-script
     colorize (0.5.8)
     coveralls (0.6.7)
       colorize
@@ -170,7 +173,9 @@ PLATFORMS
 DEPENDENCIES
   bundler
   capybara
+  closure-compiler
   coffee-rails
+  coffeelint
   coveralls
   factory_girl
   faker

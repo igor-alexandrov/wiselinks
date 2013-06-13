@@ -5,17 +5,17 @@ class RequestManager
     self = this
 
     # If been redirected, just trigger event and exit
-    # 
+    #
     if @redirected?
       @redirected = null
-      return      
+      return
 
     # Trigger loading event
-    # 
+    #
     self._loading($target, state)
 
     # Perform XHtmlHttpRequest
-    # 
+    #
     $.ajax(
       url: state.url
       headers:
@@ -24,13 +24,14 @@ class RequestManager
     
       dataType: "html"
     ).done(
-      (data, status, xhr) ->        
+      (data, status, xhr) ->
         url = xhr.getResponseHeader('X-Wiselinks-Url')
+        assets_digest = xhr.getResponseHeader('X-Wiselinks-Assets-Digest')
 
-        if self._assets_changed(xhr.getResponseHeader('X-Wiselinks-Assets-Digest'))
-          window.location.reload(true)        
+        if self._assets_changed(assets_digest)
+          window.location.reload(true)
         else
-          state = History.getState()        
+          state = History.getState()
           if url? && url != state.url
             self._redirect_to(url, $target, state, xhr)
                   
@@ -44,10 +45,10 @@ class RequestManager
     ).always(
       (data_or_xhr, status, xhr_or_error)->
         self._always($target, status, state.url)
-    ) 
+    )
 
-  _assets_changed: (digest) ->
-    @options.assets_digest? && @options.assets_digest != digest
+  _assets_changed: (assets_digest) ->
+    @options.assets_digest? && @options.assets_digest != assets_digest
 
   _redirect_to: (url, $target, state, xhr) ->
     if ( xhr && xhr.readyState < 4)
@@ -71,7 +72,7 @@ class RequestManager
     $(document).trigger('page:always', [$target, status, state.url])
 
   _title: (value) ->
-    if value?  
+    if value?
       $(document).trigger('page:title', decodeURI(value))
       document.title = decodeURI(value)
   

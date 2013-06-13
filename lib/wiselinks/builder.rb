@@ -35,8 +35,9 @@ module Wiselinks
 
         desc "Build #{self.name}-#{self.version} CoffeeScript sources."
         task 'build' do
+          system("echo '#{self.declaration}' > ./build/wiselinks.js")
           system("coffee -o ./build -j temp.js -c #{self.coffee_sources.join(' ')}")    
-          system("cat ./build/temp.js > ./build/wiselinks.js")
+          system("cat ./build/temp.js >> ./build/wiselinks.js")
 
           self.js_sources.each do |file|
             system("cat #{file} >> ./build/wiselinks.js")
@@ -66,6 +67,16 @@ module Wiselinks
 
     def version
       self.specification.version
+    end
+
+    def declaration
+<<-EOS
+/**
+ * #{self.name.capitalize}-#{self.version}
+ * @copyright 2012-#{Date.today.year} #{self.specification.authors.join(', ')}
+ * @preserve https://github.com/igor-alexandrov/wiselinks
+ */  
+EOS
     end
 
     def name

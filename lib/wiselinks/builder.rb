@@ -35,15 +35,23 @@ module Wiselinks
 
         desc "Build #{self.name}-#{self.version} CoffeeScript sources."
         task 'build' do
-          system("echo '#{self.declaration}' > ./build/wiselinks.js")
+          system("rm ./build/*")
+
+          system("echo '#{self.declaration}' > ./build/#{self.name_with_version}.js")
           system("coffee -o ./build -j temp.js -c #{self.coffee_sources.join(' ')}")    
-          system("cat ./build/temp.js >> ./build/wiselinks.js")
+          system("cat ./build/temp.js >> ./build/#{self.name_with_version}.js")
 
           self.js_sources.each do |file|
-            system("cat #{file} >> ./build/wiselinks.js")
+            system("cat #{file} >> ./build/#{self.name_with_version}.js")
           end
 
-          system("java -jar ./compiler.jar --charset UTF-8 --js ./build/wiselinks.js --js_output_file=./build/wiselinks.min.js")
+          # Minimize
+          #
+          system("java -jar ./compiler.jar --charset UTF-8 --js ./build/#{self.name_with_version}.js --js_output_file=./build/#{self.name_with_version}.min.js")
+
+          # Gzip
+          #
+          system("gzip -c ./build/#{self.name_with_version}.min.js > ./build/#{self.name_with_version}.min.js.gz")
 
           system("rm ./build/temp.js")
         end
@@ -81,6 +89,10 @@ EOS
 
     def name
       self.specification.name
+    end
+
+    def name_with_version
+      [self.name, self.version].join('-')
     end
 
     def specification

@@ -38,13 +38,13 @@ class RequestManager
           $target.html(data)
 
           self._title(xhr.getResponseHeader('X-Wiselinks-Title'))
-          self._done($target, status, state.url, data)
+          self._done($target, status, state, data)
     ).fail(
       (xhr, status, error) ->
-        self._fail($target, status, state.url, error)
+        self._fail($target, status, state, error)
     ).always(
       (data_or_xhr, status, xhr_or_error)->
-        self._always($target, status, state.url)
+        self._always($target, status, state)
     )
 
   _assets_changed: (assets_digest) ->

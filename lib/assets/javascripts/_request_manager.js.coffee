@@ -62,14 +62,14 @@ class RequestManager
   _loading: ($target, state) ->
     $(document).trigger('page:loading', [$target, state.data.render, state.url])
 
-  _done: ($target, status, state, data) ->
-    $(document).trigger('page:done', [$target, status, state.url, data])
+  _done: ($target, status, url, data) ->
+    $(document).trigger('page:done', [$target, status, url, data])
 
-  _fail: ($target, status, state, error) ->
-    $(document).trigger('page:fail', [$target, status, state.url, error])
+  _fail: ($target, status, url, error) ->
+    $(document).trigger('page:fail', [$target, status, url, error])
 
-  _always: ($target, status, state) ->
-    $(document).trigger('page:always', [$target, status, state.url])
+  _always: ($target, status, url) ->
+    $(document).trigger('page:always', [$target, status, url])
 
   _title: (value) ->
     if value?

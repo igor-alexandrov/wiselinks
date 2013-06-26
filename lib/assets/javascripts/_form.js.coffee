@@ -2,22 +2,16 @@ class Form
   constructor: (@page, @$form) ->
 
   process: ->
-    selector = 'select:not(:disabled),input:not(:disabled)'
-    $disable = @$form.find(selector).filter(-> !$(this).val())
-
-    $disable.attr('disabled', true)
-    url = this._url()
-    $disable.attr('disabled', false)
-
-    @page.load(url, @$form.attr("data-target"), this._type())
+    @page.load(@_url(), @$form.data("target"), @_type())
 
   _params: ->
     hash = {}
+    excludeBlanks = not @$form.data("include-blank")
 
     for item in @$form.serializeArray()
-      if item.name != 'utf8'
+      unless item.name is 'utf8' or (excludeBlanks and not item.value)
         # if name ends with [], then we try to optimize it
-        name = if item.name.indexOf('[]', item.name.length - '[]'.length) != -1
+        name = if item.name.indexOf('[]', item.name.length - '[]'.length) isnt -1
           item.name.substr(0, item.name.length - 2)
         else
           item.name
@@ -30,7 +24,7 @@ class Form
     hash
 
   _type: ->
-    if (@$form.attr("data-push") == 'partial') then 'partial' else 'template'
+    if (@$form.attr("data-push") is 'partial') then 'partial' else 'template'
 
   _url: ->
     serialized = []
@@ -38,14 +32,14 @@ class Form
     # To find out why encodeURIComponent should be used, follow the link:
     # http://stackoverflow.com/questions/75980/best-practice-escape-or-encodeuri-encodeuricomponent
     #
-    for key, value of this._params()
+    for key, value of @_params()
       serialized.push("#{key}=#{encodeURIComponent(value)}")
 
     serialized = serialized.join('&')
-    
+
     url = @$form.attr("action")
     url += "?#{serialized}" if serialized.length > 0
     url
 
-window._Wiselinks = {} if window._Wiselinks == undefined
+window._Wiselinks ?= {}
 window._Wiselinks.Form = Form

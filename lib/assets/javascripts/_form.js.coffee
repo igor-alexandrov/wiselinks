@@ -2,14 +2,23 @@ class Form
   constructor: (@page, @$form) ->
 
   process: ->
+    self = this
+
+    if self._include_blank_values()
+      self.page.load(self._url(), self._target(), self._type())
+    else
+      self._without_blank_values(
+        ->
+          self.page.load(self._url(), self._target(), self._type())
+      )
+
+  _without_blank_values: (callback) ->
     selector = 'select:not(:disabled),input:not(:disabled)'
     $disable = @$form.find(selector).filter(-> !$(this).val())
 
     $disable.attr('disabled', true)
-    url = this._url()
+    callback()
     $disable.attr('disabled', false)
-
-    @page.load(url, @$form.attr("data-target"), this._type())
 
   _params: ->
     hash = {}
@@ -29,8 +38,14 @@ class Form
 
     hash
 
+  _include_blank_values: ->
+    @$form.data('include-blank-values') == true
+
   _type: ->
-    if (@$form.attr("data-push") == 'partial') then 'partial' else 'template'
+    if (@$form.data('push') == 'partial') then 'partial' else 'template'
+
+  _target: ->
+    @$form.data('target')
 
   _url: ->
     serialized = []
@@ -42,10 +57,10 @@ class Form
       serialized.push("#{key}=#{encodeURIComponent(value)}")
 
     serialized = serialized.join('&')
-    
+
     url = @$form.attr("action")
     url += "?#{serialized}" if serialized.length > 0
     url
 
-window._Wiselinks = {} if window._Wiselinks == undefined
+window._Wiselinks ?= {}
 window._Wiselinks.Form = Form

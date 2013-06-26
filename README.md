@@ -60,7 +60,13 @@ Wiselinks works in all major browsers including browsers that do not support HTM
 			<td>Yes (experimental feature)</td>
 		</tr>
 		<tr>
-			<td>Form parameters optimization</td>			
+			<td>Form blank values exclusion</td>			
+			<td><strong>Yes</strong> (optional)</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>Form values optimization</td>			
 			<td><strong>Yes</strong></td>
 			<td>No</td>
 			<td>No</td>
@@ -235,7 +241,7 @@ Data from the request will be pasted into `<div id="catalog">`. This configurati
 
 Wiselinks can process forms. After submit button is clicked, Wiselinks will perform a request to form url with form attributes serialized to a string. Wiselinks always performs a HTTP GET request.
 
-```html	
+```html
 <div class="filter">
     <form action="/" method="get" data-push="true" data-target="@catalog">
 		<input type="text" size="30" name="title" id="title">
@@ -248,15 +254,27 @@ Wiselinks can process forms. After submit button is clicked, Wiselinks will perf
           	<option value="trashed">Trash</option>
     	</select>
     	
-		<input type="submit" value="Find" name="commit">		
+		<input type="submit" value="Find" name="commit">
     </form>
-</div>    
+</div>
 
 <div role="catalog">
 	<!-- the list of your items -->
-	...
+	...	
 </div>
-```     	
+```
+
+During form submit Wiselinks excludes blank values to make your URLs cleaner. You can disable this with ```data-include-blank-values``` attribute.
+
+```html
+<div class="filter">
+    <form action="/" method="get" data-push="true" data-target="@catalog" data-include-blank-values="true">
+		<input type="text" size="30" name="title" id="title">
+		<input type="submit" value="Find" name="commit">
+    </form>
+</div>
+```
+
 
 ### Server processing
 

@@ -1,5 +1,5 @@
 /**
- * Wiselinks-0.6.4
+ * Wiselinks-0.7.0
  * @copyright 2012-2013 Igor Alexandrov, Alexey Solilin, Julia Egorova, Alexandr Borisov
  * @preserve https://github.com/igor-alexandrov/wiselinks
  */  
@@ -15,15 +15,26 @@
     }
 
     Form.prototype.process = function() {
-      var $disable, selector, url;
+      var self;
+      self = this;
+      if (self._include_blank_values()) {
+        return self.page.load(self._url(), self._target(), self._type());
+      } else {
+        return self._without_blank_values(function() {
+          return self.page.load(self._url(), self._target(), self._type());
+        });
+      }
+    };
+
+    Form.prototype._without_blank_values = function(callback) {
+      var $disable, selector;
       selector = 'select:not(:disabled),input:not(:disabled)';
       $disable = this.$form.find(selector).filter(function() {
         return !$(this).val();
       });
       $disable.attr('disabled', true);
-      url = this._url();
-      $disable.attr('disabled', false);
-      return this.page.load(url, this.$form.attr("data-target"), this._type());
+      callback();
+      return $disable.attr('disabled', false);
     };
 
     Form.prototype._params = function() {
@@ -44,12 +55,20 @@
       return hash;
     };
 
+    Form.prototype._include_blank_values = function() {
+      return this.$form.data('include-blank-values') === true;
+    };
+
     Form.prototype._type = function() {
-      if (this.$form.attr("data-push") === 'partial') {
+      if (this.$form.data('push') === 'partial') {
         return 'partial';
       } else {
         return 'template';
       }
+    };
+
+    Form.prototype._target = function() {
+      return this.$form.data('target');
     };
 
     Form.prototype._url = function() {
@@ -72,7 +91,7 @@
 
   })();
 
-  if (window._Wiselinks === void 0) {
+  if (window._Wiselinks == null) {
     window._Wiselinks = {};
   }
 

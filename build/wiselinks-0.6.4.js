@@ -293,16 +293,16 @@
       return $(document).trigger('page:loading', [$target, state.data.render, state.url]);
     };
 
-    RequestManager.prototype._done = function($target, status, state, data) {
-      return $(document).trigger('page:done', [$target, status, state.url, data]);
+    RequestManager.prototype._done = function($target, status, url, data) {
+      return $(document).trigger('page:done', [$target, status, url, data]);
     };
 
-    RequestManager.prototype._fail = function($target, status, state, error) {
-      return $(document).trigger('page:fail', [$target, status, state.url, error]);
+    RequestManager.prototype._fail = function($target, status, url, error) {
+      return $(document).trigger('page:fail', [$target, status, url, error]);
     };
 
-    RequestManager.prototype._always = function($target, status, state) {
-      return $(document).trigger('page:always', [$target, status, state.url]);
+    RequestManager.prototype._always = function($target, status, url) {
+      return $(document).trigger('page:always', [$target, status, url]);
     };
 
     RequestManager.prototype._title = function(value) {

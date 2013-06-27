@@ -1,16 +1,15 @@
 $:.unshift File.expand_path('..', __FILE__)
 $:.unshift File.expand_path('../../lib', __FILE__)
 
-require 'rails'
-require 'wiselinks'
-require 'rspec'
+ENV['RAILS_ENV'] = 'test'
+require "dummy/config/environment"
+
+require 'rspec/rails'
 require 'webmock/rspec'
+require 'wiselinks'
 
 require 'coveralls'
 Coveralls.wear!
-
-ENV['RAILS_ENV'] = 'test'
-require "dummy/config/environment"
 
 require 'capybara/rspec'
 require 'capybara/rails'

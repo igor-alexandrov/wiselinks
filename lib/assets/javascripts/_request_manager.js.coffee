@@ -21,7 +21,7 @@ class RequestManager
       headers:
         'X-Wiselinks': state.data.render
         'X-Wiselinks-Referer': state.data.referer
-    
+
       dataType: "html"
     ).done(
       (data, status, xhr) ->
@@ -32,9 +32,9 @@ class RequestManager
           window.location.reload(true)
         else
           state = History.getState()
-          if url? && url != state.url
+          if url? && url != encodeURI(state.url)
             self._redirect_to(url, $target, state, xhr)
-                  
+
           $target.html(data)
 
           self._title(xhr.getResponseHeader('X-Wiselinks-Title'))
@@ -54,7 +54,7 @@ class RequestManager
     if ( xhr && xhr.readyState < 4)
       xhr.onreadystatechange = $.noop
       xhr.abort()
-    
+
     @redirected = true
     $(document).trigger('page:redirected', [$target, state.data.render, url])
     History.replaceState(state.data, document.title, url)
@@ -75,7 +75,7 @@ class RequestManager
     if value?
       $(document).trigger('page:title', decodeURI(value))
       document.title = decodeURI(value)
-  
+
 
 window._Wiselinks = {} if window._Wiselinks == undefined
 window._Wiselinks.RequestManager = RequestManager

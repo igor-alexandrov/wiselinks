@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Wiselinks  
+module Wiselinks
   module Version
     MAJOR = 0
     MINOR = 7

@@ -1,17 +1,17 @@
 class Link
   constructor: (@page, @$link) ->
-  
+
   allows_process: (event) ->
     !(this._cross_origin_link(event.currentTarget) ||
       this._non_standard_click(event))
 
   process: ->
-    type = if (@$link.attr("data-push") == 'partial')
+    type = if (@$link.data('push') == 'partial')
       'partial'
     else
       'template'
 
-    @page.load(@$link.attr("href"), @$link.attr("data-target"), type)
+    @page.load(@$link.attr("href"), @$link.data('target'), type)
 
   # We split host because IE returns host with port and other browsers not
   #

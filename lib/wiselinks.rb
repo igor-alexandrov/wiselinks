@@ -12,7 +12,7 @@ require 'wiselinks/rails' if defined?(::Rails)
 module Wiselinks
   extend Logger
 
-  DEFAULTS = {    
+  DEFAULTS = {
     :assets_digest => nil,
     :logger => nil
   }

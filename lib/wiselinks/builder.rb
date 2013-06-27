@@ -5,16 +5,16 @@ require 'coffeelint'
 
 require 'wiselinks/version'
 
-module Wiselinks  
+module Wiselinks
   class Builder
     include Rake::DSL if defined? Rake::DSL
 
-    class << self      
+    class << self
       attr_accessor :instance
 
       def install
         self.new.install
-      end      
+      end
     end
 
 
@@ -38,7 +38,7 @@ module Wiselinks
           system("rm ./build/*")
 
           system("echo '#{self.declaration}' > ./build/#{self.name_with_version}.js")
-          system("coffee -o ./build -j temp.js -c #{self.coffee_sources.join(' ')}")    
+          system("coffee -o ./build -j temp.js -c #{self.coffee_sources.join(' ')}")
           system("cat ./build/temp.js >> ./build/#{self.name_with_version}.js")
 
           self.js_sources.each do |file|
@@ -83,7 +83,7 @@ module Wiselinks
  * #{self.name.capitalize}-#{self.version}
  * @copyright 2012-#{Date.today.year} #{self.specification.authors.join(', ')}
  * @preserve https://github.com/igor-alexandrov/wiselinks
- */  
+ */
 EOS
     end
 

@@ -263,12 +263,26 @@ Wiselinks can process forms. After submit button is clicked, Wiselinks will perf
 	...	
 </div>
 ```
+**data-include-blank-url-params**
 
-During form submit Wiselinks excludes blank values to make your URLs cleaner. You can disable this with ```data-include-blank-values``` attribute.
+During form submit Wiselinks excludes blank parameters to make your URLs cleaner. You can disable this behaviour with ```data-include-blank-url-params``` attribute.
 
 ```html
 <div class="filter">
-    <form action="/" method="get" data-push="true" data-target="@catalog" data-include-blank-values="true">
+    <form action="/" method="get" data-push="true" data-target="@catalog" data-include-blank-url-params="true">
+		<input type="text" size="30" name="title" id="title">
+		<input type="submit" value="Find" name="commit">
+    </form>
+</div>
+```
+
+**data-optimize-url-params**
+
+Array parameters ```category_ids[]=1&category_ids[]=2&category_ids[]=3``` are optimized to more human readable ```category_ids=1,2,3```. To changed this behaviour use ```data-optimize-url-params``` attribute.
+
+```html
+<div class="filter">
+    <form action="/" method="get" data-push="true" data-target="@catalog" data-optimize-url-params="false">
 		<input type="text" size="30" name="title" id="title">
 		<input type="submit" value="Find" name="commit">
     </form>

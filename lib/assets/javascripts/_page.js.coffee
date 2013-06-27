@@ -18,7 +18,7 @@ class Page
           #{window.location.host}
           #{@options.html4_root_path}#!
           #{window.location.pathname}"
-      
+
       if window.location.hash.indexOf('#!') != -1
         self._call(self._make_state(window.location.hash.substring(2)))
 
@@ -27,7 +27,7 @@ class Page
       "statechange"
       (event, data) ->
         state = History.getState()
-        
+
         if self._template_id_changed(state)
           self._call(self._reset_state(state))
         else
@@ -74,7 +74,7 @@ class Page
       render: 'template',
       referer: window.location.href
     }, document.title, History.getState().url )
-  
+
   _call: (state) ->
     $target = if state.data.target? then $(state.data.target) else @$target
     this.request_manager.call($target, state)
@@ -90,13 +90,13 @@ class Page
         render: render
         referer: referer
     }
-  
+
   _reset_state: (state) ->
     state.data = {} unless state.data?
     state.data.target = null
     state.data.render = 'template'
     state
-  
+
   _try_target: ($target) ->
     if $target.length == 0  && @options.target_missing == 'exception'
       throw new Error("[Wiselinks] Target missing: `#{$target.selector}`")

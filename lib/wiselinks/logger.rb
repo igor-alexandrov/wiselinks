@@ -1,5 +1,5 @@
 module Wiselinks
-  module Logger    
+  module Logger
     def logger
       @logger ||= Wiselinks.options[:logger] || ::Logger.new(STDOUT)
     end

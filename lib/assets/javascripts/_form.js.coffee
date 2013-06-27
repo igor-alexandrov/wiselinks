@@ -4,15 +4,15 @@ class Form
   process: ->
     self = this
 
-    if self._include_blank_values()
+    if self._include_blank_url_params()
       self.page.load(self._url(), self._target(), self._type())
     else
-      self._without_blank_values(
+      self._without_blank_url_params(
         ->
           self.page.load(self._url(), self._target(), self._type())
       )
 
-  _without_blank_values: (callback) ->
+  _without_blank_url_params: (callback) ->
     selector = 'select:not(:disabled),input:not(:disabled)'
     $disable = @$form.find(selector).filter(-> !$(this).val())
 
@@ -38,8 +38,11 @@ class Form
 
     hash
 
-  _include_blank_values: ->
-    @$form.data('include-blank-values') == true
+  _include_blank_url_params: ->
+    @$form.data('include-blank-url-params') == true
+
+  _optimize_url_params: ->
+    @$form.data('optimize-url-params') != false
 
   _type: ->
     if (@$form.data('push') == 'partial') then 'partial' else 'template'
@@ -48,15 +51,20 @@ class Form
     @$form.data('target')
 
   _url: ->
-    serialized = []
+    self = this
 
-    # To find out why encodeURIComponent should be used, follow the link:
-    # http://stackoverflow.com/questions/75980/best-practice-escape-or-encodeuri-encodeuricomponent
-    #
-    for key, value of this._params()
-      serialized.push("#{key}=#{encodeURIComponent(value)}")
+    serialized = if self._optimize_url_params()
+      params = []
 
-    serialized = serialized.join('&')
+      # To find out why encodeURIComponent should be used, follow the link:
+      # http://stackoverflow.com/questions/75980/best-practice-escape-or-encodeuri-encodeuricomponent
+      #
+      for key, value of this._params()
+        params.push("#{key}=#{encodeURIComponent(value)}")
+
+      params.join('&')
+    else
+      @$form.serialize()
 
     url = @$form.attr("action")
     url += "?#{serialized}" if serialized.length > 0

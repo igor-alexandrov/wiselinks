@@ -1,6 +1,6 @@
 module Wiselinks
   module Request
-    def self.included(base)            
+    def self.included(base)
       base.alias_method_chain :referer, :wiselinks
       base.alias_method_chain :referrer, :wiselinks
     end
@@ -10,7 +10,7 @@ module Wiselinks
     end
 
     def referrer_with_wiselinks
-      self.referer_with_wiselinks      
+      self.referer_with_wiselinks
     end
 
     def wiselinks?

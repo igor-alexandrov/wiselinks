@@ -1,5 +1,5 @@
 /**
- * Wiselinks-0.7.0
+ * Wiselinks-0.7.1
  * @copyright 2012-2013 Igor Alexandrov, Alexey Solilin, Julia Egorova, Alexandr Borisov
  * @preserve https://github.com/igor-alexandrov/wiselinks
  */
@@ -126,7 +126,7 @@
     };
 
     Link.prototype._cross_origin_link = function(link) {
-      return (location.protocol !== link.protocol) || (location.host.split(':')[0] !== link.host.split(':')[0]);
+      return (location.protocol !== link.protocol) || (location.port !== link.port) || (location.host.split(':')[0] !== link.host.split(':')[0]);
     };
 
     Link.prototype._non_standard_click = function(event) {
@@ -286,13 +286,13 @@
         dataType: "html"
       }).done(function(data, status, xhr) {
         var assets_digest, url;
-        url = xhr.getResponseHeader('X-Wiselinks-Url');
+        url = self._normalize(xhr.getResponseHeader('X-Wiselinks-Url'));
         assets_digest = xhr.getResponseHeader('X-Wiselinks-Assets-Digest');
         if (self._assets_changed(assets_digest)) {
           return window.location.reload(true);
         } else {
           state = History.getState();
-          if ((url != null) && url !== encodeURI(state.url)) {
+          if ((url != null) && (url !== encodeURI(self._normalize(state.url)))) {
             self._redirect_to(url, $target, state, xhr);
           }
           $target.html(data);
@@ -304,6 +304,14 @@
       }).always(function(data_or_xhr, status, xhr_or_error) {
         return self._always($target, status, state.url);
       });
+    };
+
+    RequestManager.prototype._normalize = function(url) {
+      if (url == null) {
+        return;
+      }
+      url = url.replace(/\/+$/, '');
+      return url;
     };
 
     RequestManager.prototype._assets_changed = function(assets_digest) {

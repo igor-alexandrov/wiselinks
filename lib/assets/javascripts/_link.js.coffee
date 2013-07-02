@@ -17,6 +17,7 @@ class Link
   #
   _cross_origin_link: (link) ->
     (location.protocol != link.protocol) ||
+    (location.port != link.port) ||
     (location.host.split(':')[0] != link.host.split(':')[0])
 
   _non_standard_click: (event) ->

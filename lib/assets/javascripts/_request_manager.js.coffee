@@ -25,14 +25,15 @@ class RequestManager
       dataType: "html"
     ).done(
       (data, status, xhr) ->
-        url = xhr.getResponseHeader('X-Wiselinks-Url')
+        url = self._normalize(xhr.getResponseHeader('X-Wiselinks-Url'))
         assets_digest = xhr.getResponseHeader('X-Wiselinks-Assets-Digest')
 
         if self._assets_changed(assets_digest)
           window.location.reload(true)
         else
           state = History.getState()
-          if url? && url != encodeURI(state.url)
+
+          if url? && (url != encodeURI(self._normalize(state.url)))
             self._redirect_to(url, $target, state, xhr)
 
           $target.html(data)
@@ -46,6 +47,12 @@ class RequestManager
       (data_or_xhr, status, xhr_or_error)->
         self._always($target, status, state.url)
     )
+
+  _normalize: (url) ->
+    return unless url?
+
+    url = url.replace /\/+$/, ''
+    url
 
   _assets_changed: (assets_digest) ->
     @options.assets_digest? && @options.assets_digest != assets_digest

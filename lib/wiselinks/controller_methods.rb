@@ -20,7 +20,8 @@ module Wiselinks
     end
 
     def set_wiselinks_url
-      self.response.headers['X-Wiselinks-Url'] = request.env['REQUEST_URI'] if self.request.wiselinks?
+      # self.response.headers['X-Wiselinks-Url'] = request.env['REQUEST_URI'] if self.request.wiselinks?
+      self.response.headers['X-Wiselinks-Url'] = request.url if self.request.wiselinks?
     end
   end
 end

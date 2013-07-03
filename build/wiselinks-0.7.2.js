@@ -1,5 +1,5 @@
 /**
- * Wiselinks-0.7.1
+ * Wiselinks-0.7.2
  * @copyright 2012-2013 Igor Alexandrov, Alexey Solilin, Julia Egorova, Alexandr Borisov
  * @preserve https://github.com/igor-alexandrov/wiselinks
  */
@@ -154,7 +154,7 @@
       self._try_target(this.$target);
       if (History.emulated.pushState && this.options.html4 === true) {
         if (window.location.href.indexOf('#!') === -1 && this.options.html4_normalize_path === true && window.location.pathname !== this.options.html4_root_path) {
-          window.location.href = "" + window.location.protocol + "//          " + window.location.host + "          " + this.options.html4_root_path + "#!          " + window.location.pathname;
+          window.location.href = "" + window.location.protocol + "//" + window.location.host + this.options.html4_root_path + "#!" + window.location.pathname;
         }
         if (window.location.hash.indexOf('#!') !== -1) {
           self._call(self._make_state(window.location.hash.substring(2)));

@@ -14,10 +14,7 @@ class Page
           @options.html4_normalize_path == true &&
           window.location.pathname != @options.html4_root_path
 
-        window.location.href = "#{window.location.protocol}//
-          #{window.location.host}
-          #{@options.html4_root_path}#!
-          #{window.location.pathname}"
+        window.location.href = "#{window.location.protocol}//#{window.location.host}#{@options.html4_root_path}#!#{window.location.pathname}"
 
       if window.location.hash.indexOf('#!') != -1
         self._call(self._make_state(window.location.hash.substring(2)))

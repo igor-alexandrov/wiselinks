@@ -1,5 +1,5 @@
 /**
- * Wiselinks-0.7.2
+ * Wiselinks-0.7.3
  * @copyright 2012-2013 Igor Alexandrov, Alexey Solilin, Julia Egorova, Alexandr Borisov
  * @preserve https://github.com/igor-alexandrov/wiselinks
  */

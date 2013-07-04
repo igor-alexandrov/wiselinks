@@ -292,7 +292,7 @@
           return window.location.reload(true);
         } else {
           state = History.getState();
-          if ((url != null) && (url !== encodeURI(self._normalize(state.url)))) {
+          if ((url != null) && (url !== self._normalize(window.location.href))) {
             self._redirect_to(url, $target, state, xhr);
           }
           $target.html(data);

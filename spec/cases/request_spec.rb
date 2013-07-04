@@ -2,7 +2,7 @@ require "helper"
 
 describe ActionDispatch::Request do
   describe 'request' do
-    before :all do      
+    before :all do
       @request = FactoryGirl.build(:request)
     end
 
@@ -24,7 +24,7 @@ describe ActionDispatch::Request do
       end
     end
 
-    context 'wiselinks methods' do      
+    context 'wiselinks methods' do
       it 'should not be a wiselinks request' do
         @request.wiselinks?.should == false
       end
@@ -36,11 +36,11 @@ describe ActionDispatch::Request do
       it 'should not be a wiselinks partial request' do
         @request.wiselinks_partial?.should == false
       end
-    end  
+    end
   end
-    
+
   describe 'wiselinks_request' do
-    before :all do      
+    before :all do
       @request = FactoryGirl.build(:wiselinks_request)
     end
 
@@ -48,7 +48,7 @@ describe ActionDispatch::Request do
       @request.should be
     end
 
-    context 'wiselinks methods' do      
+    context 'wiselinks methods' do
       it 'should be a wiselinks request' do
         @request.wiselinks?.should == true
       end
@@ -60,11 +60,11 @@ describe ActionDispatch::Request do
       it 'should not be a wiselinks partial request' do
         @request.wiselinks_partial?.should == false
       end
-    end  
+    end
   end
 
   describe 'wiselinks_template_request' do
-    before :all do      
+    before :all do
       @request = FactoryGirl.build(:wiselinks_template_request)
     end
 
@@ -72,7 +72,7 @@ describe ActionDispatch::Request do
       @request.should be
     end
 
-    context 'wiselinks methods' do      
+    context 'wiselinks methods' do
       it 'should be a wiselinks request' do
         @request.wiselinks?.should == true
       end
@@ -84,11 +84,11 @@ describe ActionDispatch::Request do
       it 'should not be a wiselinks partial request' do
         @request.wiselinks_partial?.should == false
       end
-    end  
+    end
   end
 
   describe 'wiselinks_partial_request' do
-    before :all do      
+    before :all do
       @request = FactoryGirl.build(:wiselinks_partial_request)
     end
 
@@ -96,7 +96,7 @@ describe ActionDispatch::Request do
       @request.should be
     end
 
-    context 'wiselinks methods' do      
+    context 'wiselinks methods' do
       it 'should be a wiselinks request' do
         @request.wiselinks?.should == true
       end
@@ -108,6 +108,6 @@ describe ActionDispatch::Request do
       it 'should be a wiselinks partial request' do
         @request.wiselinks_partial?.should == true
       end
-    end  
+    end
   end
 end

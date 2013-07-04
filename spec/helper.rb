@@ -17,3 +17,10 @@ Capybara.app = Dummy::Application
 
 require 'factory_girl'
 FactoryGirl.find_definitions
+
+RSpec::Matchers::define :have_meta do |name|
+  match do |page|
+    puts Capybara.string(page.body)
+    Capybara.string(page.body).has_selector?(:xpath, "//head/meta[@name='#{name}']")
+  end
+end

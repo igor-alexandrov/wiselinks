@@ -33,7 +33,7 @@ class RequestManager
         else
           state = History.getState()
 
-          if url? && (url != encodeURI(self._normalize(state.url)))
+          if url? && (url != self._normalize(window.location.href))
             self._redirect_to(url, $target, state, xhr)
 
           $target.html(data)

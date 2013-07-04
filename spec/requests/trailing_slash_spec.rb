@@ -4,7 +4,7 @@ describe 'Requests' do
   context 'w/ trailing slash' do
     it 'sets X-Wiselinks header field correctly' do
       get('trailing-slash/', {}, {"X-Wiselinks" => 'template'})
-      response.headers['X-Wiselinks-Url'].last.should == '/'
+      response.headers['X-Wiselinks-Url'].should =~ /trailing-slash\z/
     end
   end
 

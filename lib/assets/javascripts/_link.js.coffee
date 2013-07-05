@@ -17,8 +17,18 @@ class Link
   #
   _cross_origin_link: (link) ->
     (location.protocol != link.protocol) ||
-    (location.port != link.port) ||
+    (!_compare_link_port_with_location_port(link)) ||
     (location.host.split(':')[0] != link.host.split(':')[0])
+
+  #
+  # private method for port comparison
+  # IE10 returns for link.port "80" but the location.port is ""
+  # stupid but "modern" browsers returning the same values
+  #
+  _compare_link_port_with_location_port = (link) ->
+    (location.port == link.port) ||
+    (location.port == "" && link.port == "80")
+
 
   _non_standard_click: (event) ->
     event.metaKey || event.ctrlKey || event.shiftKey || event.altKey

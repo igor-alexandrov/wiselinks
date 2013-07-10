@@ -7,9 +7,9 @@
 
 #Wiselinks
 
-Wiselinks makes following links and submitting some forms in your web application faster. 
+Wiselinks makes following links and submitting forms in your web application faster.
 
-You may find Wiselinks similar to [Turbolinks](https://github.com/rails/turbolinks) or [Pjax](https://github.com/defunkt/jquery-pjax), but Wiselinks have several rather important differences from both projects. We tried to make Wiselinks as easy to use as Turbolinks are but also as configurable as Pjax.
+You may find Wiselinks similar to [Turbolinks](https://github.com/rails/turbolinks) or [Pjax](https://github.com/defunkt/jquery-pjax), but Wiselinks works as a whitelist rather than blacklist. We tried to make Wiselinks as easy to use as Turbolinks are but also as configurable as Pjax.
 
 Try Wiselinks online in our **demo application**:
 
@@ -17,7 +17,7 @@ Try Wiselinks online in our **demo application**:
 
 ## Compatibility
 
-**Please be advised that Javascript events in wiselinks-0.5.0 are not backward compatible.** 
+**Please be advised that Javascript events in wiselinks-0.5.0 are not backward compatible.**
 
 Wiselinks uses [History.js](https://github.com/balupton/History.js/) library to perform requests.
 
@@ -36,7 +36,7 @@ Wiselinks works in all major browsers including browsers that do not support HTM
 	</thead>
 	<tbody>
 		<tr>
-			<td>Work in HTML5 browsers</td>			
+			<td>Work in HTML5 browsers</td>
 			<td><strong>Yes</strong></td>
 			<td>Yes</td>
 			<td>Yes</td>
@@ -54,31 +54,31 @@ Wiselinks works in all major browsers including browsers that do not support HTM
 			<td>No, degrades to normal request processing</td>
 		</tr>
 		<tr>
-			<td>Form processing</td>			
+			<td>Form processing</td>
 			<td><strong>Yes</strong></td>
 			<td>No</td>
 			<td>Yes (experimental feature)</td>
 		</tr>
 		<tr>
-			<td>Form blank values exclusion</td>			
+			<td>Form blank values exclusion</td>
 			<td><strong>Yes</strong> (optional)</td>
 			<td>No</td>
 			<td>No</td>
 		</tr>
 		<tr>
-			<td>Form values optimization</td>			
+			<td>Form values optimization</td>
 			<td><strong>Yes</strong></td>
 			<td>No</td>
 			<td>No</td>
 		</tr>
 		<tr>
-			<td>Assets change detection</td>			
+			<td>Assets change detection</td>
 			<td><strong>Yes</strong>, by calculating assets MD5 hash on boot</td>
 			<td>Yes, by parsing document head on every request</td>
 			<td>No</td>
 		</tr>
 		<tr>
-			<td>30x HTTP redirects processing</td>			
+			<td>30x HTTP redirects processing</td>
 			<td><strong>Yes</strong></td>
 			<td>No</td>
 			<td>Yes</td>
@@ -97,7 +97,7 @@ gem 'wiselinks'
 ```
 
 Then do:
-	
+
 	bundle install
 
 Restart your server and you're now using wiselinks!
@@ -111,44 +111,44 @@ Copy `wiselinks-x.y.z.js` or `wiselinks-x.y.z.min.js` from `build` folder in thi
 ### CoffeeScript
 
 Create Wiselinks object in your `application.js.coffee`:
-	
-```coffeescript	
+
+```coffeescript
 #= require jquery
 #= require wiselinks
 
 $(document).ready ->
     window.wiselinks = new Wiselinks()
-```	
+```
 
 You can disable HTML4 browsers support easily:
 
-```coffeescript	
+```coffeescript
 #= require jquery
 #= require wiselinks
 
 $(document).ready ->
     window.wiselinks = new Wiselinks($('body'), html4: false )
-```	
+```
 
 
 Or you can add some more options, if you want:
 
-```coffeescript	
+```coffeescript
 #= require jquery
 #= require jquery.role
 #= require wiselinks
 
 $(document).ready ->
-    # DOM element with id = "content" will be replaced after data load.    	
+    # DOM element with id = "content" will be replaced after data load.
     window.wiselinks = new Wiselinks($('#content'))
-   
+
 	$(document).off('page:loading').on(
         'page:loading'
         (event, $target, render, url) ->
             console.log("Loading: #{url} to #{$target.selector} within '#{render}'")
             # code to start loading animation
     )
-	
+
 	$(document).off('page:redirected').on(
         'page:redirected'
         (event, $target, render, url) ->
@@ -183,11 +183,11 @@ Click on links with `data-push` attribute will fire History.pushState() event.
 Data from the request will replace content of the container that was passed to Wiselinks (default is `$('body')`)
 
 
-```html	
+```html
 <ul class="menu">
     <li>
 	    <a href="/" data-push="true">Home</a>
-    </li>	
+    </li>
     <li>
    		<a href="/contacts" data-push="true">Contacts</a>
     </li>
@@ -200,17 +200,17 @@ Data from the request will replace content of the container that was passed to W
 ```html
 <div class="dialog">
 	<a href="/step2" data-replace="true">Proceed to the next step</a>
-</div>	
+</div>
 ```
 
 Click on following links will fire History.pushState() event.
 Data from the request will be pasted into `<div id="catalog">`. This configuration is widely when you have list of items that are paginated, sorted or maybe grouped by some attributes and you want to update only these items and nothing more on page.
 
-```html	
+```html
 <ul class="pagination">
     <li>
 	    <span>1</span>
-    </li>	
+    </li>
     <li>
    		<a href="/?page=2" data-push="true" data-target="#catalog">2</a>
     </li>
@@ -225,10 +225,10 @@ Data from the request will be pasted into `<div id="catalog">`. This configurati
 <ul class="sort">
 	<li>
 	    <a href="/?sort=title" data-push="true" data-target="#catalog">Sort by Title</a>
-    </li>	
+    </li>
     <li>
    		<a href="/?sort=price" data-push="true" data-target="#catalog">Sort by Price</a>
-    </li>	
+    </li>
 </ul>
 
 <div id="catalog">
@@ -245,7 +245,7 @@ Wiselinks can process forms. After submit button is clicked, Wiselinks will perf
 <div class="filter">
     <form action="/" method="get" data-push="true" data-target="@catalog">
 		<input type="text" size="30" name="title" id="title">
-		
+
 		<select name="scope" id="scope">
 			<option value="">All Tax Liens</option>
 			<option value="accruing">Accruing Interest</option>
@@ -253,14 +253,14 @@ Wiselinks can process forms. After submit button is clicked, Wiselinks will perf
           	<option value="closed">Closed</option>
           	<option value="trashed">Trash</option>
     	</select>
-    	
+
 		<input type="submit" value="Find" name="commit">
     </form>
 </div>
 
 <div role="catalog">
 	<!-- the list of your items -->
-	...	
+	...
 </div>
 ```
 **data-include-blank-url-params**
@@ -313,7 +313,7 @@ Event is triggered before the `XMLHttpRequest` is initialised and performed.
 
 **page:redirected ($target, render, url)**
 
-Event is triggered when you were redirected during `XMLHttpRequest` (with HTTP 30x status). 
+Event is triggered when you were redirected during `XMLHttpRequest` (with HTTP 30x status).
 * *$target* – jQuery object in which result of the request will be inserted;
 
 * *url* - URL where you have been redirected to;
@@ -360,13 +360,13 @@ So if you want to show a client-side loading spinner, you could listen for `page
 Wiselinks adds a couple of methods to `ActionDispatch::Request`. These methods are mostly syntax sugar and don't have any complex logic, so you can use them or not.
 
 #### #wiselinks? ###
-Method returns `true` if current request is initiated by Wiselinks (has `X-Wiselinks` header), `false` otherwise. 
+Method returns `true` if current request is initiated by Wiselinks (has `X-Wiselinks` header), `false` otherwise.
 
 #### #wiselinks_template? ###
-Method returns `true` if current request is initiated by Wiselinks and client want to render template (`X-Wiselinks != 'partial'`), `false` otherwise. 
+Method returns `true` if current request is initiated by Wiselinks and client want to render template (`X-Wiselinks != 'partial'`), `false` otherwise.
 
 #### #wiselinks_partial? ###
-Method returns `true` if current request is initiated by Wiselinks and client want to render partial (`X-Wiselinks == 'partial'`), `false` otherwise. 
+Method returns `true` if current request is initiated by Wiselinks and client want to render partial (`X-Wiselinks == 'partial'`), `false` otherwise.
 
 ### Assets change detection
 
@@ -388,7 +388,7 @@ Now Wiselinks will track changes of your assets and if anything will change, you
 
 Wiselinks handles page titles by passing `X-Wiselinks-Title` header with response. To set this header you can use `wiselinks_title` helper (in Rails).
 
-```html	
+```html
 <% wiselinks_title("Wiselinks is awesome") %>
 
 <div>
@@ -407,7 +407,7 @@ Wiselinks follows 30x HTTP redirects. Location is updated in browser with `X-Wis
 
 By default, if Wiselinks cannot find target that you specified during initialization, it will fail silently. But you can override this behaviour:
 
-```coffeescript	
+```coffeescript
 #= require jquery
 #= require wiselinks
 
@@ -416,7 +416,7 @@ $(document).ready ->
       $('something that does not exist'),
       target_missing: 'exception'
     )
-```	
+```
 
 `[Wiselinks] Target missing` exception will be thrown. This also works for `data-target` attributes.
 
@@ -475,4 +475,3 @@ Contributors:
 
 It is free software, and may be redistributed under the terms specified in the LICENSE file.
 
-	

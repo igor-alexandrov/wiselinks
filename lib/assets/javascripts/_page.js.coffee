@@ -10,14 +10,11 @@ class Page
     self._try_target(@$target)
 
     if History.emulated.pushState && @options.html4 == true
-      if window.location.href.indexOf('#!') == -1 &&
+      if window.location.href.indexOf('#.') == -1 &&
           @options.html4_normalize_path == true &&
           window.location.pathname != @options.html4_root_path
 
-        window.location.href = "#{window.location.protocol}//#{window.location.host}#{@options.html4_root_path}#!#{window.location.pathname}"
-
-      if window.location.hash.indexOf('#!') != -1
-        self._call(self._make_state(window.location.hash.substring(2)))
+        window.location.href = "#{window.location.protocol}//#{window.location.host}#{@options.html4_root_path}#.#{window.location.pathname}"
 
     History.Adapter.bind(
       window,
@@ -56,7 +53,6 @@ class Page
 
     if target?
       this._try_target($(target))
-
     History.pushState({
       timestamp: (new Date().getTime()),
       template_id: @template_id,

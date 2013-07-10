@@ -7,13 +7,13 @@ require 'wiselinks/version'
 Gem::Specification.new do |gem|
   gem.name          = 'wiselinks'
   gem.version       = Wiselinks::Version::STRING
-  gem.authors       = ['Igor Alexandrov', 'Alexey Solilin', 'Julia Egorova', 'Alexandr Borisov']  
-  gem.email         = 'igor.alexandrov@gmail.com'  
+  gem.authors       = ['Igor Alexandrov', 'Alexey Solilin', 'Julia Egorova', 'Alexandr Borisov']
+  gem.email         = 'igor.alexandrov@gmail.com'
   gem.summary       = 'Wiselinks makes following links and submitting some forms in your web application smarter and faster'
   gem.homepage      = 'http://github.com/igor-alexandrov/wiselinks'
   gem.licenses      = ['MIT']
 
-  gem.files         = `git ls-files`.split($/)
+  gem.files         = `git ls-files | grep -v 'build/*'`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]

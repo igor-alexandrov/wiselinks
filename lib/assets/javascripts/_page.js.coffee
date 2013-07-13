@@ -1,3 +1,4 @@
+#= require _cross_domain_check
 #= require _request_manager
 
 class Page
@@ -41,7 +42,7 @@ class Page
     $(document).on(
       'submit', 'form[data-push], form[data-replace]'
       (event) ->
-        if (form = new _Wiselinks.Form(self, $(this)))
+        if (form = new _Wiselinks.Form(self, $(this))).allows_process(event)
           event.preventDefault()
           form.process()
 

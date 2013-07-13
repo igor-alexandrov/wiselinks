@@ -1,10 +1,9 @@
 class Link
   constructor: (@page, @$link) ->
-    @cross_domain_check = new _Wiselinks.CrossDomainCheck()
 
   allows_process: (event) ->
-    !(@cross_domain_check._cross_origin_link(event.currentTarget) ||
-      @cross_domain_check._non_standard_click(event))
+    !(@page.cross_domain_check._cross_origin_link(event.currentTarget) ||
+      @page.cross_domain_check._non_standard_click(event))
 
   process: ->
     type = if (@$link.data('push') == 'partial')

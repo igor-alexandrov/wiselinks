@@ -7,6 +7,7 @@ class Page
 
     @template_id = new Date().getTime()
     @request_manager = new _Wiselinks.RequestManager(@options)
+    @cross_domain_check = new _Wiselinks.CrossDomainCheck()
 
     self._try_target(@$target)
 

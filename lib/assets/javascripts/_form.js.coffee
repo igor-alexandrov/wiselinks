@@ -1,12 +1,11 @@
 class Form
   constructor: (@page, @$form) ->
-    @cross_domain_check = new _Wiselinks.CrossDomainCheck()
 
   allows_process: (event) ->
     a = document.createElement('a')
     a.setAttribute('href', event.currentTarget.action)
-    !(@cross_domain_check._cross_origin_link(a) ||
-      @cross_domain_check._non_standard_click(event))
+    !(@page.cross_domain_check._cross_origin_link(a) ||
+      @page.cross_domain_check._non_standard_click(event))
 
   process: ->
     self = this

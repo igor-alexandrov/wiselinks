@@ -41,7 +41,7 @@ class RequestManager
           self._done($target, status, state, data)
     ).fail(
       (xhr, status, error) ->
-        self._fail($target, status, state, error)
+        self._fail($target, status, state, error, xhr.status)
     ).always(
       (data_or_xhr, status, xhr_or_error)->
         self._always($target, status, state)
@@ -71,8 +71,8 @@ class RequestManager
   _done: ($target, status, state, data) ->
     $(document).trigger('page:done', [$target, status, decodeURI(state.url), data])
 
-  _fail: ($target, status, state, error) ->
-    $(document).trigger('page:fail', [$target, status, decodeURI(state.url), error])
+  _fail: ($target, status, state, error, code) ->
+    $(document).trigger('page:fail', [$target, status, decodeURI(state.url), error, code])
 
   _always: ($target, status, state) ->
     $(document).trigger('page:always', [$target, status, decodeURI(state.url)])

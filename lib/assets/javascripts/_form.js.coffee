@@ -1,6 +1,12 @@
 class Form
   constructor: (@page, @$form) ->
 
+  allows_process: (event) ->
+    a = document.createElement('a')
+    a.setAttribute('href', event.currentTarget.action)
+    !(@page.cross_domain_check._cross_origin_link(a) ||
+      @page.cross_domain_check._non_standard_click(event))
+
   process: ->
     self = this
 

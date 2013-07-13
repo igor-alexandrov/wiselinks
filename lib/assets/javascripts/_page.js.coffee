@@ -1,3 +1,4 @@
+#= require _cross_domain_check
 #= require _request_manager
 
 class Page
@@ -6,6 +7,7 @@ class Page
 
     @template_id = new Date().getTime()
     @request_manager = new _Wiselinks.RequestManager(@options)
+    @cross_domain_check = new _Wiselinks.CrossDomainCheck()
 
     self._try_target(@$target)
 
@@ -41,7 +43,7 @@ class Page
     $(document).on(
       'submit', 'form[data-push], form[data-replace]'
       (event) ->
-        if (form = new _Wiselinks.Form(self, $(this)))
+        if (form = new _Wiselinks.Form(self, $(this))).allows_process(event)
           event.preventDefault()
           form.process()
 

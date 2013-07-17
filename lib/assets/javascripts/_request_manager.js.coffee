@@ -34,8 +34,10 @@ class RequestManager
           state = History.getState()
           if url? && (url != self._normalize(state.url))
             self._redirect_to(url, $target, state, xhr)
-
-          $target.html(data)
+          if $target instanceof jQuery
+            $target.html(data)
+          else
+            $($target).html(data)
 
           self._title(xhr.getResponseHeader('X-Wiselinks-Title'))
           self._done($target, status, state, data)

@@ -7,6 +7,8 @@ class Page
     @template_id = new Date().getTime()
     @request_manager = new _Wiselinks.RequestManager(@options)
 
+    @$target = self._wrap(@$target)
+
     self._try_target(@$target)
 
     if History.emulated.pushState && @options.html4 == true
@@ -48,15 +50,19 @@ class Page
           return false
     )
 
-  load: (url, target, render = 'template') ->
-    @template_id = new Date().getTime() if render != 'partial'
+  load: (url, target, render = 'template') ->    
+    @template_id = new Date().getTime() if render != 'partial'    
 
-    if target?
-      this._try_target($(target))
+    selector = if target?
+      $target = this._wrap(target)
+      this._try_target($target)
+      $target.selector    
+
     History.pushState({
       timestamp: (new Date().getTime()),
       template_id: @template_id,
-      render: render, target: target,
+      render: render,
+      target: selector,
       referer: window.location.href
     }, document.title, url )
 
@@ -93,6 +99,10 @@ class Page
   _try_target: ($target) ->
     if $target.length == 0  && @options.target_missing == 'exception'
       throw new Error("[Wiselinks] Target missing: `#{$target.selector}`")
+
+  _wrap: (object) ->
+    $(object)
+
 
 window._Wiselinks = {} if window._Wiselinks == undefined
 window._Wiselinks.Page = Page

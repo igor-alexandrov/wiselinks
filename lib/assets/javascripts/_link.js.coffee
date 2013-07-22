@@ -27,11 +27,12 @@ class Link
     (location.host.split(':')[0] != link.host.split(':')[0])
 
   # IE returns for link.port "80" but the location.port is ""
+  # same issue with https with link.port "443" and location.port is ""
   # Stupid but "modern" browsers return correct values
   #
   _different_port: (link) ->
     port_equals = (location.port == link.port) ||
-      (location.port == "" && link.port == "80")
+      (location.port == "" && (link.port == "80" || link.port == "443"))
 
     !port_equals
 

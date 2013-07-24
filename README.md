@@ -171,7 +171,7 @@ $(document).ready ->
 
     $(document).off('page:fail').on(
         'page:fail'
-        (event, $target, status, url, error) ->
+        (event, $target, status, url, error, code) ->
             console.log("Wiselinks status: '#{status}'")
             # code to show error message
     )
@@ -331,7 +331,7 @@ Event is triggered if the request succeeds.
 
 * *data* – content of the request;
 
-**page:fail ($target, status, url, error)**
+**page:fail ($target, status, url, error, code)**
 
 Event is triggered if the request fails.
 
@@ -342,6 +342,8 @@ Event is triggered if the request fails.
 * *url* – url of the request;
 
 * *error* – a string describing the type of error that occurred;
+
+* *code* – HTTP response status code
 
 **page:always ($target, status, url)**
 

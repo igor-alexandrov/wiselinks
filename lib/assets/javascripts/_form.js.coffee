@@ -60,7 +60,7 @@ class Form
       # http://stackoverflow.com/questions/75980/best-practice-escape-or-encodeuri-encodeuricomponent
       #
       for key, value of this._params()
-        params.push("#{key}=#{encodeURIComponent(value)}")
+        params.push("#{key}=#{encodeURIComponent(value).replace(/%2C/g, ',')}")
 
       params.join('&')
     else

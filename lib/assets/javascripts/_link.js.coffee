@@ -31,7 +31,7 @@ class Link
   #
   _different_port: (link) ->
     port_equals = (location.port == link.port) ||
-      (location.port == "" && link.port == "80")
+      (location.port == "" && (link.port == "80" || link.port == "443"))
 
     !port_equals
 

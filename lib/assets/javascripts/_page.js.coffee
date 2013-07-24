@@ -50,13 +50,13 @@ class Page
           return false
     )
 
-  load: (url, target, render = 'template') ->    
-    @template_id = new Date().getTime() if render != 'partial'    
+  load: (url, target, render = 'template') ->
+    @template_id = new Date().getTime() if render != 'partial'
 
     selector = if target?
       $target = this._wrap(target)
       this._try_target($target)
-      $target.selector    
+      $target.selector
 
     History.pushState({
       timestamp: (new Date().getTime()),

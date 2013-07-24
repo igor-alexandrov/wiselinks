@@ -66,13 +66,19 @@ class RequestManager
     History.replaceState(state.data, document.title, url)
 
   _loading: ($target, state) ->
-    $(document).trigger('page:loading', [$target, state.data.render, decodeURI(state.url)])
+    $(document).trigger('page:loading'
+      [$target, state.data.render, decodeURI(state.url)]
+    )
 
   _done: ($target, status, state, data) ->
-    $(document).trigger('page:done', [$target, status, decodeURI(state.url), data])
+    $(document).trigger('page:done'
+      [$target, status, decodeURI(state.url), data]
+    )
 
   _fail: ($target, status, state, error, code) ->
-    $(document).trigger('page:fail', [$target, status, decodeURI(state.url), error, code])
+    $(document).trigger('page:fail'
+      [$target, status, decodeURI(state.url), error, code]
+    )
 
   _always: ($target, status, state) ->
     $(document).trigger('page:always', [$target, status, decodeURI(state.url)])

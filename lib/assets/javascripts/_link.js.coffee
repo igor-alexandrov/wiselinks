@@ -19,11 +19,13 @@ class Link
     this._different_port(link)
 
   _different_protocol: (link) ->
+    return false if link.protocol == ':' || link.protocol == ''
     location.protocol != link.protocol
 
   # IE returns host with port and all other browsers return host without port
   #
   _different_host: (link) ->
+    return false if link.host == ''
     (location.host.split(':')[0] != link.host.split(':')[0])
 
   # IE returns for link.port "80" but the location.port is ""
@@ -31,7 +33,7 @@ class Link
   #
   _different_port: (link) ->
     port_equals = (location.port == link.port) ||
-      (location.port == "" && (link.port == "80" || link.port == "443"))
+      (location.port == '' && (link.port == "80" || link.port == "443"))
 
     !port_equals
 

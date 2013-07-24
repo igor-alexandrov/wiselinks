@@ -1,5 +1,5 @@
 /**
- * Wiselinks-1.1.0
+ * Wiselinks-1.1.1
  * @copyright 2012-2013 Igor Alexandrov, Alexey Solilin, Julia Egorova, Alexandr Borisov
  * @preserve https://github.com/igor-alexandrov/wiselinks
  */
@@ -130,16 +130,22 @@
     };
 
     Link.prototype._different_protocol = function(link) {
+      if (link.protocol === ':' || link.protocol === '') {
+        return false;
+      }
       return location.protocol !== link.protocol;
     };
 
     Link.prototype._different_host = function(link) {
+      if (link.host === '') {
+        return false;
+      }
       return location.host.split(':')[0] !== link.host.split(':')[0];
     };
 
     Link.prototype._different_port = function(link) {
       var port_equals;
-      port_equals = (location.port === link.port) || (location.port === "" && (link.port === "80" || link.port === "443"));
+      port_equals = (location.port === link.port) || (location.port === '' && (link.port === "80" || link.port === "443"));
       return !port_equals;
     };
 

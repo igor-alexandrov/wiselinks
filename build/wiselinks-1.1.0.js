@@ -1,5 +1,5 @@
 /**
- * Wiselinks-1.0.0
+ * Wiselinks-1.1.0
  * @copyright 2012-2013 Igor Alexandrov, Alexey Solilin, Julia Egorova, Alexandr Borisov
  * @preserve https://github.com/igor-alexandrov/wiselinks
  */
@@ -85,7 +85,7 @@
           _ref = this._params();
           for (key in _ref) {
             value = _ref[key];
-            params.push("" + key + "=" + (encodeURIComponent(value)));
+            params.push("" + key + "=" + (encodeURIComponent(value).replace(/%2C/g, ',')));
           }
           return params.join('&');
         } else {
@@ -139,7 +139,7 @@
 
     Link.prototype._different_port = function(link) {
       var port_equals;
-      port_equals = (location.port === link.port) || (location.port === "" && link.port === "80");
+      port_equals = (location.port === link.port) || (location.port === "" && (link.port === "80" || link.port === "443"));
       return !port_equals;
     };
 
@@ -165,6 +165,7 @@
       self = this;
       this.template_id = new Date().getTime();
       this.request_manager = new _Wiselinks.RequestManager(this.options);
+      this.$target = self._wrap(this.$target);
       self._try_target(this.$target);
       if (History.emulated.pushState && this.options.html4 === true) {
         if (window.location.href.indexOf('#.') === -1 && this.options.html4_normalize_path === true && window.location.pathname !== this.options.html4_root_path) {
@@ -199,20 +200,19 @@
     }
 
     Page.prototype.load = function(url, target, render) {
+      var $target, selector;
       if (render == null) {
         render = 'template';
       }
       if (render !== 'partial') {
         this.template_id = new Date().getTime();
       }
-      if (target != null) {
-        this._try_target($(target));
-      }
+      selector = target != null ? ($target = this._wrap(target), this._try_target($target), $target.selector) : void 0;
       return History.pushState({
         timestamp: new Date().getTime(),
         template_id: this.template_id,
         render: render,
-        target: target,
+        target: selector,
         referer: window.location.href
       }, document.title, url);
     };
@@ -265,6 +265,10 @@
       }
     };
 
+    Page.prototype._wrap = function(object) {
+      return $(object);
+    };
+
     return Page;
 
   })();
@@ -311,7 +315,7 @@
           return self._done($target, status, state, data);
         }
       }).fail(function(xhr, status, error) {
-        return self._fail($target, status, state, error);
+        return self._fail($target, status, state, error, xhr.status);
       }).always(function(data_or_xhr, status, xhr_or_error) {
         return self._always($target, status, state);
       });
@@ -347,8 +351,8 @@
       return $(document).trigger('page:done', [$target, status, decodeURI(state.url), data]);
     };
 
-    RequestManager.prototype._fail = function($target, status, state, error) {
-      return $(document).trigger('page:fail', [$target, status, decodeURI(state.url), error]);
+    RequestManager.prototype._fail = function($target, status, state, error, code) {
+      return $(document).trigger('page:fail', [$target, status, decodeURI(state.url), error, code]);
     };
 
     RequestManager.prototype._always = function($target, status, state) {

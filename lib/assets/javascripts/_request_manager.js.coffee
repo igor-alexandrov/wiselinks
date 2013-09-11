@@ -35,10 +35,12 @@ class RequestManager
           if url? && (url != self._normalize(state.url))
             self._redirect_to(url, $target, state, xhr)
 
-          $target.html(data)
+          $target.html(data).promise().done(
+            ->
+              self._title(xhr.getResponseHeader('X-Wiselinks-Title'))
+              self._done($target, status, state, data)
+          )
 
-          self._title(xhr.getResponseHeader('X-Wiselinks-Title'))
-          self._done($target, status, state, data)
     ).fail(
       (xhr, status, error) ->
         self._fail($target, status, state, error, xhr.status)

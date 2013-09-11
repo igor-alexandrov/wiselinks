@@ -1,5 +1,5 @@
 /**
- * Wiselinks-1.1.1
+ * Wiselinks-1.1.2
  * @copyright 2012-2013 Igor Alexandrov, Alexey Solilin, Julia Egorova, Alexandr Borisov
  * @preserve https://github.com/igor-alexandrov/wiselinks
  */
@@ -316,9 +316,10 @@
           if ((url != null) && (url !== self._normalize(state.url))) {
             self._redirect_to(url, $target, state, xhr);
           }
-          $target.html(data);
-          self._title(xhr.getResponseHeader('X-Wiselinks-Title'));
-          return self._done($target, status, state, data);
+          return $target.html(data).promise().done(function() {
+            self._title(xhr.getResponseHeader('X-Wiselinks-Title'));
+            return self._done($target, status, state, data);
+          });
         }
       }).fail(function(xhr, status, error) {
         return self._fail($target, status, state, error, xhr.status);

@@ -66,7 +66,7 @@ class Form
     else
       @$form.serialize()
 
-    url = @$form.attr("action")
+    url = @$form.attr("action").replace(/\?.*$/, '')
     url += "?#{serialized}" if serialized.length > 0
     url
 

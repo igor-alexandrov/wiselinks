@@ -1,6 +1,6 @@
 /**
- * Wiselinks-1.1.2
- * @copyright 2012-2013 Igor Alexandrov, Alexey Solilin, Julia Egorova, Alexandr Borisov
+ * Wiselinks-1.1.4
+ * @copyright 2012-2014 Igor Alexandrov, Alexey Solilin, Julia Egorova, Alexandr Borisov
  * @preserve https://github.com/igor-alexandrov/wiselinks
  */
 
@@ -92,7 +92,7 @@
           return this.$form.serialize();
         }
       }).call(this);
-      url = this.$form.attr("action");
+      url = this.$form.attr("action").replace(/\?.*$/, '');
       if (serialized.length > 0) {
         url += "?" + serialized;
       }

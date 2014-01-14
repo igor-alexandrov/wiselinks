@@ -3,6 +3,8 @@
 require 'closure-compiler'
 require 'coffeelint'
 
+require 'date'
+
 require 'wiselinks/version'
 
 module Wiselinks

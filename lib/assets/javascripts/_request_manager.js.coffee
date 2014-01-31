@@ -1,3 +1,5 @@
+#= require _response
+
 class RequestManager
   constructor: (@options = {}) ->
 
@@ -25,22 +27,7 @@ class RequestManager
       dataType: "html"
     ).done(
       (data, status, xhr) ->
-        url = self._normalize(xhr.getResponseHeader('X-Wiselinks-Url'))
-        assets_digest = xhr.getResponseHeader('X-Wiselinks-Assets-Digest')
-
-        if self._assets_changed(assets_digest)
-          window.location.reload(true)
-        else
-          state = History.getState()
-          if url? && (url != self._normalize(state.url))
-            self._redirect_to(url, $target, state, xhr)
-
-          $target.html(data).promise().done(
-            ->
-              self._title(xhr.getResponseHeader('X-Wiselinks-Title'))
-              self._done($target, status, state, data)
-          )
-
+        self._html_loaded($target, data, status, xhr)
     ).fail(
       (xhr, status, error) ->
         self._fail($target, status, state, error, xhr.status)
@@ -76,6 +63,24 @@ class RequestManager
     $(document).trigger('page:done'
       [$target, status, decodeURI(state.url), data]
     )
+
+  _html_loaded: ($target, data, status, xhr) ->
+    url = @_normalize(xhr.getResponseHeader('X-Wiselinks-Url'))
+    assets_digest = xhr.getResponseHeader('X-Wiselinks-Assets-Digest')
+
+    if @_assets_changed(assets_digest)
+      window.location.reload(true)
+    else
+      state = History.getState()
+      if url? && (url != @_normalize(state.url))
+        @_redirect_to(url, $target, state, xhr)
+
+      response = new window._Wiselinks.Response(data, xhr, $target)
+      $target.html(response.content()).promise().done(
+        =>
+          @_title(response.title())
+          @_done($target, status, state, response.content())
+      )
 
   _fail: ($target, status, state, error, code) ->
     $(document).trigger('page:fail'

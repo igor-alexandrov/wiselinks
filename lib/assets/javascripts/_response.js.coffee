@@ -19,7 +19,7 @@ class Response
     if @_is_full_document_response()
       $('meta[name="assets-digest"]', @_get_doc()).attr('content')
     else
-      xhr.getResponseHeader('X-Wiselinks-Assets-Digest')
+      @xhr.getResponseHeader('X-Wiselinks-Assets-Digest')
 
   content: ->
     @_content ?= @_extract_content()

@@ -65,8 +65,10 @@ class RequestManager
     )
 
   _html_loaded: ($target, data, status, xhr) ->
-    url = @_normalize(xhr.getResponseHeader('X-Wiselinks-Url'))
-    assets_digest = xhr.getResponseHeader('X-Wiselinks-Assets-Digest')
+    response = new window._Wiselinks.Response(data, xhr, $target)
+
+    url = @_normalize(response.url())
+    assets_digest = response.assets_digest()
 
     if @_assets_changed(assets_digest)
       window.location.reload(true)
@@ -75,7 +77,6 @@ class RequestManager
       if url? && (url != @_normalize(state.url))
         @_redirect_to(url, $target, state, xhr)
 
-      response = new window._Wiselinks.Response(data, xhr, $target)
       $target.html(response.content()).promise().done(
         =>
           @_title(response.title())

@@ -12,6 +12,15 @@ class Response
 
   constructor: (@html, @xhr, @$target) ->
 
+  url: ->
+    @xhr.getResponseHeader('X-Wiselinks-Url')
+
+  assets_digest: ->
+    if @_is_full_document_response()
+      $('meta[name="assets-digest"]', @_get_doc()).attr('content')
+    else
+      xhr.getResponseHeader('X-Wiselinks-Assets-Digest')
+
   content: ->
     @_content ?= @_extract_content()
 

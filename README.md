@@ -462,9 +462,9 @@ We crafted example application that uses nearly all features of Wiselinks so you
 
 ## Credits
 
-![JetRockets](http://www.jetrockets.ru/public/logo.png)
+![JetRockets](http://www.jetrockets.ru/jetrockets.png)
 
-Wiselinks is maintained by [JetRockets](http://www.jetrockets.ru/en).
+Wiselinks is maintained by [JetRockets](http://www.jetrockets.ru).
 
 Contributors:
 

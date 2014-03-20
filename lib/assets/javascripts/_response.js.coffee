@@ -33,6 +33,15 @@ class Response
     else
       @xhr.getResponseHeader('X-Wiselinks-Title')
 
+  description: ->
+    @_description ?= @_extract_description()
+
+  _extract_description: ->
+    if @_is_full_document_response()
+      $('meta[name="description"]', @_get_doc()).text()
+    else
+      @xhr.getResponseHeader('X-Wiselinks-Description')
+
   _extract_content: ->
     if @_is_full_document_response()
       @_get_doc_target_node().html()

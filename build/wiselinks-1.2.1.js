@@ -1,5 +1,5 @@
 /**
- * Wiselinks-1.2.0
+ * Wiselinks-1.2.1
  * @copyright 2012-2014 Igor Alexandrov, Alexey Solilin, Julia Egorova, Alexandr Borisov
  * @preserve https://github.com/igor-alexandrov/wiselinks
  */
@@ -415,6 +415,7 @@
         return $target.html(response.content()).promise().done((function(_this) {
           return function() {
             _this._title(response.title());
+            _this._description(response.description());
             return _this._done($target, status, state, response.content());
           };
         })(this));
@@ -433,6 +434,13 @@
       if (value != null) {
         $(document).trigger('page:title', decodeURI(value));
         return document.title = decodeURI(value);
+      }
+    };
+
+    RequestManager.prototype._description = function(value) {
+      if (value != null) {
+        $(document).trigger('page:description', decodeURI(value));
+        return $('meta[name="description"]').attr('content', decodeURI(value));
       }
     };
 
@@ -484,6 +492,18 @@
         return $('title', this._get_doc()).text();
       } else {
         return this.xhr.getResponseHeader('X-Wiselinks-Title');
+      }
+    };
+
+    Response.prototype.description = function() {
+      return this._description != null ? this._description : this._description = this._extract_description();
+    };
+
+    Response.prototype._extract_description = function() {
+      if (this._is_full_document_response()) {
+        return $('meta[name="description"]', this._get_doc()).text();
+      } else {
+        return this.xhr.getResponseHeader('X-Wiselinks-Description');
       }
     };
 

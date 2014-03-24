@@ -80,6 +80,7 @@ class RequestManager
       $target.html(response.content()).promise().done(
         =>
           @_title(response.title())
+          @_description(response.description())
           @_done($target, status, state, response.content())
       )
 
@@ -95,6 +96,11 @@ class RequestManager
     if value?
       $(document).trigger('page:title', decodeURI(value))
       document.title = decodeURI(value)
+
+  _description: (value) ->
+    if value?
+      $(document).trigger('page:description', decodeURI(value))
+      $('meta[name="description"]').attr('content', decodeURI(value))
 
 
 window._Wiselinks = {} if window._Wiselinks == undefined

@@ -3,6 +3,7 @@ module Wiselinks
 
     def self.included(base)
       base.helper_method :wiselinks_title
+      base.helper_method :wiselinks_description
       base.before_filter :set_wiselinks_url
     end
 
@@ -16,6 +17,13 @@ module Wiselinks
       if self.request.wiselinks? && value.present?
         Wiselinks.log("title: #{value}")
         self.response.headers['X-Wiselinks-Title'] = URI.encode(value)
+      end
+    end
+
+    def wiselinks_description(value)
+      if self.request.wiselinks? && value.present?
+        Wiselinks.log("description: #{value}")
+        self.response.headers['X-Wiselinks-Description'] = URI.encode(value)
       end
     end
 

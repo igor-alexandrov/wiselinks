@@ -42,6 +42,15 @@ class Response
     else
       @xhr.getResponseHeader('X-Wiselinks-Description')
 
+  canonical: ->
+    @_canonical ?= @_extract_canonical()
+
+  _extract_canonical: ->
+    if @_is_full_document_response()
+      $('link[rel="canonical"]', @_get_doc()).text()
+    else
+      @xhr.getResponseHeader('X-Wiselinks-Canonical')
+
   _extract_content: ->
     if @_is_full_document_response()
       @_get_doc_target_node().html()

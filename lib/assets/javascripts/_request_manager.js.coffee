@@ -81,6 +81,7 @@ class RequestManager
         =>
           @_title(response.title())
           @_description(response.description())
+          @_canonical(response.canonical())
           @_done($target, status, state, response.content())
       )
 
@@ -101,6 +102,11 @@ class RequestManager
     if value?
       $(document).trigger('page:description', decodeURI(value))
       $('meta[name="description"]').attr('content', decodeURI(value))
+
+  _canonical: (value) ->
+    if value?
+      $(document).trigger('page:canonical', decodeURI(value))
+      $('link[rel="canonical"]').attr('href', decodeURI(value))
 
 
 window._Wiselinks = {} if window._Wiselinks == undefined

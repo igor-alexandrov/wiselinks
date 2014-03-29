@@ -82,6 +82,9 @@ class RequestManager
           @_title(response.title())
           @_description(response.description())
           @_canonical(response.canonical())
+          @_robots(response.robots())
+          @_link_rel_prev(response.link_rel_prev())
+          @_link_rel_next(response.link_rel_next())
           @_done($target, status, state, response.content())
       )
 
@@ -107,6 +110,21 @@ class RequestManager
     if value?
       $(document).trigger('page:canonical', decodeURI(value))
       $('link[rel="canonical"]').attr('href', decodeURI(value))
+
+  _robots: (value) ->
+    if value?
+      $(document).trigger('page:robots', decodeURI(value))
+      $('meta[name="robots"]').attr('content', decodeURI(value))
+
+  _link_rel_prev: (value) ->
+    if value?
+      $(document).trigger('page:link_rel_prev', decodeURI(value))
+      $('link[rel="prev"]').attr('href', decodeURI(value))
+
+  _link_rel_next: (value) ->
+    if value?
+      $(document).trigger('page:link_rel_next', decodeURI(value))
+      $('link[rel="next"]').attr('href', decodeURI(value))
 
 
 window._Wiselinks = {} if window._Wiselinks == undefined

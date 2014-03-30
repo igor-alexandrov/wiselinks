@@ -30,7 +30,7 @@ class RequestManager
         self._html_loaded($target, data, status, xhr)
     ).fail(
       (xhr, status, error) ->
-        self._fail($target, status, state, error, xhr.status)
+        self._fail($target, status, state, error, xhr.status, xhr.responseText)
     ).always(
       (data_or_xhr, status, xhr_or_error)->
         self._always($target, status, state)
@@ -88,9 +88,9 @@ class RequestManager
           @_done($target, status, state, response.content())
       )
 
-  _fail: ($target, status, state, error, code) ->
+  _fail: ($target, status, state, error, code, data) ->
     $(document).trigger('page:fail'
-      [$target, status, decodeURI(state.url), error, code]
+      [$target, status, decodeURI(state.url), error, code, data]
     )
 
   _always: ($target, status, state) ->

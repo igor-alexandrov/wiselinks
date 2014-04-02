@@ -30,7 +30,7 @@ class RequestManager
         self._html_loaded($target, data, status, xhr)
     ).fail(
       (xhr, status, error) ->
-        self._fail($target, status, state, error, xhr.status)
+        self._fail($target, status, state, error, xhr.status, xhr.responseText)
     ).always(
       (data_or_xhr, status, xhr_or_error)->
         self._always($target, status, state)
@@ -81,12 +81,16 @@ class RequestManager
         =>
           @_title(response.title())
           @_description(response.description())
+          @_canonical(response.canonical())
+          @_robots(response.robots())
+          @_link_rel_prev(response.link_rel_prev())
+          @_link_rel_next(response.link_rel_next())
           @_done($target, status, state, response.content())
       )
 
-  _fail: ($target, status, state, error, code) ->
+  _fail: ($target, status, state, error, code, data) ->
     $(document).trigger('page:fail'
-      [$target, status, decodeURI(state.url), error, code]
+      [$target, status, decodeURI(state.url), error, code, data]
     )
 
   _always: ($target, status, state) ->
@@ -101,6 +105,26 @@ class RequestManager
     if value?
       $(document).trigger('page:description', decodeURI(value))
       $('meta[name="description"]').attr('content', decodeURI(value))
+
+  _canonical: (value) ->
+    if value?
+      $(document).trigger('page:canonical', decodeURI(value))
+      $('link[rel="canonical"]').attr('href', decodeURI(value))
+
+  _robots: (value) ->
+    if value?
+      $(document).trigger('page:robots', decodeURI(value))
+      $('meta[name="robots"]').attr('content', decodeURI(value))
+
+  _link_rel_prev: (value) ->
+    if value?
+      $(document).trigger('page:link_rel_prev', decodeURI(value))
+      $('link[rel="prev"]').attr('href', decodeURI(value))
+
+  _link_rel_next: (value) ->
+    if value?
+      $(document).trigger('page:link_rel_next', decodeURI(value))
+      $('link[rel="next"]').attr('href', decodeURI(value))
 
 
 window._Wiselinks = {} if window._Wiselinks == undefined

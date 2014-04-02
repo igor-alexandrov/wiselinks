@@ -42,6 +42,44 @@ class Response
     else
       @xhr.getResponseHeader('X-Wiselinks-Description')
 
+  canonical: ->
+    @_canonical ?= @_extract_canonical()
+
+  _extract_canonical: ->
+    if @_is_full_document_response()
+      $('link[rel="canonical"]', @_get_doc()).text()
+    else
+      @xhr.getResponseHeader('X-Wiselinks-Canonical')
+
+
+  robots: ->
+    @_robots ?= @_extract_robots()
+
+  _extract_robots: ->
+    if @_is_full_document_response()
+      $('meta[name="robots"]', @_get_doc()).text()
+    else
+      @xhr.getResponseHeader('X-Wiselinks-Robots')
+
+
+  link_rel_prev: ->
+    @_link_rel_prev ?= @_extract_link_rel_prev()
+
+  _extract_link_rel_prev: ->
+    if @_is_full_document_response()
+      $('link[rel="prev"]', @_get_doc()).text()
+    else
+      @xhr.getResponseHeader('X-Wiselinks-LinkRelPrev')
+
+  link_rel_next: ->
+    @_link_rel_next ?= @_extract_link_rel_next()
+
+  _extract_link_rel_next: ->
+    if @_is_full_document_response()
+      $('link[rel="next"]', @_get_doc()).text()
+    else
+      @xhr.getResponseHeader('X-Wiselinks-LinkRelNext')
+
   _extract_content: ->
     if @_is_full_document_response()
       @_get_doc_target_node().html()

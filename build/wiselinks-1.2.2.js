@@ -1,5 +1,5 @@
 /**
- * Wiselinks-1.2.1
+ * Wiselinks-1.2.2
  * @copyright 2012-2014 Igor Alexandrov, Alexey Solilin, Julia Egorova, Alexandr Borisov
  * @preserve https://github.com/igor-alexandrov/wiselinks
  */
@@ -364,7 +364,7 @@
       }).done(function(data, status, xhr) {
         return self._html_loaded($target, data, status, xhr);
       }).fail(function(xhr, status, error) {
-        return self._fail($target, status, state, error, xhr.status);
+        return self._fail($target, status, state, error, xhr.status, xhr.responseText);
       }).always(function(data_or_xhr, status, xhr_or_error) {
         return self._always($target, status, state);
       });
@@ -416,14 +416,18 @@
           return function() {
             _this._title(response.title());
             _this._description(response.description());
+            _this._canonical(response.canonical());
+            _this._robots(response.robots());
+            _this._link_rel_prev(response.link_rel_prev());
+            _this._link_rel_next(response.link_rel_next());
             return _this._done($target, status, state, response.content());
           };
         })(this));
       }
     };
 
-    RequestManager.prototype._fail = function($target, status, state, error, code) {
-      return $(document).trigger('page:fail', [$target, status, decodeURI(state.url), error, code]);
+    RequestManager.prototype._fail = function($target, status, state, error, code, data) {
+      return $(document).trigger('page:fail', [$target, status, decodeURI(state.url), error, code, data]);
     };
 
     RequestManager.prototype._always = function($target, status, state) {
@@ -441,6 +445,34 @@
       if (value != null) {
         $(document).trigger('page:description', decodeURI(value));
         return $('meta[name="description"]').attr('content', decodeURI(value));
+      }
+    };
+
+    RequestManager.prototype._canonical = function(value) {
+      if (value != null) {
+        $(document).trigger('page:canonical', decodeURI(value));
+        return $('link[rel="canonical"]').attr('href', decodeURI(value));
+      }
+    };
+
+    RequestManager.prototype._robots = function(value) {
+      if (value != null) {
+        $(document).trigger('page:robots', decodeURI(value));
+        return $('meta[name="robots"]').attr('content', decodeURI(value));
+      }
+    };
+
+    RequestManager.prototype._link_rel_prev = function(value) {
+      if (value != null) {
+        $(document).trigger('page:link_rel_prev', decodeURI(value));
+        return $('link[rel="prev"]').attr('href', decodeURI(value));
+      }
+    };
+
+    RequestManager.prototype._link_rel_next = function(value) {
+      if (value != null) {
+        $(document).trigger('page:link_rel_next', decodeURI(value));
+        return $('link[rel="next"]').attr('href', decodeURI(value));
       }
     };
 
@@ -504,6 +536,54 @@
         return $('meta[name="description"]', this._get_doc()).text();
       } else {
         return this.xhr.getResponseHeader('X-Wiselinks-Description');
+      }
+    };
+
+    Response.prototype.canonical = function() {
+      return this._canonical != null ? this._canonical : this._canonical = this._extract_canonical();
+    };
+
+    Response.prototype._extract_canonical = function() {
+      if (this._is_full_document_response()) {
+        return $('link[rel="canonical"]', this._get_doc()).text();
+      } else {
+        return this.xhr.getResponseHeader('X-Wiselinks-Canonical');
+      }
+    };
+
+    Response.prototype.robots = function() {
+      return this._robots != null ? this._robots : this._robots = this._extract_robots();
+    };
+
+    Response.prototype._extract_robots = function() {
+      if (this._is_full_document_response()) {
+        return $('meta[name="robots"]', this._get_doc()).text();
+      } else {
+        return this.xhr.getResponseHeader('X-Wiselinks-Robots');
+      }
+    };
+
+    Response.prototype.link_rel_prev = function() {
+      return this._link_rel_prev != null ? this._link_rel_prev : this._link_rel_prev = this._extract_link_rel_prev();
+    };
+
+    Response.prototype._extract_link_rel_prev = function() {
+      if (this._is_full_document_response()) {
+        return $('link[rel="prev"]', this._get_doc()).text();
+      } else {
+        return this.xhr.getResponseHeader('X-Wiselinks-LinkRelPrev');
+      }
+    };
+
+    Response.prototype.link_rel_next = function() {
+      return this._link_rel_next != null ? this._link_rel_next : this._link_rel_next = this._extract_link_rel_next();
+    };
+
+    Response.prototype._extract_link_rel_next = function() {
+      if (this._is_full_document_response()) {
+        return $('link[rel="next"]', this._get_doc()).text();
+      } else {
+        return this.xhr.getResponseHeader('X-Wiselinks-LinkRelNext');
       }
     };
 

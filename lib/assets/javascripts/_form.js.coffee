@@ -26,15 +26,12 @@ class Form
     for item in @$form.serializeArray()
       if item.name != 'utf8'
         # if name ends with [], then we try to optimize it
-        name = if item.name.indexOf('[]', item.name.length - '[]'.length) != -1
-          item.name.substr(0, item.name.length - 2)
+        if item.name.indexOf('[]', item.name.length - '[]'.length) != -1
+          name = item.name.substr(0, item.name.length - 2)
+          hash[name] ?= []
+          hash[name].push item.value
         else
-          item.name
-
-        if hash[name]?
-          hash[name] = hash[name] + ",#{item.value}"
-        else
-          hash[name] = item.value
+          hash[item.name] = item.value
 
     hash
 

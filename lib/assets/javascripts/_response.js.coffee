@@ -10,7 +10,7 @@ class Response
     Response._document_parser ?= new window._Wiselinks.DOMParser
 
 
-  constructor: (@html, @xhr, @$target) ->
+  constructor: (@html, @xhr, @$target, @forcePartial = false) ->
 
   url: ->
     @xhr.getResponseHeader('X-Wiselinks-Url')
@@ -87,7 +87,7 @@ class Response
       @html
 
   _is_full_document_response: ->
-    @_get_doc_target_node().length is 1
+    @_get_doc_target_node().length is 1 && !@forcePartial
 
   _get_doc_target_node: ->
     @$doc_target_node ?= $(@$target.selector, @_get_doc())

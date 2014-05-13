@@ -65,7 +65,8 @@ class RequestManager
     )
 
   _html_loaded: ($target, data, status, xhr) ->
-    response = new window._Wiselinks.Response(data, xhr, $target)
+    forcePartial = @options.forcePartial || false
+    response = new window._Wiselinks.Response(data, xhr, $target, forcePartial)
 
     url = @_normalize(response.url())
     assets_digest = response.assets_digest()

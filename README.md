@@ -401,6 +401,10 @@ Wiselinks handles page titles by passing `X-Wiselinks-Title` header with respons
 
 Of course you can use `wiselinks_title` helper in your own helpers too.
 
+### Invoking a page navigation via Javascript
+
+You can use `wiselinks.page.load(path)` to go to a URL through Wiselinks.
+
 ### Redirect handling
 
 Wiselinks follows 30x HTTP redirects. Location is updated in browser with `X-Wiselinks-Url` header that is setting up automatically (in Rails) on every wiselinks request.

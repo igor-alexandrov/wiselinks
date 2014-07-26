@@ -28,10 +28,8 @@ class Response
     @_title ?= @_extract_title()
 
   _extract_title: ->
-    if @_is_full_document_response()
-      $('title', @_get_doc()).text()
-    else
-      @xhr.getResponseHeader('X-Wiselinks-Title')
+    title_header = decodeURIComponent @xhr.getResponseHeader 'X-Wiselinks-Title'
+    $("<p>").html(title_header).text() || $('title', @_get_doc()).text()
 
   description: ->
     @_description ?= @_extract_description()

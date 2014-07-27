@@ -24,16 +24,35 @@ class DOMParser
       doc.close()
       doc
 
+    # fallback to ie8 support
+    create_document_using_iframe = (html) ->
+      iframe_style = 'display:none;position:absolute;z-index:-1;'
+      iframe = $('<iframe src="about:blank" style="#{iframe_style}"></iframe>')
+      iframe_parent = $('body')
+
+      iframe_parent.append iframe
+      doc = iframe[0].contentDocument
+      doc.innerHTML = html
+      iframe.remove()
+
+      doc
+
     # Use create_document_using_parser if DOMParser is defined and natively
-    # supports 'text/html' parsing (Firefox 12+, IE 10)
+    # supports 'text/html' parsing (FF 12+, IE 10)
     #
-    # Use create_document_using_DOM if create_document_using_parser throws an exception
-    # due to unsupported type 'text/html' (Firefox < 12, Opera)
+    # Use create_document_using_DOM if create_document_using_parser
+    # throws an exception due to unsupported type 'text/html' (FF < 12, Opera)
     #
     # Use create_document_using_write if:
     #  - DOMParser isn't defined
-    #  - create_document_using_parser returns null due to unsupported type 'text/html' (Chrome, Safari)
-    #  - create_document_using_DOM doesn't create a valid HTML document (safeguarding against potential edge cases)
+    #  - create_document_using_parser returns null
+    #    due to unsupported type 'text/html' (Chrome, Safari)
+    #  - create_document_using_DOM doesn't create a valid HTML document
+    #    (safeguarding against potential edge cases)
+    #
+    # Use create_document_using_iframe if
+    # no document.implementation.createHTMLDocument interface
+    # present (IE8)
     try
       if window.DOMParser
         testDoc = create_document_using_parser '<html><body><p>test'
@@ -43,7 +62,13 @@ class DOMParser
       create_document_using_DOM
     finally
       unless testDoc?.body?.childNodes.length is 1
-        return create_document_using_write
+        if @_should_fallback_to_iframe()
+          return create_document_using_iframe
+        else
+          return create_document_using_write
+
+  _should_fallback_to_iframe: ->
+    document.implementation? and !document.implementation.createHTMLDocument
 
 
 window._Wiselinks ?= {}

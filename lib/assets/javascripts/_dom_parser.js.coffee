@@ -24,6 +24,18 @@ class DOMParser
       doc.close()
       doc
 
+    # fallback to ie8 support
+    create_document_using_iframe = (html) ->
+      iframe = $('<iframe src="about:blank" style="display: none; position: absolute; z-index: -1;"></iframe>')
+      iframe_parent = $('body')
+
+      iframe_parent.append iframe
+      doc = iframe[0].contentDocument
+      doc.innerHTML = html
+      iframe.remove()
+
+      doc
+
     # Use create_document_using_parser if DOMParser is defined and natively
     # supports 'text/html' parsing (Firefox 12+, IE 10)
     #
@@ -43,7 +55,13 @@ class DOMParser
       create_document_using_DOM
     finally
       unless testDoc?.body?.childNodes.length is 1
-        return create_document_using_write
+        if @_should_fallback_to_iframe()
+          return create_document_using_iframe
+        else
+          return create_document_using_write
+
+  _should_fallback_to_iframe: ->
+    document.implementation? and !document.implementation.createHTMLDocument
 
 
 window._Wiselinks ?= {}

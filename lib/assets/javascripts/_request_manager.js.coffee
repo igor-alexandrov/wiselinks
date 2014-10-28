@@ -85,7 +85,7 @@ class RequestManager
           @_robots(response.robots())
           @_link_rel_prev(response.link_rel_prev())
           @_link_rel_next(response.link_rel_next())
-          @_done($target, status, state, response.content())
+          @_done($target, status, state, data)
       )
 
   _fail: ($target, status, state, error, code, data) ->

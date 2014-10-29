@@ -61,7 +61,7 @@ module Wiselinks
 
     def set_wiselinks_url
       # self.response.headers['X-Wiselinks-Url'] = request.env['REQUEST_URI'] if self.request.wiselinks?
-      self.response.headers['X-Wiselinks-Url'] = "#{request.protocol}#{request.host_with_port}#{request.fullpath}" if self.request.wiselinks?
+      self.response.headers['X-Wiselinks-Url'] = request.url if self.request.wiselinks?
     end
   end
 end

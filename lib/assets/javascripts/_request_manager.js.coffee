@@ -23,6 +23,7 @@ class RequestManager
       headers:
         'X-Wiselinks': state.data.render
         'X-Wiselinks-Referer': state.data.referer
+        'X-Wiselinks-Target': state.data.target
 
       dataType: "html"
     ).done(

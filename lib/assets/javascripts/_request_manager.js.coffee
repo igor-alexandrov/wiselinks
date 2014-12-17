@@ -81,6 +81,7 @@ class RequestManager
         =>
           @_title(response.title())
           @_description(response.description())
+          @_keywords(response.keywords())
           @_canonical(response.canonical())
           @_robots(response.robots())
           @_link_rel_prev(response.link_rel_prev())
@@ -105,6 +106,11 @@ class RequestManager
     if value?
       $(document).trigger('page:description', decodeURI(value))
       $('meta[name="description"]').attr('content', decodeURI(value))
+
+  _keywords: (value) ->
+    if value?
+      $(document).trigger('page:keywords', decodeURI(value))
+      $('meta[name="keywords"]').attr('content', decodeURI(value))
 
   _canonical: (value) ->
     if value?

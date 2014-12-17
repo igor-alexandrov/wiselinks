@@ -4,6 +4,7 @@ module Wiselinks
     def self.included(base)
       base.helper_method :wiselinks_title
       base.helper_method :wiselinks_description
+      base.helper_method :wiselinks_keywords
       base.helper_method :wiselinks_canonical
       base.helper_method :wiselinks_robots
       base.helper_method :wiselinks_link_rel_prev
@@ -28,6 +29,13 @@ module Wiselinks
       if self.request.wiselinks? && value.present?
         Wiselinks.log("description: #{value}")
         self.response.headers['X-Wiselinks-Description'] = URI.encode(value)
+      end
+    end
+
+    def wiselinks_keywords(value)
+      if self.request.wiselinks? && value.present?
+        Wiselinks.log("keywords: #{value}")
+        self.response.headers['X-Wiselinks-Keywords'] = URI.encode(value)
       end
     end
 

@@ -31,7 +31,7 @@ class RequestManager
         self._html_loaded($target, data, status, xhr)
     ).fail(
       (xhr, status, error) ->
-        self._fail($target, status, state, error, xhr.status, xhr.responseText)
+        self._fail($target, status, state, error, xhr.status, xhr.responseText, xhr)
     ).always(
       (data_or_xhr, status, xhr_or_error)->
         self._always($target, status, state)
@@ -52,7 +52,7 @@ class RequestManager
       xhr.abort()
 
     @redirected = true
-    $(document).trigger('page:redirected', [$target, state.data.render, url])
+    $(document).trigger('page:redirected', [$target, state.data.render, url, xhr])
     History.replaceState(state.data, document.title, url)
 
   _loading: ($target, state) ->
@@ -60,9 +60,9 @@ class RequestManager
       [$target, state.data.render, decodeURI(state.url)]
     )
 
-  _done: ($target, status, state, data) ->
+  _done: ($target, status, state, data, xhr) ->
     $(document).trigger('page:done'
-      [$target, status, decodeURI(state.url), data]
+      [$target, status, decodeURI(state.url), data, xhr]
     )
 
   _html_loaded: ($target, data, status, xhr) ->
@@ -86,12 +86,12 @@ class RequestManager
           @_robots(response.robots())
           @_link_rel_prev(response.link_rel_prev())
           @_link_rel_next(response.link_rel_next())
-          @_done($target, status, state, response.content())
+          @_done($target, status, state, response.content(), xhr)
       )
 
-  _fail: ($target, status, state, error, code, data) ->
+  _fail: ($target, status, state, error, code, data, xhr) ->
     $(document).trigger('page:fail'
-      [$target, status, decodeURI(state.url), error, code, data]
+      [$target, status, decodeURI(state.url), error, code, data, xhr]
     )
 
   _always: ($target, status, state) ->

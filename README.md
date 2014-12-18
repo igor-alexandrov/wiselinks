@@ -311,7 +311,7 @@ Event is triggered before the `XMLHttpRequest` is initialised and performed.
 
 * *render* – what should be rendered; can be 'template' or 'partial';
 
-**page:redirected ($target, render, url)**
+**page:redirected ($target, render, url, xhr)**
 
 Event is triggered when you were redirected during `XMLHttpRequest` (with HTTP 30x status).
 * *$target* – jQuery object in which result of the request will be inserted;
@@ -320,7 +320,9 @@ Event is triggered when you were redirected during `XMLHttpRequest` (with HTTP 3
 
 * *render* – what should be rendered; can be 'template' or 'partial';
 
-**page:done ($target, status, url, data)**
+* *xhr* – the jqXHR object, which is a superset of the XMLHTTPRequest object;
+
+**page:done ($target, status, url, data, xhr)**
 
 Event is triggered if the request succeeds.
 * *$target* – jQuery object that was updated with the request;
@@ -331,7 +333,9 @@ Event is triggered if the request succeeds.
 
 * *data* – content of the request;
 
-**page:fail ($target, status, url, error, code)**
+* *xhr* – the jqXHR object, which is a superset of the XMLHTTPRequest object;
+
+**page:fail ($target, status, url, error, code, xhr)**
 
 Event is triggered if the request fails.
 
@@ -344,6 +348,8 @@ Event is triggered if the request fails.
 * *error* – a string describing the type of error that occurred;
 
 * *code* – HTTP response status code
+
+* *xhr* – the jqXHR object, which is a superset of the XMLHTTPRequest object;
 
 **page:always ($target, status, url)**
 

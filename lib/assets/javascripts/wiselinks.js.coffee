@@ -17,8 +17,8 @@ class Wiselinks
   enabled: ->
     !History.emulated.pushState || @options.html4 == true
 
-  load: (url, target, render = 'template') ->
-    @page.load(url, target, render)
+  load: (url, target, render = 'template', scope) ->
+    @page.load(url, target, render, scope)
 
   reload: () ->
     @page.reload()

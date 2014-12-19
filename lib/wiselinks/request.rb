@@ -24,9 +24,13 @@ module Wiselinks
     def wiselinks_partial?
       self.wiselinks? && self.headers['X-Wiselinks'] == 'partial'
     end
-    
+
     def wiselinks_target
       self.headers['X-Wiselinks-Target']
+    end
+
+    def wiselinks_scope
+      self.headers['X-Wiselinks-Scope']
     end
   end
 end

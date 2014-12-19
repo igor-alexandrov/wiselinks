@@ -50,7 +50,7 @@ class Page
           return false
     )
 
-  load: (url, target, render = 'template') ->
+  load: (url, target, render = 'template', scope) ->
     @template_id = new Date().getTime() if render != 'partial'
 
     selector = if target?
@@ -63,6 +63,7 @@ class Page
       template_id: @template_id,
       render: render,
       target: selector,
+      scope: scope,
       referer: window.location.href
     }, document.title, url )
 
@@ -81,19 +82,21 @@ class Page
   _template_id_changed: (state) ->
     !state.data.template_id? || state.data.template_id != @template_id
 
-  _make_state: (url, target, render = 'template', referer) ->
+  _make_state: (url, target, render = 'template', referer, scope) ->
     {
       url: url
       data:
         target: target
         render: render
         referer: referer
+        scope: scope
     }
 
   _reset_state: (state) ->
     state.data = {} unless state.data?
     state.data.target = null
     state.data.render = 'template'
+    state.data.scope = null
     state
 
   _try_target: ($target) ->

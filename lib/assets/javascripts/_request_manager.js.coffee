@@ -24,6 +24,7 @@ class RequestManager
         'X-Wiselinks': state.data.render
         'X-Wiselinks-Referer': state.data.referer
         'X-Wiselinks-Target': state.data.target
+        'X-Wiselinks-Scope': state.data.scope
 
       dataType: "html"
     ).done(

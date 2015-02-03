@@ -5,7 +5,7 @@ module Wiselinks
     end
 
     def log(message)
-      self.logger.info("  [wiselinks] #{message}")
+      self.logger.debug("  [wiselinks] #{message}")
     end
   end
 end

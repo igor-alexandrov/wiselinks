@@ -23,6 +23,9 @@ class Page
       "statechange"
       (event, data) ->
         state = History.getState()
+        
+        if (state.data.no_wiselinks)
+          return
 
         if self._template_id_changed(state)
           self._call(self._reset_state(state))

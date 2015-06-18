@@ -75,7 +75,7 @@ Wiselinks works in all major browsers including browsers that do not support HTM
 			<td>Assets change detection</td>
 			<td><strong>Yes</strong>, by calculating assets MD5 hash on boot</td>
 			<td>Yes, by parsing document head on every request</td>
-			<td>No</td>
+			<td>Yes, manually</td>
 		</tr>
 		<tr>
 			<td>30x HTTP redirects processing</td>

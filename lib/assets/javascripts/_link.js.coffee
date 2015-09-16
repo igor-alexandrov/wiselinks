@@ -11,7 +11,7 @@ class Link
     else
       'template'
 
-    @page.load(@$link.attr("href"), @$link.data('target'), type, @$link.data('scope'))
+    @page.load(@$link.attr('href'), @$link.data('target'), type, @$link.data('scope'), @$link.data('wise'))
 
   _cross_origin_link: (link) ->
     this._different_protocol(link) ||
@@ -33,7 +33,7 @@ class Link
   #
   _different_port: (link) ->
     port_equals = (location.port == link.port) ||
-      (location.port == '' && (link.port == "80" || link.port == "443"))
+      (location.port == '' && (link.port == '80' || link.port == '443'))
 
     !port_equals
 

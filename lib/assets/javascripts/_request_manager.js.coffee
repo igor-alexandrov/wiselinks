@@ -20,16 +20,16 @@ class RequestManager
     #
     $.ajax(
       url: state.url
+      method: state.data.wise
       headers:
         'X-Wiselinks': state.data.render
         'X-Wiselinks-Referer': state.data.referer
         'X-Wiselinks-Target': state.data.target
         'X-Wiselinks-Scope': state.data.scope
-
-      dataType: "html"
+      dataType: 'html'
     ).done(
       (data, status, xhr) ->
-        self._html_loaded($target, data, status, xhr)
+        self._html_loaded($target, data, status, xhr, state.data.wise)
     ).fail(
       (xhr, status, error) ->
         self._fail($target, status, state, error, xhr.status, xhr.responseText, xhr)
@@ -66,7 +66,7 @@ class RequestManager
       [$target, status, decodeURI(state.url), data, xhr]
     )
 
-  _html_loaded: ($target, data, status, xhr) ->
+  _html_loaded: ($target, data, status, xhr, method) ->
     response = new window._Wiselinks.Response(data, xhr, $target)
 
     url = @_normalize(response.url())
@@ -76,7 +76,8 @@ class RequestManager
       window.location.reload(true)
     else
       state = History.getState()
-      if url? && (url != @_normalize(state.url))
+
+      if method == 'get' && url? && (url != @_normalize(state.url))
         @_redirect_to(url, $target, state, xhr)
 
       $target.html(response.content()).promise().done(

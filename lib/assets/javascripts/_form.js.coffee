@@ -5,11 +5,11 @@ class Form
     self = this
 
     if self._include_blank_url_params()
-      self.page.load(self._url(), self._target(), self._type(), self._scope())
+      self.page.load(self._url(), self._target(), self._type(), self._scope(), self._wise())
     else
       self._without_blank_url_params(
         ->
-          self.page.load(self._url(), self._target(), self._type(), self._scope())
+          self.page.load(self._url(), self._target(), self._type(), self._scope(), self._wise())
       )
 
   _without_blank_url_params: (callback) ->
@@ -52,6 +52,9 @@ class Form
 
   _scope: ->
     @$form.data('scope')
+
+  _wise: ->
+    @$form.data('wise')
 
   _url: ->
     self = this

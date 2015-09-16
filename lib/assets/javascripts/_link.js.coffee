@@ -2,8 +2,10 @@ class Link
   constructor: (@page, @$link) ->
 
   allows_process: (event) ->
-    !(this._cross_origin_link(event.currentTarget) ||
-      this._non_standard_click(event))
+    if @page.options.allow_cross_origin
+      return !this._non_standard_click(event)
+    else
+      return !(this._cross_origin_link(event.currentTarget) || this._non_standard_click(event))
 
   process: ->
     type = if (@$link.data('push') == 'partial')
@@ -11,7 +13,8 @@ class Link
     else
       'template'
 
-    @page.load(@$link.attr('href'), @$link.data('target'), type, @$link.data('scope'), @$link.data('wise'))
+    url = @$link.data('url') || @$link.attr('href')
+    @page.load(url, @$link.data('target'), type, @$link.data('scope'), @$link.data('wise'))
 
   _cross_origin_link: (link) ->
     this._different_protocol(link) ||

@@ -237,7 +237,7 @@ Data from the request will be pasted into `<div id="catalog">`. This configurati
 </div>
 ```
 
-**Form processing**
+**GET form processing**
 
 Wiselinks can process forms. After submit button is clicked, Wiselinks will perform a request to form url with form attributes serialized to a string. Wiselinks always performs a HTTP GET request.
 
@@ -263,6 +263,42 @@ Wiselinks can process forms. After submit button is clicked, Wiselinks will perf
 	...
 </div>
 ```
+
+**POST, PUT, PATCH, DELETE form processing**
+
+Wiselinks supports only GET form processing. If a POST, PUT, PATCH or DELETE form processing is required it is enough to add `remote: true` to the Rails form.
+
+```html
+<div class="filter">
+    <form action="/" method="post" data-remote="true">
+		<input type="text" size="30" name="title" id="title">
+
+		<select name="scope" id="scope">
+			<option value="">All Tax Liens</option>
+			<option value="accruing">Accruing Interest</option>
+          	<option value="awaiting_payment">Awaiting Payment</option>
+          	<option value="closed">Closed</option>
+          	<option value="trashed">Trash</option>
+    	</select>
+
+		<input type="submit" value="Submit" name="commit">
+    </form>
+</div>
+```
+
+To redirect the page after the form has been processed a simple `redirect_to my_redirect_path` is enough. Possible options are:
+
+```ruby
+# Redirect via Wiselinks when the request is XHR and not GET.
+redirect_to path
+
+# Force a redirect via Wiselinks.
+redirect_to path, wiselinks: true
+
+# Force a normal redirection.
+redirect_to path, wiselinks: false
+```
+
 **data-include-blank-url-params**
 
 During form submit Wiselinks excludes blank parameters to make your URLs cleaner. You can disable this behaviour with ```data-include-blank-url-params``` attribute.

@@ -237,7 +237,7 @@ Data from the request will be pasted into `<div id="catalog">`. This configurati
 </div>
 ```
 
-**Wiselinks on selection boxes**
+#### Wiselinks on selection boxes
 
 Wiselinks performs an action on select change. The URL is constructed by the given selected option as parameter (e.g. `/project_tasks?id=2`).
 If another parameter key is required, the option `data-param` can help to set an own parameter key.
@@ -255,10 +255,29 @@ With the attribute `data-wise` set to `POST`, the browser URL remains as is. Wit
   <option value="">Please select...</option>
 </select>
 
-A partial that renders a set of options by the Wiselinks request can be used for the tasks selection box.
+A partial that renders a set of options by the Wiselinks request can be used for the tasks selection box. The controller action and partial can look like this:
+
+**Controller action**
+
+```rails
+# issues_controller.rb
+
+def project_tasks
+  @tasks = Tasks.where(project: params[:id])
+  respond_to do |format|
+    format.html { render partial: 'tasks_options' if request.wiselinks? }
+  end
+end
 ```
 
-**GET form processing**
+**Partial view**
+```ruby
+# _tasks_options.html.slim
+
+= content_tag(:option, 'Please select...', value: '') + options_from_collection_for_select(@tasks, :id, :name)
+```
+
+#### GET form processing
 
 Wiselinks can process forms. After submit button is clicked, Wiselinks will perform a request to form url with form attributes serialized to a string. Wiselinks always performs a HTTP GET request.
 
@@ -285,7 +304,7 @@ Wiselinks can process forms. After submit button is clicked, Wiselinks will perf
 </div>
 ```
 
-**POST, PUT, PATCH, DELETE form processing**
+#### POST, PUT, PATCH, DELETE form processing
 
 Wiselinks supports only GET form processing. If a POST, PUT, PATCH or DELETE form processing is required it is enough to add `remote: true` to the Rails form.
 
@@ -320,7 +339,7 @@ redirect_to path, wiselinks: true
 redirect_to path, wiselinks: false
 ```
 
-**data-include-blank-url-params**
+#### data-include-blank-url-params
 
 During form submit Wiselinks excludes blank parameters to make your URLs cleaner. You can disable this behaviour with ```data-include-blank-url-params``` attribute.
 
@@ -333,7 +352,7 @@ During form submit Wiselinks excludes blank parameters to make your URLs cleaner
 </div>
 ```
 
-**data-optimize-url-params**
+#### data-optimize-url-params
 
 Array parameters ```category_ids[]=1&category_ids[]=2&category_ids[]=3``` are optimized to more human readable ```category_ids=1,2,3```. To changed this behaviour use ```data-optimize-url-params``` attribute.
 

@@ -254,6 +254,7 @@ With the attribute `data-wise` set to `POST`, the browser URL remains as is. Wit
 <select id="tasks">
   <option value="">Please select...</option>
 </select>
+```
 
 A partial that renders a set of options by the Wiselinks request can be used for the tasks selection box. The controller action and partial can look like this:
 

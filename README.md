@@ -11,10 +11,6 @@ Wiselinks makes following links and submitting forms in your web application fas
 
 You may find Wiselinks similar to [Turbolinks](https://github.com/rails/turbolinks) or [Pjax](https://github.com/defunkt/jquery-pjax), but Wiselinks works as a whitelist rather than blacklist. We tried to make Wiselinks as easy to use as Turbolinks are but also as configurable as Pjax.
 
-Try Wiselinks online in our **demo application**:
-
- * [http://wiselinks.herokuapp.com/](http://wiselinks.herokuapp.com/)
-
 ## Compatibility
 
 **Please be advised that Javascript events in wiselinks-0.5.0 are not backward compatible.**
@@ -260,7 +256,7 @@ A partial that renders a set of options by the Wiselinks request can be used for
 
 **Controller action**
 
-```rails
+```ruby
 # issues_controller.rb
 
 def project_tasks
@@ -530,7 +526,6 @@ We crafted example application that uses nearly all features of Wiselinks so you
 
 * GitHub Repository: [https://github.com/igor-alexandrov/wiselinks_example](https://github.com/igor-alexandrov/wiselinks_example)
 
-* Live Example: [http://wiselinks.herokuapp.com/](http://wiselinks.herokuapp.com/)
 
 ## Note on Patches / Pull Requests
 

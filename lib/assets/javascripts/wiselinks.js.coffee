@@ -4,6 +4,7 @@
 #= require _page
 #= require _link
 #= require _form
+#= require _select
 
 class Wiselinks
   constructor: ($target = $('body'), @options = {}) ->

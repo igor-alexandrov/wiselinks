@@ -50,6 +50,16 @@ class Page
           return false
     )
 
+    $(document).on(
+      'change', 'select[data-push], select[data-replace]'
+      (event) ->
+        if (select = new _Wiselinks.Select(self, $(this))).allows_process(event)
+          event.preventDefault()
+          select.process()
+
+          return false
+    )
+
   load: (url, target, render = 'template', scope, wise = 'get') ->
     @template_id = new Date().getTime() unless render == 'partial'
 

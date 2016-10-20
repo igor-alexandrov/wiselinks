@@ -26,64 +26,64 @@ Wiselinks works in all major browsers including browsers that do not support HTM
 ## In Comparison to Turbolinks and PJAX
 
 <table>
-	<thead>
-		<tr>
-			<th></th>
-			<th>Wiselinks</th>
-			<th>Turbolinks</th>
-			<th>PJAX</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>Work in HTML5 browsers</td>
-			<td><strong>Yes</strong></td>
-			<td>Yes</td>
-			<td>Yes</td>
-		</tr>
-		<tr>
-			<td>Work in browsers without History API</td>
-			<td><strong>Yes</strong>, with hashbang (can be switched off)</td>
-			<td>No, degrades to normal request processing</td>
-			<td>No, degrades to normal request processing</td>
-		</tr>
-		<tr>
-			<td>Work without JavaScript</td>
-			<td>No, degrades to normal request processing</td>
-			<td>No, degrades to normal request processing</td>
-			<td>No, degrades to normal request processing</td>
-		</tr>
-		<tr>
-			<td>Form processing</td>
-			<td><strong>Yes</strong></td>
-			<td>No</td>
-			<td>Yes (experimental feature)</td>
-		</tr>
-		<tr>
-			<td>Form blank values exclusion</td>
-			<td><strong>Yes</strong> (optional)</td>
-			<td>No</td>
-			<td>No</td>
-		</tr>
-		<tr>
-			<td>Form values optimization</td>
-			<td><strong>Yes</strong></td>
-			<td>No</td>
-			<td>No</td>
-		</tr>
-		<tr>
-			<td>Assets change detection</td>
-			<td><strong>Yes</strong>, by calculating assets MD5 hash on boot</td>
-			<td>Yes, by parsing document head on every request</td>
-			<td>Yes, manually</td>
-		</tr>
-		<tr>
-			<td>30x HTTP redirects processing</td>
-			<td><strong>Yes</strong></td>
-			<td>No</td>
-			<td>Yes</td>
-		</tr>
-	</tbody>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Wiselinks</th>
+      <th>Turbolinks</th>
+      <th>PJAX</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Work in HTML5 browsers</td>
+      <td><strong>Yes</strong></td>
+      <td>Yes</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>Work in browsers without History API</td>
+      <td><strong>Yes</strong>, with hashbang (can be switched off)</td>
+      <td>No, degrades to normal request processing</td>
+      <td>No, degrades to normal request processing</td>
+    </tr>
+    <tr>
+      <td>Work without JavaScript</td>
+      <td>No, degrades to normal request processing</td>
+      <td>No, degrades to normal request processing</td>
+      <td>No, degrades to normal request processing</td>
+    </tr>
+    <tr>
+      <td>Form processing</td>
+      <td><strong>Yes</strong></td>
+      <td>No</td>
+      <td>Yes (experimental feature)</td>
+    </tr>
+    <tr>
+      <td>Form blank values exclusion</td>
+      <td><strong>Yes</strong> (optional)</td>
+      <td>No</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Form values optimization</td>
+      <td><strong>Yes</strong></td>
+      <td>No</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Assets change detection</td>
+      <td><strong>Yes</strong>, by calculating assets MD5 hash on boot</td>
+      <td>Yes, by parsing document head on every request</td>
+      <td>Yes, manually</td>
+    </tr>
+    <tr>
+      <td>30x HTTP redirects processing</td>
+      <td><strong>Yes</strong></td>
+      <td>No</td>
+      <td>Yes</td>
+    </tr>
+  </tbody>
 </table>
 
 ##Installation
@@ -98,7 +98,7 @@ gem 'wiselinks'
 
 Then do:
 
-	bundle install
+  bundle install
 
 Restart your server and you're now using wiselinks!
 
@@ -142,21 +142,21 @@ $(document).ready ->
     # DOM element with id = "content" will be replaced after data load.
     window.wiselinks = new Wiselinks($('#content'))
 
-	$(document).off('page:loading').on(
+  $(document).off('page:loading').on(
         'page:loading'
         (event, $target, render, url) ->
             console.log("Loading: #{url} to #{$target.selector} within '#{render}'")
             # code to start loading animation
     )
 
-	$(document).off('page:redirected').on(
+  $(document).off('page:redirected').on(
         'page:redirected'
         (event, $target, render, url) ->
             console.log("Redirected to: #{url}")
             # code to start loading animation
     )
 
-	$(document).off('page:always').on(
+  $(document).off('page:always').on(
         'page:always'
         (event, xhr, settings) ->
             console.log("Wiselinks page loading completed")
@@ -185,12 +185,12 @@ Data from the request will replace content of the container that was passed to W
 
 ```html
 <ul class="menu">
-    <li>
-	    <a href="/" data-push="true">Home</a>
-    </li>
-    <li>
-   		<a href="/contacts" data-push="true">Contacts</a>
-    </li>
+  <li>
+    <a href="/" data-push="true">Home</a>
+  </li>
+  <li>
+    <a href="/contacts" data-push="true">Contacts</a>
+  </li>
 </ul>
 ```
 
@@ -199,7 +199,7 @@ Data from the request will replace content of the container that was passed to W
 
 ```html
 <div class="dialog">
-	<a href="/step2" data-replace="true">Proceed to the next step</a>
+  <a href="/step2" data-replace="true">Proceed to the next step</a>
 </div>
 ```
 
@@ -208,33 +208,54 @@ Data from the request will be pasted into `<div id="catalog">`. This configurati
 
 ```html
 <ul class="pagination">
-    <li>
-	    <span>1</span>
-    </li>
-    <li>
-   		<a href="/?page=2" data-push="true" data-target="#catalog">2</a>
-    </li>
-    <li>
-   		<a href="/?page=3" data-push="true" data-target="#catalog">3</a>
-    </li>
-    <li>
-   		<a href="/?page=4" data-push="true" data-target="#catalog">4</a>
-    </li>
+  <li>
+    <span>1</span>
+  </li>
+  <li>
+    <a href="/?page=2" data-push="true" data-target="#catalog">2</a>
+  </li>
+  <li>
+    <a href="/?page=3" data-push="true" data-target="#catalog">3</a>
+  </li>
+  <li>
+    <a href="/?page=4" data-push="true" data-target="#catalog">4</a>
+  </li>
 </ul>
 
 <ul class="sort">
-	<li>
-	    <a href="/?sort=title" data-push="true" data-target="#catalog">Sort by Title</a>
-    </li>
-    <li>
-   		<a href="/?sort=price" data-push="true" data-target="#catalog">Sort by Price</a>
-    </li>
+  <li>
+    <a href="/?sort=title" data-push="true" data-target="#catalog">Sort by Title</a>
+  </li>
+  <li>
+    <a href="/?sort=price" data-push="true" data-target="#catalog">Sort by Price</a>
+  </li>
 </ul>
 
 <div id="catalog">
-	<!-- the list of your items -->
-	...
+  <!-- the list of your items -->
+  ...
 </div>
+```
+
+**Wiselinks on selection boxes**
+
+Wiselinks performs an action on select change. The URL is constructed by the given selected option as parameter (e.g. `/project_tasks?id=2`).
+If another parameter key is required, the option `data-param` can help to set an own parameter key.
+With the attribute `data-wise` set to `POST`, the browser URL remains as is. Without this attribute `GET` is used by Wiselinks.
+
+```html
+<select data-push="partial" data-target="select#tasks" data-url="/project_tasks" data-wise="post">
+  <option value="">Please select...</option>
+  <option value="1">Project 1</option>
+  <option value="2">Project 2</option>
+  <option value="3">Project 3</option>
+</select>
+
+<select id="tasks">
+  <option value="">Please select...</option>
+</select>
+
+A partial that renders a set of options by the Wiselinks request can be used for the tasks selection box.
 ```
 
 **GET form processing**
@@ -244,23 +265,23 @@ Wiselinks can process forms. After submit button is clicked, Wiselinks will perf
 ```html
 <div class="filter">
     <form action="/" method="get" data-push="true" data-target="@catalog">
-		<input type="text" size="30" name="title" id="title">
+    <input type="text" size="30" name="title" id="title">
 
-		<select name="scope" id="scope">
-			<option value="">All Tax Liens</option>
-			<option value="accruing">Accruing Interest</option>
-          	<option value="awaiting_payment">Awaiting Payment</option>
-          	<option value="closed">Closed</option>
-          	<option value="trashed">Trash</option>
-    	</select>
+    <select name="scope" id="scope">
+      <option value="">All Tax Liens</option>
+      <option value="accruing">Accruing Interest</option>
+            <option value="awaiting_payment">Awaiting Payment</option>
+            <option value="closed">Closed</option>
+            <option value="trashed">Trash</option>
+      </select>
 
-		<input type="submit" value="Find" name="commit">
+    <input type="submit" value="Find" name="commit">
     </form>
 </div>
 
 <div role="catalog">
-	<!-- the list of your items -->
-	...
+  <!-- the list of your items -->
+  ...
 </div>
 ```
 
@@ -271,17 +292,17 @@ Wiselinks supports only GET form processing. If a POST, PUT, PATCH or DELETE for
 ```html
 <div class="filter">
     <form action="/" method="post" data-remote="true">
-		<input type="text" size="30" name="title" id="title">
+    <input type="text" size="30" name="title" id="title">
 
-		<select name="scope" id="scope">
-			<option value="">All Tax Liens</option>
-			<option value="accruing">Accruing Interest</option>
-          	<option value="awaiting_payment">Awaiting Payment</option>
-          	<option value="closed">Closed</option>
-          	<option value="trashed">Trash</option>
-    	</select>
+    <select name="scope" id="scope">
+      <option value="">All Tax Liens</option>
+      <option value="accruing">Accruing Interest</option>
+            <option value="awaiting_payment">Awaiting Payment</option>
+            <option value="closed">Closed</option>
+            <option value="trashed">Trash</option>
+      </select>
 
-		<input type="submit" value="Submit" name="commit">
+    <input type="submit" value="Submit" name="commit">
     </form>
 </div>
 ```
@@ -305,10 +326,10 @@ During form submit Wiselinks excludes blank parameters to make your URLs cleaner
 
 ```html
 <div class="filter">
-    <form action="/" method="get" data-push="true" data-target="@catalog" data-include-blank-url-params="true">
-		<input type="text" size="30" name="title" id="title">
-		<input type="submit" value="Find" name="commit">
-    </form>
+  <form action="/" method="get" data-push="true" data-target="@catalog" data-include-blank-url-params="true">
+  <input type="text" size="30" name="title" id="title">
+  <input type="submit" value="Find" name="commit">
+  </form>
 </div>
 ```
 
@@ -318,10 +339,10 @@ Array parameters ```category_ids[]=1&category_ids[]=2&category_ids[]=3``` are op
 
 ```html
 <div class="filter">
-    <form action="/" method="get" data-push="true" data-target="@catalog" data-optimize-url-params="false">
-		<input type="text" size="30" name="title" id="title">
-		<input type="submit" value="Find" name="commit">
-    </form>
+  <form action="/" method="get" data-push="true" data-target="@catalog" data-optimize-url-params="false">
+  <input type="text" size="30" name="title" id="title">
+  <input type="submit" value="Find" name="commit">
+  </form>
 </div>
 ```
 
@@ -436,8 +457,8 @@ Wiselinks handles page titles by passing `X-Wiselinks-Title` header with respons
 <% wiselinks_title("Wiselinks is awesome") %>
 
 <div>
-	<!-- your content -->
-	...
+  <!-- your content -->
+  ...
 </div>
 ```
 

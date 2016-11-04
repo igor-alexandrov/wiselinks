@@ -18,7 +18,7 @@ class Select
 
   _add_param_to_url: (url, param, value) ->
     link = this._create_link(url)
-    result = new RegExp(param + '=([^&]*)', 'i').exec(link.search);
+    result = new RegExp('[\?&]' + param + '=([^&]*)', 'i').exec(link.search);
     result = result && result[1] || '';
     if result == ''
       opt = {}; opt[param] = value

@@ -42,6 +42,15 @@ class Response
     else
       @xhr.getResponseHeader('X-Wiselinks-Description')
 
+  keywords: ->
+    @_keywords ?= @_extract_keywords()
+
+  _extract_keywords: ->
+    if @_is_full_document_response()
+      $('meta[name="keywords"]', @_get_doc()).text()
+    else
+      @xhr.getResponseHeader('X-Wiselinks-Keywords')
+
   canonical: ->
     @_canonical ?= @_extract_canonical()
 

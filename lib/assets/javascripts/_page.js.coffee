@@ -50,21 +50,40 @@ class Page
           return false
     )
 
-  load: (url, target, render = 'template') ->
-    @template_id = new Date().getTime() if render != 'partial'
+    $(document).on(
+      'change', 'select[data-push], select[data-replace]'
+      (event) ->
+        if (select = new _Wiselinks.Select(self, $(this))).allows_process(event)
+          event.preventDefault()
+          select.process()
+
+          return false
+    )
+
+  load: (url, target, render = 'template', scope, wise = 'get') ->
+    @template_id = new Date().getTime() unless render == 'partial'
+
+    wise = wise.toLowerCase()
+    wise = 'get' if $.inArray(wise, ['get', 'post', 'put', 'patch', 'delete']) == -1
 
     selector = if target?
       $target = this._wrap(target)
       this._try_target($target)
       $target.selector
 
-    History.pushState({
-      timestamp: (new Date().getTime()),
-      template_id: @template_id,
-      render: render,
-      target: selector,
-      referer: window.location.href
-    }, document.title, url )
+    if wise == 'get'
+      History.pushState({
+        timestamp: (new Date().getTime()),
+        template_id: @template_id,
+        render: render,
+        target: selector,
+        scope: scope,
+        wise: wise,
+        referer: window.location.href
+      }, document.title, url )
+    else
+      state = this._make_state(url, selector, render, window.location.href, scope, wise)
+      this._call(state)
 
   reload: () ->
     History.replaceState({
@@ -81,19 +100,23 @@ class Page
   _template_id_changed: (state) ->
     !state.data.template_id? || state.data.template_id != @template_id
 
-  _make_state: (url, target, render = 'template', referer) ->
+  _make_state: (url, target, render = 'template', referer, scope, wise = 'get') ->
     {
       url: url
       data:
         target: target
         render: render
         referer: referer
+        scope: scope
+        wise: wise
     }
 
   _reset_state: (state) ->
     state.data = {} unless state.data?
     state.data.target = null
     state.data.render = 'template'
+    state.data.scope = null
+    state.data.wise = 'get'
     state
 
   _try_target: ($target) ->

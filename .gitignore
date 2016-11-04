@@ -49,3 +49,7 @@ spec/dummy/log/test.log
 
 # For rubinius:
 #*.rbc
+
+# For Eclipse
+.project
+

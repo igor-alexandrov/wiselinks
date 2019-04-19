@@ -8,7 +8,7 @@ module Wiselinks
       base.helper_method :wiselinks_robots
       base.helper_method :wiselinks_link_rel_prev
       base.helper_method :wiselinks_link_rel_next
-      base.before_filter :set_wiselinks_url
+      base.before_action :set_wiselinks_url
     end
 
   protected

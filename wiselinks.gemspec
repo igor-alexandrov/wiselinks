@@ -19,21 +19,21 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
 
-  gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'webmock', '~> 1.9.0'
   gem.add_development_dependency 'shoulda'
   gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'coveralls'
-  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'rake', '~> 10.1.1'
   gem.add_development_dependency 'bundler'
-  gem.add_development_dependency 'sqlite3'
-  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'sqlite3', '~> 1.3.8'
+  gem.add_development_dependency 'rspec', '~> 2.14.0'
   gem.add_development_dependency 'rspec-rails'
   gem.add_development_dependency 'factory_girl'
   gem.add_development_dependency 'faker'
   gem.add_development_dependency 'capybara'
+  gem.add_development_dependency 'test-unit'
 
-  gem.add_development_dependency 'rails', '~> 3.2.13'
+  gem.add_development_dependency 'rails', '~> 4.0.0'
   gem.add_development_dependency 'coffee-rails'
 
   gem.add_development_dependency 'closure-compiler'

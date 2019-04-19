@@ -1,16 +1,15 @@
 module Wiselinks
   module Request
     def self.included(base)
-      base.alias_method_chain :referer, :wiselinks
-      base.alias_method_chain :referrer, :wiselinks
+      base.send :prepend, Wiselinks::Request
     end
 
-    def referer_with_wiselinks
-      self.headers['X-Wiselinks-Referer'] || self.referer_without_wiselinks
+    def referer
+      self.headers['X-Wiselinks-Referer'] || super
     end
 
-    def referrer_with_wiselinks
-      self.referer_with_wiselinks
+    def referrer
+      self.referer
     end
 
     def wiselinks?

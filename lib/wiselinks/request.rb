@@ -1,7 +1,7 @@
 module Wiselinks
   module Request
     def self.included(base)
-      base.prepend Wiselinks::Request
+      base.send :prepend, Wiselinks::Request
     end
 
     def referer

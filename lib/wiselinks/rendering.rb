@@ -2,7 +2,7 @@ module Wiselinks
   module Rendering
 
     def self.included(base)
-      base.prepend Wiselinks::Rendering
+      base.send :prepend, Wiselinks::Rendering
     end
 
   protected

@@ -8,6 +8,7 @@ module Wiselinks
       initializer "wiselinks.register_extensions"  do
         ActionDispatch::Request.send :include, Request
         ActionController::Base.send :include, ControllerMethods
+        ActionController::Base.send :include, Redirection
         ActionController::Base.send :include, Rendering
         ActionView::Base.send :include, Helpers
       end

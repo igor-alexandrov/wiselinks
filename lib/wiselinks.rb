@@ -1,6 +1,7 @@
 require 'wiselinks/request'
 
 require 'wiselinks/controller_methods'
+require 'wiselinks/redirection'
 require 'wiselinks/rendering'
 
 require 'wiselinks/helpers'

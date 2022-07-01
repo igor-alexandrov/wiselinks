@@ -1,5 +1,5 @@
-class Link
-  constructor: (@page, @$link) ->
+class Select
+  constructor: (@page, @$select) ->
 
   allows_process: (event) ->
     if @page.options.allow_cross_origin
@@ -8,15 +8,33 @@ class Link
       return !(this._cross_origin_link(event.currentTarget) || this._non_standard_click(event))
 
   process: ->
-    type = if (@$link.data('push') == 'partial')
+    type = if (@$select.data('push') == 'partial')
       'partial'
     else
       'template'
 
-    url = @$link.data('url') || @$link.attr('href')
-    @page.load(url, @$link.data('target'), type, @$link.data('scope'), @$link.data('wise'))
+    url = this._add_param_to_url(@$select.data('url'), @$select.data('param') || 'id', @$select.val())
+    @page.load(url, @$select.data('target'), type, @$select.data('scope'), @$select.data('wise'))
 
-  _cross_origin_link: (link) ->
+  _add_param_to_url: (url, param, value) ->
+    link = this._create_link(url)
+    result = new RegExp('[\?&]' + param + '=([^&]*)', 'i').exec(link.search);
+    result = result && result[1] || '';
+    if result == ''
+      opt = {}; opt[param] = value
+      if link.search == ''
+        url += '?' + $.param(opt);
+      else
+        url += '&' + $.param(opt);
+    return url;
+
+  _create_link: (url) ->
+    link = document.createElement('a')
+    link.href = url
+    return link
+
+  _cross_origin_link: (select) ->
+    link = this._create_link($(select).data('url'))
     this._different_protocol(link) ||
     this._different_host(link) ||
     this._different_port(link)
@@ -44,4 +62,4 @@ class Link
     event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
 
 window._Wiselinks = {} if window._Wiselinks == undefined
-window._Wiselinks.Link = Link
+window._Wiselinks.Select = Select

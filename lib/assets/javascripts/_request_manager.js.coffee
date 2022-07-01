@@ -20,17 +20,19 @@ class RequestManager
     #
     $.ajax(
       url: state.url
+      method: state.data.wise
       headers:
         'X-Wiselinks': state.data.render
         'X-Wiselinks-Referer': state.data.referer
-
-      dataType: "html"
+        'X-Wiselinks-Target': state.data.target
+        'X-Wiselinks-Scope': state.data.scope
+      dataType: 'html'
     ).done(
       (data, status, xhr) ->
-        self._html_loaded($target, data, status, xhr)
+        self._html_loaded($target, data, status, xhr, state.data.wise)
     ).fail(
       (xhr, status, error) ->
-        self._fail($target, status, state, error, xhr.status, xhr.responseText)
+        self._fail($target, status, state, error, xhr.status, xhr.responseText, xhr)
     ).always(
       (data_or_xhr, status, xhr_or_error)->
         self._always($target, status, state)
@@ -51,7 +53,7 @@ class RequestManager
       xhr.abort()
 
     @redirected = true
-    $(document).trigger('page:redirected', [$target, state.data.render, url])
+    $(document).trigger('page:redirected', [$target, state.data.render, url, xhr])
     History.replaceState(state.data, document.title, url)
 
   _loading: ($target, state) ->
@@ -59,12 +61,12 @@ class RequestManager
       [$target, state.data.render, decodeURI(state.url)]
     )
 
-  _done: ($target, status, state, data) ->
+  _done: ($target, status, state, data, xhr) ->
     $(document).trigger('page:done'
-      [$target, status, decodeURI(state.url), data]
+      [$target, status, decodeURI(state.url), data, xhr]
     )
 
-  _html_loaded: ($target, data, status, xhr) ->
+  _html_loaded: ($target, data, status, xhr, method) ->
     response = new window._Wiselinks.Response(data, xhr, $target)
 
     url = @_normalize(response.url())
@@ -74,23 +76,25 @@ class RequestManager
       window.location.reload(true)
     else
       state = History.getState()
-      if url? && (url != @_normalize(state.url))
+
+      if method == 'get' && url? && (url != @_normalize(state.url))
         @_redirect_to(url, $target, state, xhr)
 
       $target.html(response.content()).promise().done(
         =>
           @_title(response.title())
           @_description(response.description())
+          @_keywords(response.keywords())
           @_canonical(response.canonical())
           @_robots(response.robots())
           @_link_rel_prev(response.link_rel_prev())
           @_link_rel_next(response.link_rel_next())
-          @_done($target, status, state, response.content())
+          @_done($target, status, state, response.content(), xhr)
       )
 
-  _fail: ($target, status, state, error, code, data) ->
+  _fail: ($target, status, state, error, code, data, xhr) ->
     $(document).trigger('page:fail'
-      [$target, status, decodeURI(state.url), error, code, data]
+      [$target, status, decodeURI(state.url), error, code, data, xhr]
     )
 
   _always: ($target, status, state) ->
@@ -105,6 +109,11 @@ class RequestManager
     if value?
       $(document).trigger('page:description', decodeURI(value))
       $('meta[name="description"]').attr('content', decodeURI(value))
+
+  _keywords: (value) ->
+    if value?
+      $(document).trigger('page:keywords', decodeURI(value))
+      $('meta[name="keywords"]').attr('content', decodeURI(value))
 
   _canonical: (value) ->
     if value?
